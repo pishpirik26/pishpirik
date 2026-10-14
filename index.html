@@ -83,6 +83,78 @@ header{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-b
 .choice.solid .k{color:#5b3f0e} .choice.solid p{color:#4d3a12}
 .choice.solid:hover{background:#e6bd66}
 
+
+/* ---------- game switch ---------- */
+.gsel{display:grid; grid-template-columns:1fr 1fr; gap:8px; width:min(440px,100%); margin:0 auto; background:rgba(0,0,0,.22); padding:5px; border-radius:16px}
+.gsel button{display:flex; align-items:center; justify-content:center; gap:10px; font:700 15px var(--ui); color:var(--cream); background:transparent; border:0; border-radius:12px; padding:11px 8px; cursor:pointer}
+.gsel button.on{background:var(--brass); color:#1d1608}
+.gsel button:focus-visible{outline:2px solid var(--cream); outline-offset:2px}
+.mini-card{width:16px; height:22px; border-radius:3px; background:var(--face); color:var(--red); font:700 11px var(--font); display:grid; place-items:center; box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.mini-tile{width:18px; height:24px; border-radius:4px; background:#fbf6e8; color:#1e5bb8; font:800 12px var(--ui); display:grid; place-items:center; box-shadow:0 2px 0 #cbbd98}
+/* ---------- tiles ---------- */
+.tile{--tw:30px; width:var(--tw); height:calc(var(--tw) * 1.38); box-sizing:border-box; border-radius:calc(var(--tw) * .16); flex:none; user-select:none; -webkit-user-select:none; touch-action:none;
+  background:linear-gradient(180deg, #fffdf7 0%, #f6efdc 100%); box-shadow:0 calc(var(--tw)*.07) 0 #cdbf9b, 0 3px 7px rgba(0,0,0,.35);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:calc(var(--tw)*.04); position:relative; cursor:grab}
+.tile b{font:800 calc(var(--tw) * .56)/1 var(--ui); letter-spacing:-.02em}
+.tile i{width:calc(var(--tw) * .2); height:calc(var(--tw) * .2); border-radius:50%; border:max(1.5px, calc(var(--tw)*.05)) solid currentColor; box-sizing:border-box}
+.tile.c-r{color:#c8202b} .tile.c-k{color:#1d1d1d} .tile.c-b{color:#1f5fc8} .tile.c-y{color:#d28a00}
+.tile.joker{color:#c8202b} .tile.joker b{font-size:calc(var(--tw) * .62)}
+.tile.wild::after{content:"★"; position:absolute; top:1px; right:2px; font-size:calc(var(--tw) * .3); color:var(--brass-deep)}
+.tile.sel{transform:translateY(calc(var(--tw) * -.28)); box-shadow:0 0 0 2px var(--brass), 0 8px 14px rgba(0,0,0,.4)}
+.tile.fresh{animation:fresh 1.2s ease}
+@keyframes fresh{0%{transform:translateY(-14px) scale(1.1); box-shadow:0 0 0 3px var(--live), 0 10px 18px rgba(0,0,0,.4)} 100%{transform:none}}
+.tile.pop{animation:tpop .45s cubic-bezier(.2,1.5,.4,1)}
+@keyframes tpop{0%{transform:scale(.4) rotate(-12deg); opacity:.2} 100%{transform:none; opacity:1}}
+.tile.ghost{position:fixed; z-index:80; pointer-events:none; transform:scale(1.12) rotate(-3deg); box-shadow:0 14px 28px rgba(0,0,0,.5)}
+/* ---------- okey table ---------- */
+.ok-table{display:grid; grid-template-columns:1fr minmax(0,1.25fr) 1fr; grid-template-rows:auto auto auto; gap:10px 8px; align-items:center; justify-items:center;
+  background:radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.06), transparent 70%); border-radius:18px; padding:8px 4px}
+.ok-seat{position:relative; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; max-width:100%}
+.ok-seat .av{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font:800 17px var(--display); background:#2d6a50; color:var(--cream); border:2px solid rgba(239,230,210,.25)}
+.ok-seat.cpu .av{background:#3a3f4b}
+.ok-seat.on .av{border-color:var(--brass); box-shadow:0 0 0 0 rgba(216,173,85,.7); animation:ping 1.4s ease-out infinite}
+.ok-seat .nm{font-size:12.5px; font-weight:600; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ok-seat .meta{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--muted)}
+.ok-seat .cnt::before{content:""; display:inline-block; width:8px; height:11px; border-radius:2px; background:#f6efdc; margin-right:4px; vertical-align:-1px}
+.ok-seat .think{position:static; transform:none; display:flex; padding:5px 8px}
+.ok-seat .think[hidden]{display:none}
+.ok-disc{position:relative; width:46px; height:62px; border-radius:9px; border:1.5px dashed rgba(239,230,210,.18); display:grid; place-items:center}
+button.ok-disc,button.ok-deck{font:inherit; color:inherit; padding:0; cursor:default; -webkit-appearance:none; appearance:none}
+button.ok-disc{background:transparent}
+.ok-disc .tile{--tw:40px; cursor:inherit}
+.ok-disc .under{position:absolute; right:-7px; bottom:-7px; font-size:10.5px; background:rgba(0,0,0,.45); border-radius:999px; padding:1px 6px; color:var(--cream); font-variant-numeric:tabular-nums}
+.ok-disc.take, .ok-deck.take{cursor:pointer; border-color:var(--brass); box-shadow:0 0 0 3px rgba(216,173,85,.35), 0 0 18px rgba(216,173,85,.45); animation:glow 1.3s ease-in-out infinite}
+.ok-disc.drop, .ok-ind.drop{border-color:var(--live); box-shadow:0 0 0 3px rgba(95,211,138,.3)}
+@keyframes glow{50%{box-shadow:0 0 0 5px rgba(216,173,85,.15), 0 0 26px rgba(216,173,85,.55)}}
+.ok-center{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap}
+.ok-deck{position:relative; width:46px; height:62px; border-radius:9px; display:grid; place-items:center; background:repeating-linear-gradient(0deg, #e9dfc5 0 3px, #d8cba8 3px 4px); box-shadow:0 4px 10px rgba(0,0,0,.35); border:1.5px solid transparent}
+.ok-deck span{font:800 15px var(--ui); color:#5a4a28; font-variant-numeric:tabular-nums}
+.ok-ind{display:flex; flex-direction:column; align-items:center; gap:3px; padding:5px; border-radius:10px; border:1.5px solid transparent; cursor:pointer}
+.ok-ind .tile{--tw:34px; transform:rotate(-8deg)}
+.ok-ind small{font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
+.ok-me{position:relative; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:12px; color:var(--muted)}
+.ok-me b{color:var(--cream); font-size:13px}
+.rack{--tw:26px; display:grid; grid-template-columns:repeat(13, minmax(0,1fr)); column-gap:3px; row-gap:10px; padding:10px 8px 12px; border-radius:14px;
+  background:linear-gradient(180deg, #9b6a3e 0%, #7a4f2c 55%, #5e3c21 100%); box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 10px 22px rgba(0,0,0,.4)}
+.rack .slot{aspect-ratio:1/1.38; border-radius:5px; background:rgba(0,0,0,.16); display:grid; place-items:center; min-width:0}
+.rack .tile{width:100%; height:100%}
+[data-turn="draw"] .rack, [data-turn="throw"] .rack{box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 0 0 2px rgba(216,173,85,.55), 0 10px 22px rgba(0,0,0,.4)}
+.ok-actions{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+.ok-actions .btn[hidden]{display:none}
+.ok-seat .bubble{top:100%}
+.ok-me .bubble{bottom:100%}
+.ok-sum-hand{display:flex; flex-wrap:wrap; gap:10px; margin:6px 0 14px}
+.ok-sum-hand .grp{display:flex; gap:3px}
+.ok-sum-hand .tile{--tw:28px; cursor:default}
+.inv-row{padding:9px 0; border-bottom:1px solid var(--paper-line)}
+.inv-row:last-child{border-bottom:0}
+.gt-choices{display:grid; gap:10px}
+.gt-choices button{display:flex; flex-direction:column; gap:3px; text-align:left; font:inherit; color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:14px; padding:14px 16px; cursor:pointer}
+.gt-choices button b{font-family:var(--display); font-size:19px}
+.gt-choices button span{font-size:13px; color:var(--paper-muted)}
+.gt-choices button:hover{border-color:var(--paper-ink)}
+@media (max-width:420px){ .ok-seat .av{width:34px; height:34px; font-size:15px} .ok-disc,.ok-deck{width:40px; height:54px} .ok-disc .tile{--tw:34px} }
+
 /* ---------- paper panels (auth, lobby) ---------- */
 .panel{background:var(--paper); color:var(--paper-ink); border-radius:16px; padding:20px; box-sizing:border-box; min-width:0}
 .panel h2{font-family:var(--display); font-weight:900; font-size:24px; margin:0 0 4px; text-wrap:balance}
@@ -379,9 +451,13 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 
   <!-- ENTRY -->
   <section class="screen" id="scrEntry">
+    <div class="gsel" id="gameSel" role="tablist" aria-label="Zgjidh lojën">
+      <button type="button" data-g="pishpirik" role="tab"><span class="mini-card">J</span>Pishpirik</button>
+      <button type="button" data-g="okey" role="tab"><span class="mini-tile">7</span>Lojë me gurë</button>
+    </div>
     <div class="hero">
       <div class="fan" id="fan"></div>
-      <h1>Pishpirik</h1>
+      <h1 id="heroH">Pishpirik</h1>
       <p>Kyçu për të luajtur me shokët, ose luaj me CPU pa llogari.</p>
     </div>
     <div class="panel auth">
@@ -473,6 +549,43 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
       </svg>
     </button>
   </section>
+
+  <!-- OKEY -->
+  <section class="screen" id="scrOkey" hidden>
+    <div class="gbar">
+      <button class="btn" type="button" id="okBack">← Menyja</button>
+      <span class="mode" id="okModeLbl"></span>
+      <button class="btn" type="button" id="okAct"></button>
+    </div>
+    <div class="ok-table">
+      <div class="ok-disc" id="okDisc2" aria-label="Gurët e hedhur"></div>
+      <div class="ok-seat" id="okSeat2"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
+      <div class="ok-disc" id="okDisc1" aria-label="Gurët e hedhur"></div>
+      <div class="ok-seat" id="okSeat3"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
+      <div class="ok-center">
+        <button class="ok-deck" id="okDeck" type="button" aria-label="Merr nga pakoja"><span id="okDeckN"></span></button>
+        <div class="ok-ind" id="okIndWrap" title="Hidhe gurin këtu për ta mbyllur"><div id="okInd"></div><small>Treguesi</small></div>
+        <div class="label" id="okRound" style="flex-basis:100%"></div>
+      </div>
+      <div class="ok-seat" id="okSeat1"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
+      <button class="ok-disc" id="okDisc3" type="button" aria-label="Merr gurin e hedhur nga e majta"></button>
+      <div class="ok-me" id="okMe"><b>Ti</b><span class="pips" id="okMePips"></span></div>
+      <button class="ok-disc" id="okDisc0" type="button" aria-label="Hidhe gurin këtu"></button>
+    </div>
+    <div class="rack" id="okRack" aria-label="Gurët e tu"></div>
+    <div class="ok-actions">
+      <button class="btn" type="button" id="okSortRun">Rendit seritë</button>
+      <button class="btn" type="button" id="okSortPair">Rendit çiftet</button>
+      <button class="btn primary" type="button" id="okThrow" hidden>Hidhe</button>
+      <button class="btn primary" type="button" id="okClose" hidden>Mbyll ✓</button>
+    </div>
+    <div class="msg" id="okMsg"></div>
+    <button class="chat-fab" id="bChat2" type="button" aria-label="Chat" title="Chat">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 5.5h16v10H9.5L5 19.5v-4H4z"/><circle cx="9" cy="10.5" r=".6" fill="currentColor"/><circle cx="12" cy="10.5" r=".6" fill="currentColor"/><circle cx="15" cy="10.5" r=".6" fill="currentColor"/>
+      </svg>
+    </button>
+  </section>
 </div>
 
 <div class="overlay" id="setOv" hidden>
@@ -514,8 +627,16 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 <div class="overlay" id="rulesOv" hidden>
   <div class="sheet" role="dialog" aria-labelledby="rulesH">
     <h2 id="rulesH">Si luhet Pishpiriku</h2>
-    <p class="sub">Pako me 52 karta, dy lojtarë.</p>
-    <ol class="rules">
+    <p class="sub" id="rulesSub">Pako me 52 karta, dy lojtarë.</p>
+    <ol class="rules" id="rulesOkey" hidden>
+      <li>4 lojtarë, 106 gurë: numrat 1–13 në 4 ngjyra, nga dy herë, plus 2 gurë me yll (okey false).</li>
+      <li>Guri në mes është <b>treguesi</b>. Guri me një numër më lart dhe me të njëjtën ngjyrë është <b>okey</b>: zëvendëson cilindo gur. Te gurët e tu ka një yll të vogël në qoshe. Gurët me yll vlejnë sa okey-ja.</li>
+      <li>Secili ka 14 gurë, ai që fillon 15. Kur të vjen radha, merr një gur nga pakoja ose gurin që e hodhi lojtari në të majtë, pastaj hidh një gur djathtas.</li>
+      <li><b>Mbyll:</b> kur 14 gurët e tu janë të gjithë në seri (e njëjta ngjyrë me radhë, p.sh. 4-5-6 ose 12-13-1) ose grupe (i njëjti numër në ngjyra të ndryshme, 3 ose 4), ose në 7 çifte, hidhe të 15-tin mbi tregues dhe e fiton raundin.</li>
+      <li>Guret i rregullon duke i tërhequr në dërrasë, ose prek një gur dhe pastaj një vend bosh. "Rendit seritë" dhe "Rendit çiftet" i rregullojnë vetë.</li>
+      <li>Nëse mbarojnë gurët e pakos, raundi del barazim. Lojën e fiton kush fiton më shumë raunde.</li>
+    </ol>
+    <ol class="rules" id="rulesPish">
       <li>Secili merr 4 karta. Në mes vendosen 4 karta, por duket vetëm e sipërmja.</li>
       <li>Me radhë hidhni nga një kartë mbi grumbull. Nëse karta jote ka të njëjtin numër me kartën e sipërme, e merr gjithë grumbullin.</li>
       <li>Fanti (J) e merr grumbullin gjithmonë, çfarëdo karte të jetë sipër.</li>
@@ -542,6 +663,40 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     <div class="rgrid" id="rGrid"></div>
     <p class="rhint" id="rHint"></p>
     <div class="row-end"><button class="btn" type="button" data-close>Anulo</button><button class="btn primary" type="button" id="rGo">Fillo</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="okSumOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="okSumH" style="width:min(560px,100%)">
+    <h2 id="okSumH"></h2>
+    <p class="sub" id="okSumSub"></p>
+    <div class="ok-sum-hand" id="okSumHand"></div>
+    <table class="tally"><thead><tr><th>Lojtari</th><th>Raunde</th></tr></thead><tbody id="okSumTable"></tbody></table>
+    <div class="row-end"><button class="btn" type="button" id="okSumMenu">Menyja</button><button class="btn primary" type="button" id="okNext">Raundi tjetër</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="gtOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="gtH" style="width:min(420px,100%)">
+    <h2 id="gtH">Në cilën lojë?</h2>
+    <p class="sub">Zgjidh lojën për ftesën.</p>
+    <div class="gt-choices">
+      <button type="button" id="gtPish"><b>Pishpirik</b><span>Ti dhe shoku, 1 kundër 1</span></button>
+      <button type="button" id="gtOkey"><b>Lojë me gurë</b><span>Deri në 4 në tavolinë, vendet e lira i zë CPU-ja</span></button>
+    </div>
+    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="okInvOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="okInvH" style="width:min(440px,100%)">
+    <h2 id="okInvH">Lojë me gurë</h2>
+    <p class="sub">Zgjidh deri në 3 shokë. Kush s’pranon, vendin e tij e zë CPU-ja.</p>
+    <div class="list" id="okInvList"></div>
+    <h3 style="margin:16px 0 6px">Sa raunde?</h3>
+    <div class="rgrid" id="okInvR"></div>
+    <p class="rhint" id="okInvHint"></p>
+    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button><button class="btn primary" type="button" id="okInvGo">Dërgo ftesat</button></div>
   </div>
 </div>
 
@@ -591,7 +746,7 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let S = null;                       // the game state on screen
-const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false};
+const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, game:(()=>{ try{ return localStorage.getItem('pishpirik-game')==='okey' ? 'okey' : 'pishpirik'; }catch(e){ return 'pishpirik'; } })()};
 const NET = {chatTs:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
              gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}};
 
@@ -716,6 +871,8 @@ const sfx = {
     grain(c, t+.42, {type:'lowpass', f:420, q:.9, att:.002, dec:.08, g:.3}); thud(c, t+.42, .14, 80);
   },
   click(){ const c=ac(); if(!c) return; flick(c, c.currentTime+.005, 0, .22); },
+  tile(){ const c=ac(); if(!c) return; const t=c.currentTime+.005;
+    grain(c, t, {type:'highpass', f:rnd(2600,3400), q:.9, att:.001, dec:.03, g:.5}); grain(c, t, {f:rnd(1100,1400), q:3, att:.001, dec:.05, g:.35}); thud(c, t, .2, rnd(150,190)); },
 };
 
 /* ================= cards ================= */
@@ -1008,10 +1165,10 @@ async function nextRound(){
 }
 
 /* ================= local (CPU) play ================= */
-function startCpu(){ pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
+function startCpu(){ if (APP.game==='okey') return okStartCpu(); pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
 function startCpuWith(rounds){
   closeGameSub();
-  APP.mode='cpu'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false;
+  APP.mode='cpu'; APP.game='pishpirik'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false;
   S = newMatch(rounds);
   show('game'); render(); afterState(); sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); maybeAi();
 }
@@ -1047,7 +1204,8 @@ async function humanPlay(i){
 /* ================= screens ================= */
 function show(name){
   APP.screen = name;
-  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame']]) $(id).hidden = k!==name;
+  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame'],['okey','scrOkey']]) $(id).hidden = k!==name;
+  if (name!=='okey') $('okSumOv').hidden = true;
   if (name!=='game') $('sumOv').hidden = true;
   if (name==='entry') renderEntry();
   if (name==='lobby') renderLobby();
@@ -1226,7 +1384,8 @@ async function setFriends(list){
   await NET.db.doc('players/'+NET.uid).update({friends:list});
   renderLobby();
 }
-function invite(fid){
+function invite(fid){ chooseGameFor(fid); }
+function invitePishpirik(fid){
   const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play'));
   if (live){ if (live.status==='play') return openGame(live.id); return toast('Ke tashmë një ftesë të hapur me '+nameOf(fid)+'.'); }
   pickRounds(`Sa raunde me ${nameOf(fid)}?`, 'Dërgo ftesën', async rounds=>{
@@ -1272,29 +1431,50 @@ function renderLobby(){
     acts.push(btn('Hiq', ()=>setFriends(friends.filter(x=>x!==id)).catch(e=>toast(writeErr(e)))));
     fl.append(rowEl(nameOf(id), mutual ? (on ? 'Online tani' : 'Shok') : 'Në pritje që të të shtojë', acts, on));
   });
-  const inv = NET.games.filter(g=>g.status==='invite' && g.p[1]===me);
+  const isOk = g => g.type==='okey';
+  const games = NET.games.filter(g=>!(isOk(g) && (g.acc||{})[me]===false));
+  const isInviteForMe = g => g.status==='invite' && g.p[0]!==me && (isOk(g) ? (g.acc||{})[me]===undefined : g.p[1]===me);
+  const inv = games.filter(isInviteForMe);
   $('invSec').hidden = !inv.length;
-  $('invList').replaceChildren(...inv.map(g=>rowEl(nameOf(g.p[0]), `Të fton në lojë · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
+  $('invList').replaceChildren(...inv.map(g=> isOk(g)
+    ? rowEl(nameOf(g.p[0]), `Lojë me gurë · ${g.rounds||5} raunde · ${g.p.length-1>1 ? 'me '+g.p.slice(1).filter(x=>x!==me).map(nameOf).join(', ') : 'ti dhe CPU'}`, [btn('Prano', ()=>okAccept(g,true), true), btn('Refuzo', ()=>okAccept(g,false))], NET.online.has(g.p[0]))
+    : rowEl(nameOf(g.p[0]), `Pishpirik · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
   const gl = $('gmList'); gl.replaceChildren();
-  const mine = NET.games.filter(g=>!(g.status==='invite' && g.p[1]===me)).sort((a,b)=>(b.created||0)-(a.created||0));
+  const mine = games.filter(g=>!isInviteForMe(g)).sort((a,b)=>(b.created||0)-(a.created||0));
   if (!mine.length) gl.innerHTML = '<div class="empty">Asnjë lojë ende. Fto një shok nga lista.</div>';
   mine.slice(0,12).forEach(g=>{
-    const opp = g.p[0]===me ? g.p[1] : g.p[0];
     const i = g.p.indexOf(me), G = g.G;
-    let st='', acts=[];
+    let st='', acts=[], title;
+    if (isOk(g)){
+      const others = g.p.filter(x=>x!==me);
+      title = 'Gurë · ' + (others.map(nameOf).join(', ') || 'CPU');
+      const acc = g.acc||{};
+      if (g.status==='invite'){
+        const yes = g.p.slice(1).filter(x=>acc[x]===true).length, tot = g.p.length-1;
+        if (g.p[0]===me){ st=`Pranuan ${yes}/${tot} · ${g.rounds||5} raunde`; acts=[btn('Fillo', ()=>okHostStart(g), true), btn('Anulo', ()=>dropGame(g))]; }
+        else { st=`Në pritje që ${nameOf(g.p[0])} ta nisë`; acts=[btn('Dil', ()=>okAccept(g,false))]; }
+      } else if (g.status==='play' && G){ st=`Raundi ${Math.min(G.round,G.rounds)}/${G.rounds} · ti ${G.wins[i]} raunde` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : ''); acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
+      else if (g.status==='over' && G){ const mx=Math.max(...G.wins); st = G.wins[i]===mx ? 'Fitove' : 'Humbe'; st += ` · ${G.wins[i]} raunde`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
+      else { st='Loja u mbyll'; acts=[btn('Fshi', ()=>dropGame(g))]; }
+      gl.append(rowEl(title, st, acts));
+      return;
+    }
+    const opp = g.p[0]===me ? g.p[1] : g.p[0];
+    title = 'Pishpirik · ' + nameOf(opp);
     if (g.status==='invite'){ st=`Ftesa u dërgua (${g.rounds||5} raunde), në pritje`; acts=[btn('Anulo', ()=>dropGame(g))]; }
     else if (g.status==='play'){ st = G ? `${winsOf(G)[i]} – ${winsOf(G)[1-i]} · raundi ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
     else if (g.status==='over' && G){ const Wg=winsOf(G); st=`${Wg[i]>Wg[1-i]?'Fitove':Wg[i]<Wg[1-i]?'Humbe':'Barazim'} ${Wg[i]} – ${Wg[1-i]} në raunde`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
     else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-    gl.append(rowEl(nameOf(opp), st, acts, NET.online.has(opp)));
+    gl.append(rowEl(title, st, acts, NET.online.has(opp)));
   });
 }
 
 /* ================= online game ================= */
 function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null; } NET.gameId=null; NET.gameDoc=null; NET.pending=null; }
 function openGame(gid){
+  const gg = NET.games.find(x=>x.id===gid); if (gg && gg.type==='okey') return openOkey(gid);
   closeGameSub();
-  APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid; NET.chatTs=null;
+  APP.mode='online'; APP.game='pishpirik'; APP.busy=false; S=null; NET.gameId=gid; NET.chatTs=null;
   $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
   show('game');
   NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(onGameSnap, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
@@ -1334,7 +1514,9 @@ async function recordResult(d){
   const i = d.p.indexOf(NET.uid); if (i<0) return;
   const res = NET.player.results || {};
   if (res[NET.gameId]) return;
-  const Wd = winsOf(d.G); const r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd';
+  let r;
+  if (d.type==='okey'){ const W=d.G.wins, mx=Math.max(...W), top=W.filter(x=>x===mx).length; r = W[i]===mx ? (top>1 ? 'd' : 'w') : 'l'; }
+  else { const Wd = winsOf(d.G); r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd'; }
   NET.player.results = {...res, [NET.gameId]:r};
   try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
 }
@@ -1384,9 +1566,9 @@ function sendChat(k, v){
     setTimeout(()=>cpuSay(replies[Math.floor(Math.random()*replies.length)]), 1100+Math.random()*900);
   }
 }
-function cpuSay([k,v]){ if (APP.mode==='cpu' && APP.screen==='game') showChat('opp', k, v); }
+function cpuSay([k,v]){ if (APP.mode==='cpu' && (APP.screen==='game' || APP.screen==='okey')) showChat('opp', k, v); }
 function showChat(who, k, v){
-  const seat = document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
+  const seat = APP.screen==='okey' ? (who==='me' ? $('okMe') : $('okSeat'+(typeof who==='number' ? who : 1+Math.floor(Math.random()*3)))) : document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
   if (!seat) return;
   seat.querySelectorAll('.bubble').forEach(b=>b.remove());
   const b = document.createElement('div'); b.className='bubble';
@@ -1397,6 +1579,576 @@ function showChat(who, k, v){
   seat.append(b); setTimeout(()=>b.remove(), 3100);
 }
 
+
+
+/* =====================================================================
+   LOJË ME GURË (Okey klasik) — 106 gurë, 4 lojtarë, 14 gurë + i 15-ti e mbyll
+   ===================================================================== */
+const OK_COL = ['r','k','b','y'];
+const OK_CI = {r:0,k:1,b:2,y:3};
+const OK_BOTS = ['Arbi','Drita','Gëzimi'];
+const okParse = id => id[0]==='X' ? {x:true} : {c:id[0], n:parseInt(id.slice(1),10)};
+function okAllTiles(){ const t=[]; for (const c of OK_COL) for (let n=1;n<=13;n++) for (const s of ['a','b']) t.push(c+n+s); t.push('Xa','Xb'); return t; }
+function okVal(id, O){
+  const p = okParse(id);
+  if (p.x) return {c:O.c, n:O.n, w:false};
+  if (p.c===O.c && p.n===O.n) return {c:p.c, n:p.n, w:true};
+  return {c:p.c, n:p.n, w:false};
+}
+function okCounts(ids, O){
+  const cnt = [0,1,2,3].map(()=>new Array(15).fill(0)); let J=0;
+  for (const id of ids){ const v=okVal(id,O); if (v.w) J++; else cnt[OK_CI[v.c]][v.n]++; }
+  return {cnt, J};
+}
+/* Partition solver. needAll=true: every tile must be in a set (returns null if impossible).
+   needAll=false: maximise tiles placed in sets. Sets are runs (same colour, consecutive, 12-13-1 allowed)
+   or groups (same number, different colours, 3-4). 'J' marks a wild okey tile. */
+function okSolve(cnt, J, needAll){
+  const memo = new Map();
+  const key = () => cnt.map(r=>r.slice(1,14).join('')).join('|') + '#' + J;
+  const first = () => { for (let c=0;c<4;c++) for (let n=1;n<=13;n++) if (cnt[c][n]>0) return [c,n]; return null; };
+  function rec(){
+    const f = first();
+    if (!f) return {score:0, sets:[]};
+    const k = key(); if (memo.has(k)) return memo.get(k);
+    const [c,n] = f; let best = null;
+    const consider = (res, set) => { if (!res) return; const sc = res.score + set.length; if (!best || sc > best.score) best = {score:sc, sets:[set, ...res.sets]}; };
+    // groups with this tile
+    const others = [0,1,2,3].filter(o=>o>c && cnt[o][n]>0);
+    const subsets = [[]];
+    for (const o of others){ const L=subsets.length; for (let i=0;i<L;i++) subsets.push([...subsets[i], o]); }
+    for (const sub of subsets){
+      for (let j=0; j<=Math.min(J,2); j++){
+        const size = 1+sub.length+j; if (size<3 || size>4) continue;
+        cnt[c][n]--; sub.forEach(o=>cnt[o][n]--); J-=j;
+        consider(rec(), [[c,n], ...sub.map(o=>[o,n]), ...Array(j).fill('J')]);
+        cnt[c][n]++; sub.forEach(o=>cnt[o][n]++); J+=j;
+      }
+    }
+    // runs where this is the first real tile (wild tiles may stand before it)
+    for (let pre=0; pre<=J && n-pre>=1; pre++){
+      const members = [...Array(pre).fill('J'), [c,n]]; let jUse = pre; const taken = [];
+      cnt[c][n]--;
+      let k2 = n;
+      while (true){
+        if (members.length>=3){ J-=jUse; consider(rec(), members.slice()); J+=jUse; }
+        k2++; if (k2>13) break;
+        if (cnt[c][k2]>0){ cnt[c][k2]--; taken.push(k2); members.push([c,k2]); }
+        else if (jUse<J){ jUse++; members.push('J'); }
+        else break;
+      }
+      taken.forEach(t=>cnt[c][t]++); cnt[c][n]++;
+    }
+    // runs that wrap: ..., 12, 13, 1
+    if (n===1){
+      for (let L=3; L<=13; L++){
+        const members=[]; let jUse=0; const taken=[]; let ok=true;
+        for (let p=14-(L-1); p<=13; p++){
+          if (cnt[c][p]>0){ cnt[c][p]--; taken.push(p); members.push([c,p]); }
+          else if (jUse<J){ jUse++; members.push('J'); }
+          else { ok=false; break; }
+        }
+        if (ok){ cnt[c][1]--; members.push([c,1]); J-=jUse; consider(rec(), members); J+=jUse; cnt[c][1]++; }
+        taken.forEach(t=>cnt[c][t]++);
+        if (!ok) break;
+      }
+    }
+    // leave this tile out (only when maximising)
+    if (!needAll){ cnt[c][n]--; const r=rec(); cnt[c][n]++; if (r && (!best || r.score>best.score)) best = {score:r.score, sets:r.sets}; }
+    memo.set(k, best); return best;
+  }
+  return rec();
+}
+function okPairsInfo(ids, O){
+  const m = new Map(); let J=0;
+  for (const id of ids){ const v=okVal(id,O); if (v.w){ J++; continue; } const k=v.c+v.n; m.set(k,(m.get(k)||0)+1); }
+  let pairs=0, single=0; m.forEach(v=>{ pairs+=Math.floor(v/2); single+=v%2; });
+  return {pairs, single, J};
+}
+function okIsWin(ids, O){
+  if (ids.length!==14) return null;
+  const {cnt,J} = okCounts(ids,O);
+  if (okSolve(cnt,J,true)) return 'sets';
+  const p = okPairsInfo(ids,O);
+  if (p.single<=p.J && (p.J-p.single)%2===0) return 'pairs';
+  return null;
+}
+function okEval(ids, O){
+  const {cnt,J} = okCounts(ids,O);
+  const r = okSolve(cnt,J,false);
+  let s = r.score*10 + J*6;
+  const vals = ids.map(id=>okVal(id,O)).filter(v=>!v.w);
+  for (let i=0;i<vals.length;i++) for (let j=i+1;j<vals.length;j++){
+    const a=vals[i], b=vals[j];
+    if (a.c===b.c){ const d=Math.abs(a.n-b.n); if (d===1||d===12) s+=2; else if (d===2) s+=1; else if (d===0) s+=1; }
+    else if (a.n===b.n) s+=1.5;
+  }
+  const p = okPairsInfo(ids,O);
+  const ps = (p.pairs + J)*14;
+  return (p.pairs>=5) ? Math.max(s, ps) : s;
+}
+
+/* ---------- match / round state ---------- */
+function okNewMatch(seats, rounds){
+  const G = {type:'okey', seats, rounds:Math.min(10,Math.max(1,rounds||5)), wins:[0,0,0,0], round:0, starter:Math.floor(Math.random()*4), seq:0};
+  okNewRound(G); return G;
+}
+function okNewRound(G){
+  G.round++;
+  const t = shuffle(okAllTiles());
+  const ii = t.findIndex(x=>x[0]!=='X');
+  const ind = t.splice(ii,1)[0], ip = okParse(ind);
+  G.indicator = ind; G.okey = {c:ip.c, n: ip.n%13+1};
+  G.hands = [[],[],[],[]];
+  for (let r=0;r<14;r++) for (let s=0;s<4;s++) G.hands[s].push(t.pop());
+  G.hands[G.starter].push(t.pop());
+  G.deck = t; G.discards = [[],[],[],[]];
+  G.turn = G.starter; G.drawn = true; G.phase = 'play'; G.summary = null; G.lastMove = null; G.finishTile = null;
+  G.seq = (G.seq||0)+1;
+}
+function okDraw(G, p, src){
+  if (G.phase!=='play' || G.turn!==p || G.drawn) return false;
+  let tile;
+  if (src==='left'){ const L=G.discards[(p+3)%4]; if (!L.length) return false; tile=L.pop(); }
+  else { if (!G.deck.length) return false; tile=G.deck.pop(); }
+  G.hands[p].push(tile); G.drawn = true;
+  G.lastMove = {by:p, kind:'draw', src, tile: src==='left' ? tile : null};
+  G.seq++; return true;
+}
+function okDiscard(G, p, id){
+  if (G.phase!=='play' || G.turn!==p || !G.drawn) return false;
+  const i = G.hands[p].indexOf(id); if (i<0) return false;
+  G.hands[p].splice(i,1); G.discards[p].push(id);
+  G.turn = (p+1)%4; G.drawn = false;
+  G.lastMove = {by:p, kind:'discard', tile:id};
+  if (!G.deck.length) okEnd(G, -1, null);
+  G.seq++; return true;
+}
+function okFinish(G, p, id){
+  if (G.phase!=='play' || G.turn!==p || !G.drawn) return false;
+  const rest = G.hands[p].filter(x=>x!==id);
+  if (rest.length!==14) return false;
+  const how = okIsWin(rest, G.okey); if (!how) return false;
+  G.hands[p] = rest; G.finishTile = id;
+  G.lastMove = {by:p, kind:'finish', tile:id};
+  okEnd(G, p, how, okVal(id,G.okey).w);
+  G.seq++; return true;
+}
+function okEnd(G, w, how, withOkey){
+  G.phase = 'summary';
+  if (w>=0) G.wins[w]++;
+  const left = G.rounds - G.round;
+  const s = [...G.wins].sort((a,b)=>b-a);
+  const over = left<=0 || s[0] > s[1]+left;
+  G.summary = {winner:w, how, over, okey: !!withOkey};
+  G.starter = (G.starter+1)%4;
+}
+
+/* ---------- CPU ---------- */
+function okAiDrawSrc(G, p){
+  const L = G.discards[(p+3)%4]; if (!L.length || SET.level==='easy') return 'deck';
+  const top = L[L.length-1]; const O = G.okey; const hand = G.hands[p];
+  if (okVal(top,O).w) return 'left';
+  const withTop = [...hand, top];
+  for (const id of withTop){ if (okIsWin(withTop.filter(x=>x!==id), O)) return 'left'; }
+  const base = okEval(hand, O) + 7;
+  let best = -Infinity;
+  for (const id of new Set(hand)){ const v=okEval(withTop.filter(x=>x!==id), O); if (v>best) best=v; }
+  return best > base + (SET.level==='hard' ? 2 : 5) ? 'left' : 'deck';
+}
+function okAiDiscard(G, p){
+  const O = G.okey, hand = G.hands[p];
+  for (const id of hand){ if (okIsWin(hand.filter(x=>x!==id), O)) return {finish:id}; }
+  const cands = hand.filter(id=>!okVal(id,O).w);
+  const pool = cands.length ? cands : hand;
+  if (SET.level==='easy' && Math.random()<.25) return {id: pool[Math.floor(Math.random()*pool.length)]};
+  let best=null, bestV=-Infinity; const seen=new Set();
+  for (const id of pool){
+    const v0 = okVal(id,O), k = v0.c+v0.n; if (seen.has(k)) continue; seen.add(k);
+    const v = okEval(hand.filter(x=>x!==id), O) + (SET.level==='hard' ? 0 : Math.random()*1.5);
+    if (v>bestV){ bestV=v; best=id; }
+  }
+  return {id: best};
+}
+
+/* ---------- UI state ---------- */
+const OK = {G:null, me:0, mode:'cpu', gid:null, doc:null, rack:Array(26).fill(null), sel:null, fresh:null, busy:false, round:0, pending:null, timer:null};
+function okTileHTML(id, O, mine){
+  const p = okParse(id);
+  if (p.x) return `<div class="tile joker" data-id="${id}"><b>★</b><i></i></div>`;
+  const wild = mine && O && p.c===O.c && p.n===O.n;
+  return `<div class="tile c-${p.c}${wild?' wild':''}" data-id="${id}"><b>${p.n}</b><i></i></div>`;
+}
+function okName(a){
+  const s = OK.G.seats[a];
+  if (a===OK.me) return 'Ti';
+  if (s.k==='h') return nameOf(s.uid);
+  return OK.mode==='cpu' ? OK_BOTS[(a-OK.me+3)%4] : 'CPU';
+}
+function okDriver(){
+  if (OK.mode==='cpu') return true;
+  const i = OK.G.seats.findIndex(s=>s.k==='h');
+  return i===OK.me;
+}
+function okSyncRack(){
+  const hand = OK.G.hands[OK.me]; const hs = new Set(hand);
+  for (let i=0;i<26;i++) if (OK.rack[i] && !hs.has(OK.rack[i])) OK.rack[i]=null;
+  const placed = new Set(OK.rack.filter(Boolean));
+  for (const id of hand) if (!placed.has(id)){ const i=OK.rack.indexOf(null); if (i>=0){ OK.rack[i]=id; OK.fresh=id; } }
+  if (OK.sel && !hs.has(OK.sel)) OK.sel=null;
+}
+function okArrange(mode){
+  if (!OK.G) return;
+  const ids = OK.G.hands[OK.me].slice(), O = OK.G.okey;
+  const groups = [];
+  const pool = {}; ids.forEach(id=>{ const v=okVal(id,O); const k=v.w?'J':(OK_CI[v.c]+':'+v.n); (pool[k]=pool[k]||[]).push(id); });
+  if (mode==='pairs'){
+    Object.keys(pool).filter(k=>k!=='J').forEach(k=>{ while (pool[k].length>=2) groups.push(pool[k].splice(0,2)); });
+  } else {
+    const {cnt,J} = okCounts(ids,O); const r = okSolve(cnt,J,false);
+    for (const set of r.sets) groups.push(set.map(m=> m==='J' ? pool.J.pop() : pool[m[0]+':'+m[1]].pop()));
+  }
+  const rest = Object.values(pool).flat().filter(Boolean);
+  rest.sort((a,b)=>{ const A=okVal(a,O), B=okVal(b,O); if (A.w!==B.w) return A.w?1:-1; return (OK_CI[A.c]-OK_CI[B.c]) || (A.n-B.n); });
+  if (rest.length) groups.push(rest);
+  const slots = Array(26).fill(null); let row=0, col=0;
+  for (const g of groups){
+    if (col>0 && col+g.length>13){ row++; col=0; }
+    for (const id of g){ if (col>=13){ row++; col=0; } if (row>1) break; slots[row*13+col++] = id; }
+    col++;
+  }
+  const placed = new Set(slots.filter(Boolean));
+  ids.filter(id=>!placed.has(id)).forEach(id=>{ slots[slots.indexOf(null)] = id; });
+  OK.rack = slots; OK.sel = null; okRender();
+}
+function okRender(){
+  const G = OK.G; if (!G) return;
+  const me = OK.me, O = G.okey;
+  const myTurn = G.phase==='play' && G.turn===me;
+  const needDraw = myTurn && !G.drawn, canThrow = myTurn && G.drawn;
+  const st = OK.mode==='online' && OK.doc ? OK.doc.status : 'play';
+  const pips = a => { const need=Math.floor(G.rounds/2)+1; return Array.from({length:need},(_,i)=>`<i class="${i<G.wins[a]?'on':''}"></i>`).join(''); };
+  for (const r of [1,2,3]){
+    const a=(me+r)%4, el=$('okSeat'+r);
+    el.classList.toggle('on', G.phase==='play' && G.turn===a);
+    el.classList.toggle('cpu', G.seats[a].k!=='h');
+    const nm = okName(a);
+    el.querySelector('.av').textContent = (nm[0]==='@' ? nm[1] : nm[0]).toUpperCase();
+    el.querySelector('.nm').textContent = nm;
+    el.querySelector('.cnt').textContent = G.hands[a].length;
+    el.querySelector('.pips').innerHTML = pips(a);
+    el.querySelector('.think').hidden = !(G.phase==='play' && G.turn===a && st==='play');
+  }
+  $('okMePips').innerHTML = pips(me);
+  for (const r of [0,1,2,3]){
+    const a=(me+r)%4, pile=G.discards[a], top=pile[pile.length-1], el=$('okDisc'+r);
+    el.innerHTML = (top ? okTileHTML(top, O, false) : '') + (pile.length>1 ? `<span class="under">${pile.length}</span>` : '');
+    const lm = G.lastMove;
+    if (lm && lm.kind==='discard' && lm.by===a && top===lm.tile){ const t=el.querySelector('.tile'); if (t) t.classList.add('pop'); }
+  }
+  $('okDisc3').classList.toggle('take', needDraw && G.discards[(me+3)%4].length>0);
+  $('okDisc0').classList.toggle('drop', canThrow);
+  $('okDeck').classList.toggle('take', needDraw && G.deck.length>0);
+  $('okDeckN').textContent = G.deck.length;
+  $('okInd').innerHTML = okTileHTML(G.indicator, null, false);
+  $('okIndWrap').classList.toggle('drop', canThrow);
+  $('okRound').textContent = `Raundi ${Math.min(G.round,G.rounds)}/${G.rounds}`;
+  $('scrOkey').dataset.turn = (G.phase==='play' && st==='play') ? (myTurn ? (needDraw ? 'draw' : 'throw') : 'wait') : '';
+  // rack
+  okSyncRack();
+  const rack = $('okRack');
+  rack.innerHTML = OK.rack.map((id,i)=>`<div class="slot" data-slot="${i}">${id ? okTileHTML(id, O, true) : ''}</div>`).join('');
+  if (OK.sel){ const t=rack.querySelector(`.tile[data-id="${OK.sel}"]`); if (t) t.classList.add('sel'); }
+  if (OK.fresh){ const t=rack.querySelector(`.tile[data-id="${OK.fresh}"]`); if (t) t.classList.add('fresh'); OK.fresh=null; }
+  const sw = rack.querySelector('.slot')?.getBoundingClientRect().width || 26;
+  rack.style.setProperty('--tw', sw+'px');
+  $('okThrow').hidden = !(canThrow && OK.sel);
+  $('okClose').hidden = !(canThrow && OK.sel);
+  $('okSortRun').hidden = $('okSortPair').hidden = !!(canThrow && OK.sel);
+  let msg = '';
+  if (OK.mode==='online' && OK.doc && OK.doc.status==='left') msg = 'Të gjithë shokët e lanë lojën.';
+  $('okMsg').textContent = msg;
+  if (OK.mode==='cpu'){ $('okModeLbl').textContent = 'Kundër CPU'; $('okAct').textContent = 'Lojë e re'; }
+  else { $('okModeLbl').innerHTML = '<span class="live"></span>Online'; $('okAct').textContent = 'Lëre lojën'; }
+}
+
+/* ---------- moves ---------- */
+async function okCommit(G, extra){
+  OK.G = G; okRender();
+  if (OK.mode==='online'){
+    OK.busy = true;
+    try{ await NET.db.doc('games/'+OK.gid).update({status: (G.phase==='summary' && G.summary && G.summary.over) ? 'over' : 'play', G, ...(extra||{})}); }
+    catch(e){ toast(writeErr(e)); if (OK.doc && OK.doc.G) { OK.G = OK.doc.G; okRender(); } }
+    OK.busy = false;
+    if (OK.pending){ const d=OK.pending; OK.pending=null; okApplyDoc(d); return; }
+  }
+  okAfter();
+}
+function okAfter(){
+  const G = OK.G; if (!G) return;
+  if (G.phase==='summary'){ okShowSummary(); return; }
+  $('okSumOv').hidden = true;
+  clearTimeout(OK.timer);
+  if (G.seats[G.turn].k!=='h' && okDriver() && (OK.mode==='cpu' || (OK.doc && OK.doc.status==='play'))) OK.timer = setTimeout(okCpuStep, G.drawn ? 700 : 600);
+}
+function okCpuStep(){
+  if (APP.screen!=='okey' || OK.busy) return;
+  const G = clone(OK.G), p = G.turn;
+  if (G.phase!=='play' || G.seats[p].k==='h') return;
+  if (!G.drawn){
+    const src = okAiDrawSrc(G,p);
+    if (!okDraw(G,p,src)) { if (!okDraw(G,p,'deck')) return; }
+    sfx.tile && sfx.tile();
+  } else {
+    const d = okAiDiscard(G,p);
+    if (d.finish){ okFinish(G,p,d.finish); }
+    else okDiscard(G,p,d.id);
+    sfx.tile && sfx.tile();
+    if (OK.mode==='cpu' && G.phase==='summary' && G.summary.winner===p && Math.random()<.7) setTimeout(()=>cpuSay(['e',1]), 600);
+  }
+  okCommit(G);
+}
+function okCanAct(){ return OK.G && OK.G.phase==='play' && OK.G.turn===OK.me && !OK.busy && (OK.mode==='cpu' || (OK.doc && OK.doc.status==='play')); }
+function okHumanDraw(src){
+  if (!okCanAct() || OK.G.drawn) return;
+  const G = clone(OK.G);
+  if (!okDraw(G, OK.me, src)) return;
+  sfx.tile(); okCommit(G);
+}
+function okHumanThrow(id){
+  id = id || OK.sel; if (!id || !okCanAct() || !OK.G.drawn) return;
+  const G = clone(OK.G);
+  if (!okDiscard(G, OK.me, id)) return;
+  OK.sel = null; sfx.tile(); okCommit(G);
+}
+function okHumanFinish(id){
+  id = id || OK.sel; if (!id || !okCanAct() || !OK.G.drawn) return;
+  const G = clone(OK.G);
+  if (!okFinish(G, OK.me, id)){ toast('Gurët ende s’janë të rregulluar. Duhen 14 gurë në seri, grupe ose 7 çifte.'); sfx.click(); return; }
+  OK.sel = null; sfx.pishti(); okCommit(G);
+}
+function okMoveTo(id, slot){
+  const from = OK.rack.indexOf(id); if (from<0 || slot===from) return;
+  const other = OK.rack[slot]; OK.rack[slot] = id; OK.rack[from] = other || null;
+  OK.sel = null; sfx.click(); okRender();
+}
+
+/* ---------- rack drag & tap ---------- */
+let okDrag = null;
+function okRackDown(e){
+  const t = e.target.closest('.tile');
+  if (!t){ const s=e.target.closest('.slot'); if (s && OK.sel) okMoveTo(OK.sel, +s.dataset.slot); return; }
+  okDrag = {id:t.dataset.id, x:e.clientX, y:e.clientY, el:t, moved:false, ghost:null, pid:e.pointerId};
+  try{ t.setPointerCapture(e.pointerId); }catch(_){}
+}
+function okRackMove(e){
+  if (!okDrag) return;
+  const dx=e.clientX-okDrag.x, dy=e.clientY-okDrag.y;
+  if (!okDrag.moved && Math.hypot(dx,dy)>7){
+    okDrag.moved = true;
+    const r = okDrag.el.getBoundingClientRect();
+    const g = okDrag.el.cloneNode(true); g.classList.add('ghost'); g.style.width=r.width+'px'; g.style.height=r.height+'px';
+    g.style.setProperty('--tw', r.width+'px');
+    document.body.append(g); okDrag.ghost=g; okDrag.off={x:okDrag.x-r.left, y:okDrag.y-r.top};
+    okDrag.el.style.opacity='.25';
+  }
+  if (okDrag.ghost){ okDrag.ghost.style.left=(e.clientX-okDrag.off.x)+'px'; okDrag.ghost.style.top=(e.clientY-okDrag.off.y)+'px'; }
+}
+function okRackUp(e){
+  if (!okDrag) return;
+  const d = okDrag; okDrag = null;
+  if (!d.moved){ OK.sel = (OK.sel===d.id) ? null : d.id; sfx.click(); okRender(); return; }
+  d.ghost.remove(); d.el.style.opacity='';
+  const hit = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = hit && hit.closest('#okRack .slot');
+  if (slot) return okMoveTo(d.id, +slot.dataset.slot);
+  if (hit && hit.closest('#okDisc0')) return okHumanThrow(d.id);
+  if (hit && hit.closest('#okIndWrap')) return okHumanFinish(d.id);
+  okRender();
+}
+
+/* ---------- summary ---------- */
+let okSumKey='';
+function okShowSummary(){
+  const G=OK.G, S2=G.summary, me=OK.me; if (!S2) return;
+  const key=G.round+':'+G.seq;
+  const W = G.wins;
+  if (key!==okSumKey){
+    okSumKey=key;
+    setTimeout(()=>{ if (S2.over){ const mx=Math.max(...W); (W[me]===mx && W.filter(x=>x===mx).length===1) ? sfx.win() : sfx.lose(); } else if (S2.winner===me) sfx.win(); else sfx.round(); }, 250);
+  }
+  const wn = S2.winner;
+  let h, sub;
+  if (wn<0){ h='Barazim'; sub='U mbaruan gurët pa e mbyllur askush.'; }
+  else if (wn===me){ h='E mbylle! 🎉'; sub = S2.how==='pairs' ? 'Me 7 çifte.' : 'Me seri dhe grupe.'; }
+  else { h=`E mbylli ${okName(wn)}`; sub = S2.how==='pairs' ? 'Me 7 çifte.' : 'Me seri dhe grupe.'; }
+  if (S2.okey) sub += ' Dhe e hodhi okey-n në fund!';
+  if (S2.over){
+    const mx=Math.max(...W), top=[0,1,2,3].filter(a=>W[a]===mx);
+    h = top.length>1 ? 'Loja doli barazim' : (top[0]===me ? 'Fitove lojën! 🏆' : `Fitoi ${okName(top[0])}`);
+  }
+  $('okSumH').textContent = h; $('okSumSub').textContent = sub + ` Raundi ${G.round} nga ${G.rounds}.`;
+  // winner hand
+  const hw = $('okSumHand'); hw.innerHTML='';
+  if (wn>=0){
+    const ids=G.hands[wn], O=G.okey;
+    let groups=[];
+    if (S2.how==='pairs'){ const m={}; ids.forEach(id=>{const v=okVal(id,O); const k=v.w?'J':v.c+v.n; (m[k]=m[k]||[]).push(id);}); groups=Object.values(m); }
+    else { const {cnt,J}=okCounts(ids,O); const r=okSolve(cnt,J,true)||okSolve(cnt,J,false); const pool={}; ids.forEach(id=>{const v=okVal(id,O); const k=v.w?'J':(OK_CI[v.c]+':'+v.n); (pool[k]=pool[k]||[]).push(id);}); groups=r.sets.map(s=>s.map(m=>m==='J'?pool.J.pop():pool[m[0]+':'+m[1]].pop())); const rest=Object.values(pool).flat(); if (rest.length) groups.push(rest); }
+    hw.innerHTML = groups.map(g=>`<span class="grp">${g.filter(Boolean).map(id=>okTileHTML(id,O,false)).join('')}</span>`).join('');
+  }
+  $('okSumTable').innerHTML = [0,1,2,3].map(a=>`<tr${a===wn?' class="sum"':''}><td>${esc(okName(a))}</td><td>${W[a]}</td></tr>`).join('');
+  const nb = $('okNext');
+  if (okDriver()){ nb.disabled=false; nb.textContent = S2.over ? (OK.mode==='cpu' ? 'Lojë e re' : 'Luaj përsëri') : 'Raundi tjetër'; }
+  else { nb.disabled=true; nb.textContent='Në pritje…'; }
+  $('okSumOv').hidden = false;
+}
+function okNext(){
+  if (!OK.G || OK.G.phase!=='summary' || !okDriver()) return;
+  $('okSumOv').hidden = true;
+  if (OK.mode==='cpu' && OK.G.summary.over){ okStartCpu(); return; }
+  const G = OK.G.summary.over ? okNewMatch(OK.G.seats, OK.G.rounds) : (()=>{ const g=clone(OK.G); okNewRound(g); return g; })();
+  OK.rack = Array(26).fill(null); OK.round = G.round;
+  sfx.shuffle();
+  okCommit(G);
+  setTimeout(()=>okArrange('runs'), 50);
+}
+
+/* ---------- start / open ---------- */
+function okStartCpu(){ pickRounds('Sa raunde me gurë?', 'Fillo', r=>okStartCpuWith(r)); }
+function okStartCpuWith(rounds){
+  closeGameSub();
+  APP.mode='cpu'; APP.game='okey';
+  OK.mode='cpu'; OK.me=0; OK.gid=null; OK.doc=null; OK.busy=false; OK.pending=null;
+  OK.G = okNewMatch([{k:'h'},{k:'c'},{k:'c'},{k:'c'}], rounds);
+  OK.rack = Array(26).fill(null); OK.round = OK.G.round; okSumKey='';
+  show('okey'); okRender(); okArrange('runs'); sfx.shuffle();
+  okAfter();
+}
+function openOkey(gid){
+  closeGameSub();
+  APP.mode='online'; APP.game='okey';
+  OK.mode='online'; OK.gid=gid; OK.doc=null; OK.G=null; OK.busy=false; OK.pending=null; OK.rack=Array(26).fill(null); OK.round=0; okSumKey='';
+  NET.gameId = gid; NET.chatTs = null;
+  $('okRack').innerHTML=''; $('okMsg').textContent='Duke hapur lojën…';
+  show('okey');
+  NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(snap=>{
+    if (APP.screen!=='okey' || OK.gid!==gid) return;
+    if (!snap.exists){ toast('Kjo lojë nuk ekziston më.'); closeGameSub(); show('lobby'); return; }
+    okApplyDoc(clone(snap.data()));
+  }, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
+}
+function okApplyDoc(d){
+  if (OK.busy){ OK.pending = d; return; }
+  OK.doc = d; NET.gameDoc = d;
+  OK.me = Math.max(0, d.p.indexOf(NET.uid));
+  const ch = d.chat;
+  if (ch && ch.ts){
+    if (NET.chatTs!==null && ch.ts>NET.chatTs && ch.by!==NET.uid){ const a=d.p.indexOf(ch.by); showChat(a>=0 ? ((a-OK.me+4)%4)||1 : 'opp', ch.k, ch.v); }
+    NET.chatTs = Math.max(NET.chatTs||0, ch.ts);
+  } else if (NET.chatTs===null) NET.chatTs = 0;
+  if (!d.G){ $('okMsg').textContent = 'Në pritje që të niset loja…'; return; }
+  recordResult(d);
+  const G = d.G;
+  if (!OK.G || G.seq!==OK.G.seq){
+    const newRound = !OK.G || G.round!==OK.round;
+    const lm = G.lastMove;
+    if (OK.G && lm && lm.by!==OK.me) sfx.tile();
+    OK.G = G;
+    if (newRound){ OK.rack=Array(26).fill(null); OK.round=G.round; okRender(); okArrange('runs'); if (OK.G.round>1 || G.seq>1) sfx.shuffle(); }
+    else okRender();
+    if (G.phase==='play' && G.turn===OK.me && lm && lm.by!==OK.me) setTimeout(()=>sfx.turn(), 150);
+  } else okRender();
+  okAfter();
+}
+async function okLeave(){
+  if (OK.mode==='cpu'){ okStartCpu(); return; }
+  if (!OK.G || !OK.doc) return;
+  const G = clone(OK.G); G.seats[OK.me] = {k:'c'};
+  const humans = G.seats.filter(s=>s.k==='h').length;
+  try{ await NET.db.doc('games/'+OK.gid).update({status: humans ? (OK.doc.status) : 'left', G}); }catch(e){ toast(writeErr(e)); }
+  closeGameSub(); show(loggedIn() ? 'lobby' : 'entry');
+}
+
+/* ---------- online invites ---------- */
+let okInvSel = new Set(), okInvRounds = 5;
+function okInvite(fid){
+  okInvSel = new Set(fid ? [fid] : []); okInvRounds = SET.rounds || 5;
+  okDrawInvite(); $('okInvOv').hidden = false;
+}
+function okDrawInvite(){
+  const me=NET.uid, friends=(NET.player.friends||[]).filter(id=>(NET.players[id]?.friends||[]).includes(me));
+  const box=$('okInvList'); box.replaceChildren();
+  if (!friends.length) box.innerHTML='<div class="empty">S’ke shokë të ndërsjellë ende.</div>';
+  friends.forEach(id=>{
+    const l=document.createElement('label'); l.className='chk inv-row';
+    const c=document.createElement('input'); c.type='checkbox'; c.checked=okInvSel.has(id);
+    c.onchange=()=>{ if (c.checked){ if (okInvSel.size>=3){ c.checked=false; return toast('Në tavolinë ka vend për 3 shokë.'); } okInvSel.add(id); } else okInvSel.delete(id); okDrawInviteHint(); };
+    const s=document.createElement('span'); s.textContent=nameOf(id)+(NET.online.has(id)?' · online':'');
+    l.append(c,s); box.append(l);
+  });
+  $('okInvR').replaceChildren(...Array.from({length:10},(_,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=i+1; b.className=i+1===okInvRounds?'on':''; b.onclick=()=>{ okInvRounds=i+1; okDrawInvite(); }; return b; }));
+  okDrawInviteHint();
+}
+function okDrawInviteHint(){ const n=okInvSel.size; $('okInvHint').textContent = n ? `${n} shok${n>1?'ë':''} + ${3-n} CPU në tavolinë.` : 'Zgjidh të paktën një shok.'; $('okInvGo').disabled = !n; }
+async function okSendInvite(){
+  if (!okInvSel.size) return;
+  SET.rounds = okInvRounds; saveSet();
+  const p = [NET.uid, ...okInvSel];
+  try{ await NET.db.collection('games').add({type:'okey', p, acc:{[NET.uid]:true}, status:'invite', rounds:okInvRounds, created:Date.now(), G:null}); $('okInvOv').hidden=true; toast('Ftesat u dërguan.'); }
+  catch(e){ toast(writeErr(e)); }
+}
+async function okAccept(g, yes){
+  try{ await NET.db.doc('games/'+g.id).update({acc:{[NET.uid]:!!yes}}); if (yes) toast(`Prit që ${nameOf(g.p[0])} ta nisë lojën.`); }
+  catch(e){ toast(writeErr(e)); }
+}
+async function okHostStart(g){
+  const acc = g.acc||{};
+  const seats = [0,1,2,3].map(i => (i<g.p.length && (i===0 || acc[g.p[i]]===true)) ? {k:'h', uid:g.p[i]} : {k:'c'});
+  try{ await NET.db.doc('games/'+g.id).update({status:'play', G: okNewMatch(seats, g.rounds||5)}); openOkey(g.id); }
+  catch(e){ toast(writeErr(e)); }
+}
+function chooseGameFor(fid){ $('gtOv').hidden=false; $('gtOv').dataset.fid=fid; }
+
+/* ---------- wiring ---------- */
+$('okRack').addEventListener('pointerdown', okRackDown);
+$('okRack').addEventListener('pointermove', okRackMove);
+$('okRack').addEventListener('pointerup', okRackUp);
+$('okRack').addEventListener('pointercancel', ()=>{ if (okDrag){ okDrag.ghost?.remove(); okDrag.el.style.opacity=''; okDrag=null; } });
+$('okDeck').onclick = () => okHumanDraw('deck');
+$('okDisc3').onclick = () => okHumanDraw('left');
+$('okDisc0').onclick = () => { if (OK.sel) okHumanThrow(); };
+$('okIndWrap').onclick = () => { if (OK.sel && OK.G && OK.G.drawn && OK.G.turn===OK.me) okHumanFinish(); };
+$('okThrow').onclick = () => okHumanThrow();
+$('okClose').onclick = () => okHumanFinish();
+$('okSortRun').onclick = () => okArrange('runs');
+$('okSortPair').onclick = () => okArrange('pairs');
+$('okNext').onclick = okNext;
+$('okSumMenu').onclick = () => { $('okSumOv').hidden=true; $('okBack').onclick(); };
+$('okBack').onclick = () => { clearTimeout(OK.timer); if (OK.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); } else show('entry'); };
+$('okAct').onclick = () => okLeave();
+$('bChat2').onclick = () => { $('chatOv').hidden = false; };
+$('okInvGo').onclick = okSendInvite;
+$('gtPish').onclick = () => { $('gtOv').hidden=true; invitePishpirik($('gtOv').dataset.fid); };
+$('gtOkey').onclick = () => { $('gtOv').hidden=true; okInvite($('gtOv').dataset.fid); };
+window.addEventListener('resize', ()=>{ if (APP.screen==='okey') okRender(); });
+if (location.hostname==='localhost') window.__ok = {OK, okIsWin, okHumanFinish};
+
+/* ================= game hub ================= */
+function setGame(g){
+  APP.game = g; try{ localStorage.setItem('pishpirik-game', g); }catch(e){}
+  document.querySelectorAll('#gameSel button').forEach(b=>{ const on=b.dataset.g===g; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  $('heroH').textContent = g==='okey' ? 'Lojë me gurë' : 'Pishpirik';
+  const fan = $('fan'); fan.replaceChildren();
+  if (g==='okey'){
+    fan.innerHTML = ['r7a','b8a','y9a','Xa'].map(id=>okTileHTML(id,null,false)).join('');
+    fan.querySelectorAll('.tile').forEach(t=>t.style.setProperty('--tw','44px'));
+  } else fan.append(backEl(), cardEl({r:'J',s:'♦',red:1}), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'10',s:'♦',red:1}));
+  $('rulesOkey').hidden = g!=='okey'; $('rulesPish').hidden = g==='okey';
+  $('rulesH').textContent = g==='okey' ? 'Si luhet Loja me gurë' : 'Si luhet Pishpiriku';
+  $('rulesSub').textContent = g==='okey' ? 'Okey klasik: 106 gurë, 4 lojtarë.' : 'Pako me 52 karta, dy lojtarë.';
+}
+document.querySelectorAll('#gameSel button').forEach(b=>b.onclick=()=>{ setGame(b.dataset.g); sfx.click(); });
 
 /* ================= network: Firebase ================= */
 let FDB=null, AUTH=null;
@@ -1441,8 +2193,9 @@ function startNet(uid){
     const hadAny = Object.keys(NET.prevStatus).length>0;
     list.forEach(g=>{
       const prev = NET.prevStatus[g.id];
-      if (prev==='invite' && g.status==='play' && g.p[0]===uid && APP.screen!=='game') toast(`${nameOf(g.p[1])} pranoi ftesën. Shtyp Vazhdo.`);
-      if (prev===undefined && hadAny && g.status==='invite' && g.p[1]===uid){ toast(`${nameOf(g.p[0])} të fton në lojë.`); sfx.turn(); }
+      if (g.type!=='okey' && prev==='invite' && g.status==='play' && g.p[0]===uid && APP.screen!=='game') toast(`${nameOf(g.p[1])} pranoi ftesën. Shtyp Vazhdo.`);
+      if (prev===undefined && hadAny && g.status==='invite' && g.p[0]!==uid){ toast(`${nameOf(g.p[0])} të fton në ${g.type==='okey' ? 'Lojë me gurë' : 'Pishpirik'}.`); sfx.turn(); }
+      if (g.type==='okey' && prev==='invite' && g.status==='play' && g.p[0]!==uid && (g.acc||{})[uid] && APP.screen!=='okey') toast(`${nameOf(g.p[0])} e nisi lojën me gurë. Shtyp Vazhdo.`);
     });
     NET.prevStatus = Object.fromEntries(list.map(g=>[g.id, g.status])); NET.prevStatus.__='x';
     NET.games = list;
@@ -1515,6 +2268,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').
 
 buildTiles();
 buildChat();
+setGame(APP.game);
 loadRemembered();
 syncSetUI();
 let saved = 0;
