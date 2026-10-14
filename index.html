@@ -1,0 +1,1360 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pishpirik online: luaj me shokët ose me CPU.">
+<meta name="theme-color" content="#102b1d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='3' width='20' height='26' rx='3' fill='%23fbf8f1' stroke='%23b3212b' stroke-width='2'/%3E%3Ctext x='16' y='21' font-size='13' text-anchor='middle' fill='%23b3212b' font-family='serif'%3EJ%3C/text%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Pishpirik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Rubik:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@700&family=Alegreya+SC:wght@700&family=Orbitron:wght@600&family=Poiret+One&family=Bitter:wght@700&family=IBM+Plex+Mono:wght@600&family=Righteous&family=Nunito:wght@800&display=swap">
+<style>
+/* Layout: one felt card table. Entry → (account → lobby) → table with opponent on top, pile in the middle, your hand at the bottom */
+:root{
+  --felt:#1d4a37; --felt-hi:#2a6249; --felt-deep:#102b1d;
+  --cream:#efe6d2; --muted:#a8b9a5; --brass:#d8ad55; --brass-deep:#a97f2c; --live:#5fd38a;
+  --paper:#f5eedd; --paper-ink:#221d14; --paper-line:#d9ccb0; --paper-muted:#6f644d; --danger:#a3141e;
+  --ui:'Rubik', system-ui, -apple-system, sans-serif;
+  --display:'Fraunces', Georgia, serif;
+  --cw: clamp(54px, 15.5vw, 92px);
+  --ch: calc(var(--cw) * 1.42);
+  color-scheme: dark;
+  /* card theme tokens (overwritten by the chosen deck) */
+  --face:#fbf8f1; --ink:#1b1b1b; --red:#c0262d; --font:'Playfair Display', Georgia, serif;
+  --fw:700; --rad:8px; --glow:none; --bd:rgba(0,0,0,.18);
+  --back:#b3212b; --back-edge:#ffffff; --back-frame:#ffffff;
+}
+html,body{height:100%}
+body{
+  background: radial-gradient(ellipse at 50% 42%, var(--felt-hi) 0%, var(--felt) 42%, var(--felt-deep) 100%) fixed, var(--felt-deep);
+  color:var(--cream); font-family:var(--ui); font-size:15px;
+  -webkit-tap-highlight-color: transparent;
+}
+.app{
+  max-width:860px; margin:0 auto; box-sizing:border-box; min-height:100%;
+  padding-block:12px 22px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex; flex-direction:column; gap:14px;
+}
+header{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px 16px}
+.brand{font-family:var(--display); font-weight:900; font-size:26px; margin:0; color:var(--brass); line-height:1; background:none; border:0; padding:0; cursor:pointer}
+.tools{display:flex; gap:8px; flex-wrap:wrap}
+.btn{
+  font:600 13px/1 var(--ui); color:var(--cream); background:rgba(0,0,0,.22);
+  border:1px solid rgba(216,173,85,.45); border-radius:999px; padding:9px 14px; cursor:pointer;
+}
+.btn:hover{background:rgba(0,0,0,.35)}
+.btn.primary{background:var(--brass); color:#1d1608; border-color:var(--brass)}
+.btn.primary:hover{background:#e6bd66}
+.btn[disabled]{opacity:.55; cursor:default}
+.btn:focus-visible,.card-btn:focus-visible,.tile:focus-visible,.choice:focus-visible,input:focus-visible{outline:2px solid var(--brass); outline-offset:2px}
+.screen{display:flex; flex-direction:column; gap:14px}
+
+/* ---------- entry ---------- */
+.hero{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding-block:18px 6px}
+.fan{display:flex; justify-content:center; height:calc(var(--ch) + 24px); align-items:flex-end; margin-bottom:6px}
+.fan .card{margin:0 calc(var(--cw) * -0.18)}
+.fan .card:nth-child(1){transform:rotate(-16deg) translateY(10px)}
+.fan .card:nth-child(2){transform:rotate(-5deg)}
+.fan .card:nth-child(3){transform:rotate(6deg)}
+.fan .card:nth-child(4){transform:rotate(17deg) translateY(10px)}
+.hero h1{font-family:var(--display); font-weight:900; font-size:clamp(46px, 13vw, 84px); line-height:.9; margin:0; color:var(--brass); letter-spacing:-.01em;
+  text-shadow:0 3px 0 #5b3f0e, 0 12px 30px rgba(0,0,0,.4)}
+.hero p{margin:0; color:var(--muted); max-width:44ch; line-height:1.5}
+.choices{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px}
+.choice{text-align:left; font:inherit; color:var(--cream); cursor:pointer; background:rgba(0,0,0,.26); border:1.5px solid rgba(216,173,85,.4);
+  border-radius:16px; padding:18px 18px 16px; display:flex; flex-direction:column; gap:6px; min-width:0}
+.choice:hover:not([disabled]){background:rgba(0,0,0,.36); border-color:var(--brass)}
+.choice[disabled]{cursor:default; opacity:.75}
+.choice .k{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass)}
+.choice h3{font-family:var(--display); font-weight:700; font-size:23px; margin:0; line-height:1.1}
+.choice p{margin:0; color:var(--muted); font-size:13.5px; line-height:1.45}
+.choice.solid{background:var(--brass); color:#1d1608; border-color:var(--brass)}
+.choice.solid .k{color:#5b3f0e} .choice.solid p{color:#4d3a12}
+.choice.solid:hover{background:#e6bd66}
+
+/* ---------- paper panels (auth, lobby) ---------- */
+.panel{background:var(--paper); color:var(--paper-ink); border-radius:16px; padding:20px; box-sizing:border-box; min-width:0}
+.panel h2{font-family:var(--display); font-weight:900; font-size:24px; margin:0 0 4px; text-wrap:balance}
+.panel h3{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-muted); margin:0 0 6px; font-weight:600}
+.panel .sub{margin:0 0 14px; color:var(--paper-muted); font-size:14px; line-height:1.5}
+.panel .btn{color:var(--paper-ink); background:transparent; border-color:#bfae88}
+.panel .btn:hover{background:#ece2c9}
+.panel .btn.primary{background:var(--paper-ink); color:var(--paper); border-color:var(--paper-ink)}
+.panel .btn.primary:hover{background:#3a3222}
+.auth{width:min(440px, 100%); margin:0 auto}
+.gear{width:42px; height:42px; border-radius:50%; display:grid; place-items:center; cursor:pointer; flex:none;
+  background:var(--face); color:var(--red); border:2px solid var(--back-edge); box-shadow:0 0 0 2px var(--back-frame), 0 4px 12px rgba(0,0,0,.35)}
+.gear svg{filter:drop-shadow(var(--glow)); transition:transform .5s ease}
+.gear:hover svg{transform:rotate(60deg)}
+.gear:focus-visible{outline:2px solid var(--brass); outline-offset:4px}
+.chk{display:flex; align-items:center; gap:8px; font-size:13.5px; cursor:pointer}
+.chk input{width:17px; height:17px; accent-color:var(--paper-ink); margin:0}
+.sgroup{border-top:1px solid var(--paper-line); padding-top:14px; margin-top:14px}
+.sgroup h3{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-muted); margin:0 0 6px; font-weight:600}
+.srow{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:8px 0; cursor:default}
+label.srow{cursor:pointer}
+.srow b{font-weight:600; font-size:14.5px}
+.srow small{display:block; color:var(--paper-muted); font-size:12.5px; margin-top:2px}
+.srow input[type=range]{width:min(220px, 50%); accent-color:var(--paper-ink)}
+.sw{appearance:none; -webkit-appearance:none; width:44px; height:26px; border-radius:999px; background:#cfc3a6; position:relative; cursor:pointer; flex:none; margin:0; transition:background .2s}
+.sw::after{content:""; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:#fffaf0; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .2s}
+.sw:checked{background:var(--paper-ink)}
+.sw:checked::after{transform:translateX(18px)}
+.sw:focus-visible{outline:2px solid var(--paper-ink); outline-offset:2px}
+.seg{display:flex; background:#e8dec6; border-radius:999px; padding:3px; gap:2px; flex:none}
+.seg button{font:600 12.5px var(--ui); border:0; border-radius:999px; padding:7px 11px; background:transparent; color:var(--paper-muted); cursor:pointer}
+.seg button.on{background:var(--paper); color:var(--paper-ink); box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.acc-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+.acc-head b{font-family:var(--display); font-size:20px}
+.acc-head span{color:var(--paper-muted); font-size:13px}
+#fPw{margin-top:6px}
+#fPw .row2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px}
+@media (max-width:480px){ #fPw .row2{grid-template-columns:minmax(0,1fr)} .srow{flex-wrap:wrap} }
+.note{margin:0 0 14px; font-size:13.5px; line-height:1.5; background:#ece2c9; border-radius:10px; padding:10px 12px; color:var(--paper-ink)}
+.or{width:min(440px, 100%); margin:0 auto; display:flex; align-items:center; gap:12px; color:var(--muted); font-size:12px; letter-spacing:.14em; text-transform:uppercase}
+.or::before,.or::after{content:""; flex:1; height:1px; background:rgba(239,230,210,.22)}
+.cpu-btn{width:min(440px, 100%); margin:0 auto; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  font:inherit; text-align:left; cursor:pointer; color:#1d1608; background:var(--brass); border:0; border-radius:14px; padding:14px 18px; font-size:22px}
+.cpu-btn:hover{background:#e6bd66}
+.cpu-btn:focus-visible{outline:2px solid var(--cream); outline-offset:3px}
+.cpu-btn b{display:block; font-family:var(--display); font-weight:900; font-size:21px; line-height:1.1}
+.cpu-btn small{display:block; font-size:13px; color:#4d3a12; margin-top:2px}
+#scrEntry .hero{padding-block:6px 0}
+#scrEntry .fan{--cw:clamp(44px, 11vw, 64px); --ch:calc(var(--cw) * 1.42); height:calc(var(--ch) + 20px)}
+#scrEntry .hero h1{font-size:clamp(40px, 10vw, 64px)}
+.tabs{display:flex; gap:4px; background:#e8dec6; border-radius:999px; padding:4px; margin-bottom:16px}
+.tabs button{flex:1; font:600 13.5px var(--ui); border:0; border-radius:999px; padding:9px; background:transparent; color:var(--paper-muted); cursor:pointer}
+.tabs button.on{background:var(--paper); color:var(--paper-ink); box-shadow:0 1px 3px rgba(0,0,0,.12)}
+form{display:flex; flex-direction:column; gap:12px}
+.field{display:flex; flex-direction:column; gap:5px}
+.field label{font-size:13px; font-weight:600}
+.field small{color:var(--paper-muted); font-size:12px}
+input[type=text],input[type=password]{font:16px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:10px; padding:10px 12px; width:100%; box-sizing:border-box}
+input:focus{border-color:var(--paper-ink); outline:none}
+.err{color:var(--danger); font-size:13.5px; min-height:1em; margin:0}
+.ok{color:#2c6b3f}
+.form-end{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap}
+
+.lobby-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:14px; align-items:start}
+.me-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.me-bar .who{font-family:var(--display); font-size:24px; font-weight:900}
+.me-bar .rec{color:var(--paper-muted); font-size:13.5px; font-variant-numeric:tabular-nums}
+.addf{display:flex; gap:8px; margin:4px 0 6px}
+.addf input{flex:1; min-width:0}
+.list{display:flex; flex-direction:column}
+.row{display:flex; align-items:center; gap:10px; padding:11px 0; border-bottom:1px solid var(--paper-line); min-width:0}
+.row:last-child{border-bottom:0}
+.row .nm{font-weight:600; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.row .st{color:var(--paper-muted); font-size:12.5px}
+.row .grow{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px}
+.row .acts{display:flex; gap:6px; flex:none}
+.row .btn{padding:7px 11px; font-size:12.5px}
+.dot{width:9px; height:9px; border-radius:50%; background:#c9bea5; flex:none}
+.dot.on{background:#2fa45d; box-shadow:0 0 0 3px rgba(47,164,93,.18)}
+.empty{color:var(--paper-muted); font-size:13.5px; padding:10px 0; line-height:1.5}
+.badge{display:inline-block; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; background:#e8dec6; color:var(--paper-muted)}
+.badge.hot{background:var(--paper-ink); color:var(--paper)}
+.sec + .sec{margin-top:18px}
+
+/* ---------- table ---------- */
+.gbar{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap}
+.mode{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.mode .live{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--live); margin-right:6px; vertical-align:1px}
+.board{display:flex; align-items:stretch; gap:10px; background:rgba(0,0,0,.2); border-radius:12px; padding:10px 14px; justify-content:space-between}
+.sc{display:flex; flex-direction:column; gap:3px; min-width:0}
+.sc .who{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:30vw}
+.sc .pts{font-family:var(--display); font-weight:700; font-size:28px; line-height:1; font-variant-numeric:tabular-nums}
+.sc.me .pts{color:var(--brass)}
+.sc.right{text-align:right; align-items:flex-end}
+.goal{align-self:center; text-align:center; font-size:12px; color:var(--muted)}
+.goal b{display:block; font-family:var(--display); font-size:15px; color:var(--cream)}
+
+.seat{display:flex; flex-direction:column; align-items:center; gap:8px}
+.stats{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; font-size:12.5px; color:var(--muted)}
+.chip{background:rgba(0,0,0,.25); border-radius:999px; padding:4px 10px; font-variant-numeric:tabular-nums}
+.chip b{color:var(--cream); font-weight:600}
+.chip.pis{background:rgba(216,173,85,.18); color:var(--brass)}
+.chip.pis b{color:var(--brass)}
+.hand{display:flex; justify-content:center; gap:8px; min-height:var(--ch)}
+.opp .hand{gap:0}
+.opp .hand .card + .card{margin-left:calc(var(--cw) * -0.55)}
+.mid-table{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; min-height:calc(var(--ch) * 1.5)}
+.deck-wrap{display:flex; flex-direction:column; align-items:center; gap:6px; justify-self:start}
+.deck{position:relative; width:var(--cw); height:var(--ch)}
+.deck .card{position:absolute; left:0; top:0}
+.deck .card:nth-child(2){transform:translate(-3px,-3px)}
+.deck .card:nth-child(3){transform:translate(-6px,-6px)}
+.deck.empty{border:1.5px dashed rgba(239,230,210,.25); border-radius:var(--rad)}
+.label{font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; text-align:center}
+.pile{position:relative; width:calc(var(--cw) * 1.9); height:calc(var(--ch) * 1.4); transition:transform .42s cubic-bezier(.5,0,.7,.4), opacity .42s}
+.pile::before{content:""; position:absolute; inset:6%; border-radius:50%; background:radial-gradient(ellipse, rgba(0,0,0,.22), transparent 70%)}
+.pile .card{position:absolute; left:50%; top:50%; margin-left:calc(var(--cw) / -2); margin-top:calc(var(--ch) / -2)}
+.pile.sweep0{transform:translateY(38vh) scale(.45); opacity:0}
+.pile.sweep1{transform:translateY(-38vh) scale(.45); opacity:0}
+.round-wrap{justify-self:end; text-align:right}
+.round-wrap .label b{display:block; font-family:var(--display); font-size:20px; color:var(--cream)}
+.msg{text-align:center; min-height:22px; font-size:14.5px; color:var(--cream)}
+.msg.wait{color:var(--muted)}
+
+/* cards */
+.card{
+  width:var(--cw); height:var(--ch); position:relative; box-sizing:border-box; flex:none;
+  border-radius:var(--rad); background:var(--face); color:var(--ink);
+  font-family:var(--font); font-weight:var(--fw); text-shadow:var(--glow);
+  border:1px solid var(--bd);
+  box-shadow:0 1px 0 rgba(0,0,0,.2), 0 5px 12px rgba(0,0,0,.35);
+  user-select:none; -webkit-user-select:none;
+}
+.card.r{color:var(--red)}
+.cr{position:absolute; display:flex; flex-direction:column; align-items:center; line-height:.95; font-size:calc(var(--cw) * .21)}
+.cr i,.mid i{font-style:normal; font-family:"Segoe UI Symbol","DejaVu Sans","Apple Symbols",sans-serif}
+.cr i{font-size:.82em}
+.tl{top:5%; left:7%}
+.br{bottom:5%; right:7%; transform:rotate(180deg)}
+.mid{position:absolute; inset:0; display:grid; place-items:center; font-size:calc(var(--cw) * .5); line-height:1}
+.mid.face{inset:21% 19%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  border:1.5px solid currentColor; border-radius:calc(var(--rad) * .6); font-size:calc(var(--cw) * .38)}
+.mid.face i{font-size:.62em}
+.card.back{background:var(--back-edge); padding:calc(var(--cw) * .065)}
+.card.back .pat{height:100%; border-radius:calc(var(--rad) * .55); background:var(--back); box-shadow:inset 0 0 0 1.5px var(--back-frame)}
+.card-btn{cursor:pointer; padding:0; transition:transform .16s ease, box-shadow .16s ease}
+.card-btn[disabled]{cursor:default}
+.card-btn:not([disabled]):hover{transform:translateY(-10px)}
+.card-btn.can:not([disabled]){box-shadow:0 0 0 2.5px var(--brass), 0 8px 18px rgba(0,0,0,.4)}
+.card-btn.pishti:not([disabled]){box-shadow:0 0 0 2.5px var(--brass), 0 0 18px 2px rgba(216,173,85,.7)}
+.mine .hand{min-height:calc(var(--ch) + 12px); align-items:flex-end}
+.fly{position:fixed; z-index:40; margin:0; pointer-events:none; transition:transform .34s cubic-bezier(.3,.7,.3,1)}
+
+.burst{position:fixed; inset:0; z-index:50; display:grid; place-items:center; pointer-events:none}
+.burst div{font-family:var(--display); font-weight:900; color:var(--brass); text-align:center;
+  font-size:clamp(40px, 11vw, 84px); line-height:.95; text-shadow:0 4px 0 #5b3f0e, 0 10px 30px rgba(0,0,0,.6);
+  animation:pop 1.4s cubic-bezier(.2,1.4,.4,1) both}
+.burst small{display:block; font-size:.42em; color:var(--cream); text-shadow:0 2px 10px rgba(0,0,0,.6); margin-top:6px}
+@keyframes pop{0%{transform:scale(.3) rotate(-8deg); opacity:0} 25%{transform:scale(1.08) rotate(-3deg); opacity:1} 70%{transform:scale(1) rotate(-3deg); opacity:1} 100%{transform:scale(1.15) rotate(-3deg); opacity:0}}
+
+.toast{position:fixed; z-index:70; left:50%; bottom:calc(18px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%);
+  background:var(--paper); color:var(--paper-ink); border-radius:999px; padding:10px 16px; font-size:14px; font-weight:500;
+  box-shadow:0 10px 30px rgba(0,0,0,.4); max-width:calc(100% - 32px); box-sizing:border-box; text-align:center}
+
+/* sheets */
+.overlay{position:fixed; inset:0; z-index:60; background:rgba(5,14,9,.66); display:grid; place-items:center;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:16px}
+.sheet{background:var(--paper); color:var(--paper-ink); border-radius:16px; width:min(760px, 100%); max-height:88vh; overflow:auto;
+  box-sizing:border-box; padding:20px 20px 22px; box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.sheet h2{font-family:var(--display); font-weight:900; font-size:26px; margin:0 0 4px; text-wrap:balance}
+.sheet p.sub{margin:0 0 16px; color:var(--paper-muted); font-size:14px}
+.sheet .row-end{display:flex; justify-content:flex-end; gap:8px; margin-top:18px; flex-wrap:wrap}
+.sheet .btn{color:var(--paper-ink); background:transparent; border-color:#bfae88}
+.sheet .btn.primary{background:var(--paper-ink); color:var(--paper); border-color:var(--paper-ink)}
+.tiles{display:grid; grid-template-columns:repeat(auto-fill, minmax(132px, 1fr)); gap:10px}
+.tile{--cw:46px; position:relative; border:1.5px solid var(--paper-line); background:#fffaf0; border-radius:12px; padding:12px 8px 10px;
+  cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:9px; font:inherit; color:inherit}
+.tile:hover{border-color:#bfae88}
+.tile.on{border-color:var(--paper-ink); box-shadow:0 0 0 1.5px var(--paper-ink)}
+.tile .sample{display:flex; height:calc(var(--ch) + 6px); align-items:flex-end}
+.tile .sample .card{box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.tile .sample .card:nth-child(1){transform:rotate(-8deg) translateX(8px)}
+.tile .sample .card:nth-child(2){transform:translateY(-4px); z-index:1}
+.tile .sample .card:nth-child(3){transform:rotate(8deg) translateX(-8px); z-index:2}
+.tile .nm{font-weight:600; font-size:13.5px}
+.tile .ds{font-size:11.5px; color:#7a6e57; margin-top:-6px}
+.tile .tick{position:absolute; top:7px; right:8px; width:18px; height:18px; border-radius:50%; background:var(--paper-ink); color:var(--paper); font-size:11px; display:none; place-items:center}
+.tile.on .tick{display:grid}
+table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; font-size:14px}
+.tally th,.tally td{padding:8px 6px; border-bottom:1px solid var(--paper-line); text-align:right}
+.tally th:first-child,.tally td:first-child{text-align:left}
+.tally thead th{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#7a6e57; font-weight:600; max-width:30vw; overflow:hidden; text-overflow:ellipsis}
+.tally tr.sum td{font-weight:700; border-bottom:none; font-size:16px}
+.tally tr.tot td{font-family:var(--display); font-size:20px; font-weight:700; border-bottom:none; padding-top:2px}
+.rules{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:8px; line-height:1.5; max-width:62ch}
+
+@media (max-width:640px){
+  .choices,.lobby-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:480px){
+  .sc .pts{font-size:24px}
+  .mid-table{gap:6px}
+}
+@media (prefers-reduced-motion: reduce){
+  .fly,.pile,.card-btn{transition:none}
+  .burst div{animation-duration:1.6s; animation-timing-function:linear}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="brand" id="bHome" type="button" aria-label="Kthehu në hyrje">Pishpirik</button>
+    <button class="gear" id="bSet" type="button" aria-label="Cilësimet" title="Cilësimet">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 2.8l1.6 2.3 2.7-.6.6 2.7 2.4 1.4-1.1 2.5 1.1 2.5-2.4 1.4-.6 2.7-2.7-.6L12 21.2l-1.6-2.3-2.7.6-.6-2.7-2.4-1.4 1.1-2.5-1.1-2.5 2.4-1.4.6-2.7 2.7.6z"/>
+        <circle cx="12" cy="12" r="3.2"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ENTRY -->
+  <section class="screen" id="scrEntry">
+    <div class="hero">
+      <div class="fan" id="fan"></div>
+      <h1>Pishpirik</h1>
+      <p>Kyçu për të luajtur me shokët, ose luaj me CPU pa llogari.</p>
+    </div>
+    <div class="panel auth">
+      <div id="authLogged" hidden>
+        <h2 id="lgWho"></h2>
+        <p class="sub">Je i kyçur. Shokët, ftesat dhe lojërat të presin.</p>
+        <div class="form-end"><button class="btn" type="button" id="bOut2">Dil</button><button class="btn primary" type="button" id="bToLobby">Vazhdo te shokët</button></div>
+      </div>
+      <div id="authForms">
+      <p class="note" id="netNote" hidden></p>
+      <div class="tabs" role="tablist">
+        <button type="button" id="tabIn" class="on" role="tab">Kyçu</button>
+        <button type="button" id="tabUp" role="tab">Krijo llogari</button>
+      </div>
+      <form id="fIn" novalidate>
+        <h2>Mirë se u ktheve</h2>
+        <div class="field"><label for="inUser">Emri i përdoruesit</label><input type="text" id="inUser" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+        <div class="field"><label for="inPass">Fjalëkalimi</label><input type="password" id="inPass" autocomplete="current-password"></div>
+        <label class="chk" for="inRemember"><input type="checkbox" id="inRemember"> Mbaj mend emrin e përdoruesit</label>
+        <p class="err" id="inErr"></p>
+        <div class="form-end"><span></span><button class="btn primary" type="submit" id="inBtn">Kyçu</button></div>
+      </form>
+      <form id="fUp" novalidate hidden>
+        <h2>Llogari e re</h2>
+        <div class="field"><label for="upUser">Emri i përdoruesit</label><input type="text" id="upUser" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="16">
+          <small>3–16 shkronja, numra, pikë ose _. Shokët të gjejnë me këtë emër.</small></div>
+        <div class="field"><label for="upPass">Fjalëkalimi</label><input type="password" id="upPass" autocomplete="new-password"><small>Të paktën 6 karaktere.</small></div>
+        <div class="field"><label for="upPass2">Përsërit fjalëkalimin</label><input type="password" id="upPass2" autocomplete="new-password"></div>
+        <p class="err" id="upErr"></p>
+        <div class="form-end"><span></span><button class="btn primary" type="submit" id="upBtn">Krijo llogarinë</button></div>
+      </form>
+      </div>
+    </div>
+    <div class="or"><span>ose</span></div>
+    <button class="cpu-btn" id="chCpu" type="button">
+      <span><b>Luaj me CPU</b><small>Pa llogari, fillon menjëherë</small></span><span aria-hidden="true">→</span>
+    </button>
+  </section>
+
+  <!-- LOBBY -->
+  <section class="screen" id="scrLobby" hidden>
+    <div class="panel me-bar">
+      <div><div class="who" id="lbWho"></div><div class="rec" id="lbRec"></div></div>
+      <div class="tools"><button class="btn" type="button" id="bCpu2">Luaj me CPU</button><button class="btn" type="button" id="bOut">Dil</button></div>
+    </div>
+    <div class="lobby-grid">
+      <div class="panel">
+        <div class="sec">
+          <h3>Shto shok</h3>
+          <form class="addf" id="fAdd" novalidate>
+            <input type="text" id="addUser" placeholder="emri i përdoruesit" autocapitalize="none" spellcheck="false" aria-label="Emri i përdoruesit të shokut">
+            <button class="btn primary" type="submit">Shto</button>
+          </form>
+          <p class="err" id="addErr"></p>
+        </div>
+        <div class="sec" id="reqSec" hidden><h3>Të kanë shtuar</h3><div class="list" id="reqList"></div></div>
+        <div class="sec"><h3>Shokët</h3><div class="list" id="frList"></div></div>
+      </div>
+      <div class="panel">
+        <div class="sec" id="invSec" hidden><h3>Ftesa për lojë</h3><div class="list" id="invList"></div></div>
+        <div class="sec"><h3>Lojërat e mia</h3><div class="list" id="gmList"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="scrGame" hidden>
+    <div class="gbar">
+      <button class="btn" type="button" id="bBack">← Menyja</button>
+      <span class="mode" id="modeLbl"></span>
+      <button class="btn" type="button" id="bGameAct"></button>
+    </div>
+    <div class="board">
+      <div class="sc me"><span class="who" id="name0">Ti</span><span class="pts" id="tot0">0</span></div>
+      <div class="goal">deri në<b>101</b></div>
+      <div class="sc right"><span class="who" id="name1">Kompjuteri</span><span class="pts" id="tot1">0</span></div>
+    </div>
+    <section class="seat opp"><div class="hand" id="hand1"></div><div class="stats" id="stats1"></div></section>
+    <section class="mid-table">
+      <div class="deck-wrap"><div class="deck" id="deck"></div><div class="label" id="deckLbl"></div></div>
+      <div class="pile" id="pile"></div>
+      <div class="round-wrap"><div class="label" id="roundLbl"></div></div>
+    </section>
+    <div class="msg" id="msg"></div>
+    <section class="seat mine"><div class="hand" id="hand0"></div><div class="stats" id="stats0"></div></section>
+  </section>
+</div>
+
+<div class="overlay" id="setOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="setH">
+    <h2 id="setH">Cilësimet</h2>
+    <p class="sub">Ruhen në këtë shfletues.</p>
+
+    <div class="sgroup">
+      <h3>Zëri</h3>
+      <label class="srow" for="sSound"><span><b>Tingujt</b><small>Hedhja e kartave, marrja, pishpiriku, radha jote</small></span><input type="checkbox" class="sw" id="sSound"></label>
+      <div class="srow"><label for="sVol"><b>Volumi</b></label><input type="range" id="sVol" min="0" max="100" step="5"></div>
+    </div>
+
+    <div class="sgroup">
+      <h3>Loja</h3>
+      <label class="srow" for="sHints"><span><b>Ndihma</b><small>Ndriço kartat që e marrin grumbullin</small></span><input type="checkbox" class="sw" id="sHints"></label>
+      <label class="srow" for="sAnim"><span><b>Animacionet</b><small>Kartat fluturojnë në grumbull</small></span><input type="checkbox" class="sw" id="sAnim"></label>
+      <div class="srow"><span><b>Niveli i CPU</b><small>Sa mirë luan kompjuteri</small></span>
+        <div class="seg" id="sLevel" role="radiogroup" aria-label="Niveli i CPU">
+          <button type="button" data-v="easy" role="radio">Lehtë</button><button type="button" data-v="normal" role="radio">Normal</button><button type="button" data-v="hard" role="radio">Vështirë</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sgroup">
+      <h3>Kartat</h3>
+      <div class="tiles" id="tiles"></div>
+    </div>
+
+    <div class="sgroup">
+      <h3>Llogaria</h3>
+      <div id="accBox"></div>
+    </div>
+
+    <div class="row-end"><button class="btn" type="button" id="bRules">Rregullat e lojës</button><button class="btn primary" type="button" data-close>Gati</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="rulesOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="rulesH">
+    <h2 id="rulesH">Si luhet Pishpiriku</h2>
+    <p class="sub">Pako me 52 karta, dy lojtarë.</p>
+    <ol class="rules">
+      <li>Secili merr 4 karta. Në mes vendosen 4 karta, por duket vetëm e sipërmja.</li>
+      <li>Me radhë hidhni nga një kartë mbi grumbull. Nëse karta jote ka të njëjtin numër me kartën e sipërme, e merr gjithë grumbullin.</li>
+      <li>Fanti (J) e merr grumbullin gjithmonë, çfarëdo karte të jetë sipër.</li>
+      <li><b>Pishpirik:</b> kur në mes ka vetëm një kartë dhe ti e merr me të njëjtin numër, fiton 10 pikë. Fant mbi fant jep 20.</li>
+      <li>Kur mbarojnë kartat në dorë ndahen nga 4 të reja. Kartat që mbeten në fund i merr ai që mori i fundit.</li>
+      <li>Pikët e raundit: më shumë karta 3, çdo As 1, çdo Fant 1, 2 spathi (2♣) 2, 10 karo (10♦) 3, plus pishpirikët.</li>
+      <li>Fiton kush arrin i pari 101 pikë.</li>
+    </ol>
+    <div class="row-end"><button class="btn primary" type="button" data-close>Mbyll</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="sumOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="sumH">
+    <h2 id="sumH">Raundi mbaroi</h2>
+    <p class="sub" id="sumSub"></p>
+    <table class="tally" id="sumTable"></table>
+    <div class="row-end"><button class="btn" type="button" id="bSumMenu">Menyja</button><button class="btn primary" type="button" id="bNext">Raundi tjetër</button></div>
+  </div>
+</div>
+
+<script type="module">
+import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
+// Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
+let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
+const VS = '︎';
+const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const GOAL = 101;
+
+const THEMES = [
+  {name:'Klasike', ds:'Kuq e bardhë, si në kafene', v:{face:'#fbf8f1',ink:'#1b1b1b',red:'#c0262d',font:"'Playfair Display',Georgia,serif",fw:'700',rad:'8px',glow:'none',bd:'rgba(0,0,0,.18)',
+    back:'repeating-linear-gradient(45deg, rgba(255,255,255,.2) 0 2px, transparent 2px 7px), repeating-linear-gradient(-45deg, rgba(255,255,255,.2) 0 2px, transparent 2px 7px), #b3212b','back-edge':'#ffffff','back-frame':'#ffffff'}},
+  {name:'Mbretërore', ds:'Blu e thellë me ar',v:{face:'#ffffff',ink:'#14213d',red:'#b5172b',font:"'Cormorant Garamond',Georgia,serif",fw:'700',rad:'9px',glow:'none',bd:'rgba(20,33,61,.2)',
+    back:'radial-gradient(circle, #d9b45a 1.4px, transparent 1.9px) 0 0/9px 9px, radial-gradient(circle, #d9b45a 1.4px, transparent 1.9px) 4.5px 4.5px/9px 9px, #18295a','back-edge':'#f7f3e8','back-frame':'#d9b45a'}},
+  {name:'Kuq e Zi', ds:'Shah kuq e zi',v:{face:'#f6f1e7',ink:'#111111',red:'#d0021b',font:"'Alegreya SC',Georgia,serif",fw:'700',rad:'6px',glow:'none',bd:'rgba(0,0,0,.22)',
+    back:'conic-gradient(#111 25%, #c8102e 0 50%, #111 0 75%, #c8102e 0) 0 0/14px 14px','back-edge':'#111111','back-frame':'#c8102e'}},
+  {name:'Neon', ds:'Natë në arkadë',v:{face:'#130d26',ink:'#39f3ff',red:'#ff3df2',font:"'Orbitron',system-ui,sans-serif",fw:'600',rad:'10px',glow:'0 0 6px currentColor',bd:'rgba(57,243,255,.35)',
+    back:'linear-gradient(rgba(255,61,242,.6) 1px, transparent 1px) 0 0/10px 10px, linear-gradient(90deg, rgba(57,243,255,.6) 1px, transparent 1px) 0 0/10px 10px, #130d26','back-edge':'#06030f','back-frame':'#ff3df2'}},
+  {name:'Art Deco', ds:'E zezë dhe ar',v:{face:'#151412',ink:'#e8d49a',red:'#e0704a',font:"'Poiret One',Georgia,serif",fw:'400',rad:'4px',glow:'none',bd:'rgba(232,212,154,.35)',
+    back:'repeating-conic-gradient(from -90deg at 50% 100%, #d4af37 0 5deg, #141414 5deg 10deg)','back-edge':'#0b0b0b','back-frame':'#d4af37'}},
+  {name:'Druri', ds:'Arrë e lëmuar',v:{face:'#f3e6cc',ink:'#3b2414',red:'#a8321f',font:"'Bitter',Georgia,serif",fw:'700',rad:'7px',glow:'none',bd:'rgba(59,36,20,.25)',
+    back:'repeating-radial-gradient(ellipse at 28% 18%, #8a5a33 0 3px, #77492a 3px 7px, #9a6a40 7px 9px)','back-edge':'#e9d6b0','back-frame':'#5a3518'}},
+  {name:'Minimal', ds:'Bardh e zi, pa zbukurime',v:{face:'#ffffff',ink:'#000000',red:'#e63312',font:"'IBM Plex Mono',ui-monospace,monospace",fw:'600',rad:'3px',glow:'none',bd:'rgba(0,0,0,.35)',
+    back:'radial-gradient(circle at 50% 50%, transparent 0 26%, #111 26% 28.5%, transparent 29%), #ffffff','back-edge':'#ffffff','back-frame':'#111111'}},
+  {name:'Retro 70', ds:'Vija portokalli',v:{face:'#fff3d6',ink:'#3a2316',red:'#e2571e',font:"'Righteous',system-ui,sans-serif",fw:'400',rad:'14px',glow:'none',bd:'rgba(58,35,22,.22)',
+    back:'repeating-linear-gradient(0deg, #e2571e 0 7px, #f2a33a 7px 14px, #6b3a1e 14px 21px, #fff3d6 21px 26px)','back-edge':'#fff3d6','back-frame':'#6b3a1e'}},
+  {name:'Oqeani', ds:'Valë të gjelbra',v:{face:'#eef8f7',ink:'#0b3b46',red:'#e2574c',font:"'Nunito',system-ui,sans-serif",fw:'800',rad:'12px',glow:'none',bd:'rgba(11,59,70,.2)',
+    back:'radial-gradient(circle at 50% 100%, #8fdcd1 0 28%, #1a8c94 30% 46%, transparent 48%) 0 0/16px 12px, #0d5c66','back-edge':'#eef8f7','back-frame':'#8fdcd1'}},
+  {name:'Qilim', ds:'Motiv qilimi shqiptar',v:{face:'#fbf3e4',ink:'#2b1a17',red:'#a3141e',font:"'Rubik',system-ui,sans-serif",fw:'700',rad:'6px',glow:'none',bd:'rgba(43,26,23,.22)',
+    back:'linear-gradient(135deg, #2b1a17 25%, transparent 25%) -8px 0/16px 16px, linear-gradient(225deg, #2b1a17 25%, transparent 25%) -8px 0/16px 16px, linear-gradient(315deg, #f3e2c0 25%, transparent 25%) 0 0/16px 16px, linear-gradient(45deg, #f3e2c0 25%, transparent 25%) 0 0/16px 16px, #a3141e','back-edge':'#f3e2c0','back-frame':'#2b1a17'}},
+];
+
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const clone = o => JSON.parse(JSON.stringify(o));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let S = null;                       // the game state on screen
+const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false};
+const NET = {state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
+             gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}};
+
+/* ================= settings ================= */
+const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal'};
+try{ Object.assign(SET, JSON.parse(localStorage.getItem('pishpirik-settings')||'{}')); }catch(e){}
+function saveSet(){ try{ localStorage.setItem('pishpirik-settings', JSON.stringify(SET)); }catch(e){} }
+function syncSetUI(){
+  $('sSound').checked = SET.sound; $('sVol').value = SET.vol; $('sVol').disabled = !SET.sound;
+  $('sHints').checked = SET.hints; $('sAnim').checked = SET.anim;
+  document.querySelectorAll('#sLevel button').forEach(b=>{ const on=b.dataset.v===SET.level; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+}
+function openSettings(){ syncSetUI(); renderAccount(); $('setOv').hidden=false; }
+
+/* ================= sounds: real card physics, synthesised (no files) =================
+   Every sound is built from filtered noise the way paper cards actually sound:
+   a sharp paper "snap" on top, a muffled thud of the felt underneath, a soft slide before it. */
+const SND = {ctx:null, out:null, bus:null, noise:null};
+function ac(){
+  if (!SET.sound || !SET.vol) return null;
+  try{
+    if (!SND.ctx){
+      const C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+      const c = SND.ctx = new C();
+      // one second of white noise, reused by every grain
+      SND.noise = c.createBuffer(1, c.sampleRate, c.sampleRate);
+      const d = SND.noise.getChannelData(0); for (let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+      // felt table: everything a bit muffled, a small room around it
+      SND.out = c.createGain();
+      const comp = c.createDynamicsCompressor(); comp.threshold.value=-14; comp.ratio.value=4;
+      const felt = c.createBiquadFilter(); felt.type='lowpass'; felt.frequency.value=7000; felt.Q.value=.5;
+      SND.bus = c.createGain();
+      const room = c.createConvolver(), irLen = Math.floor(c.sampleRate*.28);
+      const ir = c.createBuffer(2, irLen, c.sampleRate);
+      for (let ch=0; ch<2; ch++){ const x=ir.getChannelData(ch); for (let i=0;i<irLen;i++) x[i]=(Math.random()*2-1)*Math.pow(1-i/irLen, 3.2); }
+      room.buffer = ir;
+      const wet = c.createGain(); wet.gain.value = .14;
+      SND.bus.connect(felt); felt.connect(comp);
+      SND.bus.connect(room); room.connect(wet); wet.connect(comp);
+      comp.connect(SND.out); SND.out.connect(c.destination);
+    }
+    if (SND.ctx.state==='suspended') SND.ctx.resume();
+    SND.out.gain.value = Math.pow(SET.vol/100, 1.4) * 1.1;
+    return SND.ctx;
+  }catch(e){ return null; }
+}
+const rnd = (a,b) => a + Math.random()*(b-a);
+// one burst of filtered noise with attack/decay envelope
+function grain(c, t, {type='bandpass', f=2000, f2=null, q=.8, att=.002, dec=.04, g=.5, pan=0}){
+  const src = c.createBufferSource(); src.buffer = SND.noise;
+  src.playbackRate.value = rnd(.85, 1.15);
+  const flt = c.createBiquadFilter(); flt.type = type; flt.Q.value = q;
+  flt.frequency.setValueAtTime(f, t);
+  if (f2) flt.frequency.exponentialRampToValueAtTime(f2, t+att+dec);
+  const env = c.createGain();
+  env.gain.setValueAtTime(0.0001, t);
+  env.gain.exponentialRampToValueAtTime(g, t+att);
+  env.gain.exponentialRampToValueAtTime(0.0001, t+att+dec);
+  let node = env;
+  if (c.createStereoPanner && pan){ const p=c.createStereoPanner(); p.pan.value=pan; env.connect(p); node=p; }
+  src.connect(flt); flt.connect(env); node.connect(SND.bus);
+  src.start(t, Math.random()*.5); src.stop(t+att+dec+.05);
+}
+// a low "knock" of a card or knuckle meeting the table
+function thud(c, t, g=.4, f=110){
+  const o=c.createOscillator(), e=c.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(f*1.6, t); o.frequency.exponentialRampToValueAtTime(f, t+.04);
+  e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(g, t+.003); e.gain.exponentialRampToValueAtTime(0.0001, t+.09);
+  o.connect(e); e.connect(SND.bus); o.start(t); o.stop(t+.12);
+}
+// a card landing on the felt: short slide, paper snap, soft body
+function cardDown(c, t, power=1, pan=0){
+  grain(c, t, {f:rnd(2600,3400), f2:1500, q:.6, att:.025, dec:.05, g:.07*power, pan});            // slide in
+  const hit = t + .03;
+  grain(c, hit, {type:'highpass', f:rnd(2200,2800), q:.7, att:.001, dec:rnd(.018,.026), g:.55*power, pan}); // snap
+  grain(c, hit, {type:'lowpass', f:rnd(420,560), q:.9, att:.002, dec:.07, g:.5*power, pan});              // felt body
+  thud(c, hit, .16*power, rnd(95,125));
+}
+// one card flicked off the top of the deck
+function flick(c, t, pan=0, g=.32){
+  grain(c, t, {type:'highpass', f:rnd(3000,4200), q:.6, att:.001, dec:rnd(.012,.02), g, pan});
+  grain(c, t+.006, {f:rnd(1600,2200), f2:900, q:.7, att:.004, dec:.05, g:g*.35, pan});
+}
+// riffle: dozens of tiny paper clicks, the two halves falling into each other
+function riffle(c, t, dur=.55){
+  const n = 46;
+  for (let i=0;i<n;i++){
+    const k = i/n, tt = t + dur * (1-Math.pow(1-k, 1.25));
+    grain(c, tt, {type:'highpass', f:rnd(3200,5200), q:.5, att:.0008, dec:rnd(.006,.011), g:rnd(.12,.22)*(1-k*.35), pan:(i%2?-.25:.25)});
+  }
+  grain(c, t+dur+.02, {f:1800, f2:700, q:.5, att:.02, dec:.16, g:.16});                         // bridge "brrr"
+  cardDown(c, t+dur+.2, .7);                                                                   // square the deck
+}
+const sfx = {
+  play(){ const c=ac(); if(!c) return; cardDown(c, c.currentTime+.005, 1, rnd(-.12,.12)); },
+  capture(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;
+    for (let i=0;i<4;i++) grain(c, t+i*.045, {f:rnd(1300,2400), f2:rnd(600,900), q:.55, att:.025, dec:rnd(.09,.14), g:.16, pan:rnd(-.3,.3)}); // sweeping the pile
+    grain(c, t+.24, {type:'lowpass', f:500, q:.8, att:.002, dec:.06, g:.35}); thud(c, t+.24, .14, 100);                                        // tap it square
+    grain(c, t+.34, {type:'lowpass', f:520, q:.8, att:.002, dec:.05, g:.25}); thud(c, t+.34, .1, 105);
+  },
+  deal(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;
+    for (let i=0;i<8;i++){ const tt=t+i*.085; flick(c, tt, i%2?.35:-.35); grain(c, tt+.03, {type:'lowpass', f:480, q:.8, att:.002, dec:.04, g:.18, pan:i%2?.35:-.35}); }
+  },
+  shuffle(){ const c=ac(); if(!c) return; riffle(c, c.currentTime+.02); },
+  turn(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                               // two soft knocks on the table
+    [0,.13].forEach(d=>{ grain(c, t+d, {type:'lowpass', f:380, q:1, att:.002, dec:.05, g:.28}); thud(c, t+d, .22, 85); });
+  },
+  pishti(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                             // card slammed down hard
+    grain(c, t, {f:3000, f2:1200, q:.5, att:.04, dec:.05, g:.12});
+    grain(c, t+.045, {type:'highpass', f:1800, q:.6, att:.001, dec:.035, g:.9});
+    grain(c, t+.045, {type:'lowpass', f:380, q:1.1, att:.002, dec:.16, g:.9});
+    thud(c, t+.045, .5, 70);
+    grain(c, t+.3, {type:'lowpass', f:420, q:.9, att:.002, dec:.05, g:.3}); thud(c, t+.3, .18, 95);  // second knock: "eh!"
+  },
+  round(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                              // gather everything and square the deck
+    for (let i=0;i<6;i++) grain(c, t+i*.06, {f:rnd(1200,2200), f2:700, q:.55, att:.03, dec:.12, g:.14, pan:rnd(-.4,.4)});
+    [.42,.52,.62].forEach(d=>{ grain(c, t+d, {type:'lowpass', f:500, q:.8, att:.002, dec:.05, g:.3}); thud(c, t+d, .12, 100); });
+  },
+  win(){ const c=ac(); if(!c) return; const t=c.currentTime+.02; riffle(c, t, .5); riffle(c, t+.95, .42); },
+  lose(){ const c=ac(); if(!c) return; const t=c.currentTime+.02;
+    grain(c, t, {f:1800, f2:500, q:.5, att:.06, dec:.35, g:.18});
+    grain(c, t+.42, {type:'lowpass', f:420, q:.9, att:.002, dec:.08, g:.3}); thud(c, t+.42, .14, 80);
+  },
+  click(){ const c=ac(); if(!c) return; flick(c, c.currentTime+.005, 0, .22); },
+};
+
+/* ================= cards ================= */
+function newDeck(){
+  const d = [];
+  for (const [s,n,red] of SUITS) for (const r of RANKS) d.push({r, s, n, red, id:r+n});
+  return shuffle(d);
+}
+function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function inner(c){
+  const s = c.s + VS;
+  const isFace = c.r==='J'||c.r==='Q'||c.r==='K';
+  const mid = isFace ? `<span class="mid face">${c.r}<i>${s}</i></span>` : `<span class="mid"><i>${s}</i></span>`;
+  return `<span class="cr tl">${c.r}<i>${s}</i></span>${mid}<span class="cr br">${c.r}<i>${s}</i></span>`;
+}
+function cardEl(c, tag='div'){ const el=document.createElement(tag); el.className='card'+(c.red?' r':''); el.innerHTML=inner(c); el.setAttribute('aria-label', c.r+' '+c.s); return el; }
+function backEl(){ const el=document.createElement('div'); el.className='card back'; el.innerHTML='<div class="pat"></div>'; return el; }
+function hash(str){ let h=7; for (const ch of str) h=(h*31+ch.charCodeAt(0))%9973; return h; }
+function cardVal(c){ if(c.r==='A'||c.r==='J') return 1; if(c.id==='2C') return 2; if(c.id==='10D') return 3; return 0; }
+
+/* ================= themes ================= */
+let themeIdx = 0;
+function setVars(el, t){ for (const [k,v] of Object.entries(t.v)) el.style.setProperty('--'+k, v); }
+function applyTheme(i){
+  themeIdx = i; setVars(document.documentElement, THEMES[i]);
+  try{ localStorage.setItem('pishpirik-deck', String(i)); }catch(e){}
+  document.querySelectorAll('.tile').forEach((t,k)=>{ t.classList.toggle('on', k===i); t.setAttribute('aria-pressed', k===i); });
+}
+function buildTiles(){
+  const box = $('tiles');
+  THEMES.forEach((t,i)=>{
+    const b = document.createElement('button'); b.type='button'; b.className='tile'; setVars(b, t);
+    const sample = document.createElement('div'); sample.className='sample';
+    sample.append(backEl(), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'K',s:'♥',red:1}));
+    b.append(sample);
+    b.insertAdjacentHTML('beforeend', `<span class="nm">${i+1}. ${t.name}</span><span class="ds">${t.ds}</span><span class="tick">✓</span>`);
+    b.onclick = () => applyTheme(i);
+    box.append(b);
+  });
+  $('fan').append(backEl(), cardEl({r:'J',s:'♦',red:1}), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'10',s:'♦',red:1}));
+}
+
+/* ================= game engine (pure state) ================= */
+function newMatch(){ const G = {tot:[0,0], round:0, starter:0, seq:0}; startRound(G); return G; }
+function startRound(G){
+  G.round++;
+  G.deck = newDeck();
+  const four = G.deck.splice(-4);
+  if (four[3].r==='J'){ const k=G.deck.findIndex(c=>c.r!=='J'); [four[3], G.deck[k]] = [G.deck[k], four[3]]; }
+  G.pile = four.map((c,i)=>({c, hidden:i<3}));
+  G.hands=[[],[]]; G.cap=[[],[]]; G.pis=[0,0]; G.pisN=[0,0]; G.last=-1;
+  G.seen = {}; RANKS.forEach(r=>G.seen[r]=0); G.seen[four[3].r]++;
+  G.turn = G.starter; G.phase='play'; G.summary=null; G.lastMove=null;
+  G.seq = (G.seq||0)+1;
+  deal(G);
+}
+function deal(G){ for (let i=0;i<4;i++){ G.hands[0].push(G.deck.pop()); G.hands[1].push(G.deck.pop()); } }
+function applyPlay(G, p, i){
+  const card = G.hands[p].splice(i,1)[0];
+  const before = G.pile.map(x=>({c:x.c, hidden:!!x.hidden}));
+  const top = before.length ? before[before.length-1].c : null;
+  G.pile.push({c:card}); G.seen[card.r]++;
+  let captured=0, bonus=0, dealt=false;
+  if (top && (card.r===top.r || card.r==='J')){
+    if (before.length===1 && card.r===top.r) bonus = card.r==='J' ? 20 : 10;
+    if (bonus){ G.pis[p]+=bonus; G.pisN[p]++; }
+    G.pile.forEach(it=>{ if(it.hidden) G.seen[it.c.r]++; });
+    captured = G.pile.length; G.cap[p].push(...G.pile.map(x=>x.c)); G.pile=[]; G.last=p;
+  }
+  G.turn = 1-p;
+  if (!G.hands[0].length && !G.hands[1].length){
+    if (G.deck.length){ deal(G); dealt=true; } else endRound(G);
+  }
+  G.seq = (G.seq||0)+1;
+  G.lastMove = {by:p, idx:i, card, before, captured, bonus, dealt, seq:G.seq};
+  return G.lastMove;
+}
+function tally(G,p){
+  const c = G.cap[p];
+  return { n:c.length, aces:c.filter(x=>x.r==='A').length, jacks:c.filter(x=>x.r==='J').length,
+    two:c.some(x=>x.id==='2C')?2:0, ten:c.some(x=>x.id==='10D')?3:0, pis:G.pis[p] };
+}
+function endRound(G){
+  if (G.pile.length && G.last>=0){ G.cap[G.last].push(...G.pile.map(x=>x.c)); G.pile=[]; }
+  const t = [tally(G,0), tally(G,1)];
+  const most = t[0].n>t[1].n ? 0 : t[1].n>t[0].n ? 1 : -1;
+  const pts = t.map((x,k)=>x.aces+x.jacks+x.two+x.ten+x.pis+(most===k?3:0));
+  G.tot[0]+=pts[0]; G.tot[1]+=pts[1];
+  const over = (G.tot[0]>=GOAL || G.tot[1]>=GOAL) && G.tot[0]!==G.tot[1];
+  G.summary = {t, most, pts, over};
+  G.phase = 'summary'; G.starter = 1-G.starter;
+}
+function aiPick(G){
+  const hand = G.hands[1];
+  const top = G.pile.length ? G.pile[G.pile.length-1].c : null;
+  const level = SET.level;
+  if (level==='easy' && Math.random()<0.55) return Math.floor(Math.random()*hand.length);
+  if (top){
+    const m = hand.findIndex(c=>c.r===top.r);
+    if (m>=0) return m;
+    const j = hand.findIndex(c=>c.r==='J');
+    if (j>=0){
+      const val = G.pile.reduce((a,it)=>a+cardVal(it.c),0);
+      const need = level==='hard' ? 2 : 3;
+      if (G.pile.length>=need || val>=2 || hand.every(c=>c.r==='J') || (!G.deck.length && hand.length<=2)) return j;
+    }
+  }
+  let best=-1, bestScore=-Infinity;
+  hand.forEach((c,i)=>{
+    if (c.r==='J') return;
+    const known = G.seen[c.r] + hand.filter(x=>x.r===c.r).length;
+    let sc = known*3 - cardVal(c)*2 + (level==='hard' ? 0 : Math.random()*0.5);
+    if (!G.pile.length && known===4) sc += 4;
+    if (sc>bestScore){ bestScore=sc; best=i; }
+  });
+  return best>=0 ? best : 0;
+}
+
+/* ================= table rendering ================= */
+function canAct(){
+  if (!S || S.phase!=='play' || S.turn!==APP.me || APP.busy || NET.animating) return false;
+  if (APP.mode==='online' && (!NET.gameDoc || NET.gameDoc.status!=='play')) return false;
+  return true;
+}
+function msgFor(G){
+  const me=APP.me, opp=APP.oppName;
+  if (APP.mode==='online' && NET.gameDoc && NET.gameDoc.status==='left'){
+    return NET.gameDoc.leftBy===NET.uid ? 'E le këtë lojë.' : `${opp} e la lojën.`;
+  }
+  if (G.phase==='summary') return 'Raundi mbaroi.';
+  const m = G.lastMove; let s='';
+  if (m){
+    const card = m.card.r + m.card.s + VS;
+    if (m.bonus) s = m.by===me ? `Bëre pishpirik me ${card}! +${m.bonus}.` : `${opp} bëri pishpirik me ${card}! +${m.bonus}.`;
+    else if (m.captured) s = m.by===me ? `More ${m.captured} karta me ${card}.` : `${opp} mori ${m.captured} karta me ${card}.`;
+    else s = m.by===me ? `Hodhe ${card}.` : `${opp} hodhi ${card}.`;
+    if (m.dealt) s += ' U ndanë karta të reja.';
+  }
+  if (G.turn===me) s += ' Radha jote.';
+  else if (APP.mode==='online') s += ` Radha e ${opp}.`;
+  return s.trim();
+}
+function renderPile(items){
+  const p = $('pile'); p.className='pile'; p.replaceChildren();
+  items.slice(-8).forEach((it,k,arr)=>{
+    const isTop = k===arr.length-1;
+    const el = (it.hidden && !isTop) ? backEl() : cardEl(it.c);
+    const h = hash(it.c.id + k);
+    const rot = isTop ? (h%7)-3 : (h%25)-12, dx=(h%13)-6, dy=((h>>3)%11)-5;
+    el.style.transform = `translate(${dx}px,${dy}px) rotate(${rot}deg)`;
+    p.append(el);
+  });
+}
+function render(){
+  if (!S) return;
+  const me = APP.me, op = 1-me;
+  $('name0').textContent = 'Ti'; $('name1').textContent = APP.oppName;
+  $('tot0').textContent = S.tot[me]; $('tot1').textContent = S.tot[op];
+  $('hand1').replaceChildren(...S.hands[op].map(()=>backEl()));
+  const h0 = $('hand0'); h0.replaceChildren();
+  const top = S.pile.length ? S.pile[S.pile.length-1].c : null;
+  const act = canAct();
+  S.hands[me].forEach((c,i)=>{
+    const b = cardEl(c,'button'); b.type='button'; b.classList.add('card-btn');
+    if (SET.hints && top && (c.r===top.r || c.r==='J')) b.classList.add(S.pile.length===1 && c.r===top.r ? 'pishti' : 'can');
+    b.disabled = !act;
+    b.onclick = () => humanPlay(i);
+    h0.append(b);
+  });
+  const d = $('deck'); d.replaceChildren(); d.classList.toggle('empty', !S.deck.length);
+  for (let i=0;i<Math.min(3, Math.ceil(S.deck.length/8));i++) d.append(backEl());
+  $('deckLbl').textContent = S.deck.length ? `${S.deck.length} në pako` : 'Pako mbaroi';
+  renderPile(S.pile);
+  $('roundLbl').innerHTML = `Raundi<b>${S.round}</b>`;
+  [[me,'stats0'],[op,'stats1']].forEach(([k,id])=>{
+    const parts = [`<span class="chip">Mori <b>${S.cap[k].length}</b> karta</span>`];
+    if (S.pisN[k]) parts.push(`<span class="chip pis">Pishpirik ×<b>${S.pisN[k]}</b> · +${S.pis[k]}</span>`);
+    $(id).innerHTML = parts.join('');
+  });
+  setMsg(msgFor(S), S.turn!==me && S.phase==='play');
+  if (APP.mode==='cpu'){
+    $('modeLbl').textContent = 'Kundër kompjuterit';
+    $('bGameAct').textContent = 'Lojë e re'; $('bGameAct').hidden = false;
+  } else {
+    $('modeLbl').innerHTML = `<span class="live"></span>Online`;
+    const st = NET.gameDoc && NET.gameDoc.status;
+    $('bGameAct').textContent = 'Lëre lojën'; $('bGameAct').hidden = st!=='play';
+  }
+}
+function setMsg(t, wait){ const m=$('msg'); m.textContent=t; m.classList.toggle('wait', !!wait); }
+
+async function fly(fromEl, card){
+  if (!fromEl || !SET.anim || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const fr = fromEl.getBoundingClientRect(), pr = $('pile').getBoundingClientRect();
+  if (!fr.width) return;
+  const el = cardEl(card); el.classList.add('fly');
+  el.style.left = fr.left+'px'; el.style.top = fr.top+'px';
+  document.body.append(el);
+  fromEl.style.visibility='hidden';
+  const tx = pr.left + pr.width/2 - fr.width/2 - fr.left, ty = pr.top + pr.height/2 - fr.height/2 - fr.top;
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  el.style.transform = `translate(${tx}px,${ty}px) rotate(${(hash(card.id)%7)-3}deg)`;
+  await sleep(350);
+  el.remove();
+}
+async function animateMove(m, G){
+  const mine = m.by===APP.me;
+  const handEl = mine ? $('hand0') : $('hand1');
+  await fly(handEl.children[m.idx] || handEl.children[0], m.card);
+  sfx.play();
+  if (m.captured){
+    renderPile(m.before.concat([{c:m.card}]));
+    await sleep(SET.anim ? 520 : 380);
+    if (m.bonus){ burst(mine ? 'Ti' : APP.oppName, m.bonus); sfx.pishti(); }
+    else sfx.capture();
+    if (SET.anim) $('pile').classList.add(mine ? 'sweep0' : 'sweep1');
+    await sleep(SET.anim ? 440 : 150);
+  }
+  S = G; render();
+  if (m.dealt) setTimeout(()=>sfx.deal(), 120);
+  if (!mine && G.phase==='play' && G.turn===APP.me) setTimeout(()=>sfx.turn(), m.dealt ? 450 : 150);
+}
+function burst(who, bonus){
+  const b = document.createElement('div'); b.className='burst';
+  b.innerHTML = `<div>Pishpirik!<small>${esc(who)} +${bonus}</small></div>`;
+  document.body.append(b); setTimeout(()=>b.remove(), 1500);
+}
+let toastTimer;
+function toast(t){
+  document.querySelectorAll('.toast').forEach(x=>x.remove());
+  const el=document.createElement('div'); el.className='toast'; el.setAttribute('role','status'); el.textContent=t;
+  document.body.append(el); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.remove(), 3200);
+}
+
+/* ================= summary ================= */
+let lastSumKey = '';
+function afterState(){
+  if (S && S.phase==='summary' && S.summary){
+    const key = S.round+':'+S.seq;
+    if (key!==lastSumKey){
+      lastSumKey = key;
+      const me=APP.me;
+      setTimeout(()=>{ if (!S.summary.over) sfx.round(); else if (S.tot[me]>S.tot[1-me]) sfx.win(); else sfx.lose(); }, 200);
+    }
+    showSummary();
+  } else $('sumOv').hidden = true;
+}
+function showSummary(){
+  const me=APP.me, op=1-me;
+  const {t, most, pts, over} = S.summary;
+  const row = (label, a, b) => `<tr><td>${label}</td><td>${a}</td><td>${b}</td></tr>`;
+  $('sumTable').innerHTML = `<thead><tr><th></th><th>Ti</th><th>${esc(APP.oppName)}</th></tr></thead><tbody>
+    ${row('Karta të marra', t[me].n, t[op].n)}
+    ${row('Më shumë karta', most===me?3:0, most===op?3:0)}
+    ${row('Asat', t[me].aces, t[op].aces)}
+    ${row('Fantët', t[me].jacks, t[op].jacks)}
+    ${row('2 spathi (2♣'+VS+')', t[me].two, t[op].two)}
+    ${row('10 karo (10♦'+VS+')', t[me].ten, t[op].ten)}
+    ${row('Pishpirik', t[me].pis, t[op].pis)}
+    <tr class="sum"><td>Ky raund</td><td>${pts[me]}</td><td>${pts[op]}</td></tr>
+    <tr class="tot"><td>Gjithsej</td><td>${S.tot[me]}</td><td>${S.tot[op]}</td></tr></tbody>`;
+  if (over){
+    const win = S.tot[me]>S.tot[op];
+    $('sumH').textContent = win ? 'Fitove!' : (APP.mode==='cpu' ? 'Fitoi kompjuteri' : `Fitoi ${APP.oppName}`);
+    $('sumSub').textContent = `Loja mbaroi ${S.tot[me]} me ${S.tot[op]}.`;
+  } else {
+    $('sumH').textContent = `Raundi ${S.round} mbaroi`;
+    $('sumSub').textContent = `Deri në ${GOAL}: ti ke ${Math.max(0,GOAL-S.tot[me])} pikë mbetur, ${APP.mode==='cpu'?'kompjuteri':APP.oppName} ${Math.max(0,GOAL-S.tot[op])}.`;
+  }
+  const nb = $('bNext');
+  if (APP.mode==='online' && APP.me!==0){
+    nb.disabled = true; nb.textContent = `Në pritje të ${APP.oppName}…`;
+  } else {
+    nb.disabled = false; nb.textContent = over ? (APP.mode==='cpu' ? 'Lojë e re' : 'Luaj përsëri') : 'Raundi tjetër';
+  }
+  $('sumOv').hidden = false;
+}
+async function nextRound(){
+  if (!S || S.phase!=='summary') return;
+  const G = S.summary.over ? newMatch() : (()=>{ const g=clone(S); startRound(g); return g; })();
+  $('sumOv').hidden = true;
+  sfx.shuffle(); setTimeout(()=>sfx.deal(), 900);
+  if (APP.mode==='cpu'){ S=G; render(); maybeAi(); return; }
+  S = G; render();
+  try{ await NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status:'play', G}); }
+  catch(e){ toast(writeErr(e)); }
+}
+
+/* ================= local (CPU) play ================= */
+function startCpu(){
+  closeGameSub();
+  APP.mode='cpu'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false;
+  S = newMatch();
+  show('game'); render(); afterState(); sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); maybeAi();
+}
+function maybeAi(){ if (APP.mode==='cpu' && S && S.phase==='play' && S.turn===1) setTimeout(aiTurn, 800); }
+async function aiTurn(){
+  if (APP.mode!=='cpu' || !S || S.turn!==1 || S.phase!=='play' || APP.busy) return;
+  APP.busy = true; setMsg('Kompjuteri po mendon…', true);
+  await sleep(450);
+  if (APP.mode!=='cpu'){ APP.busy=false; return; }
+  const G = clone(S); const m = applyPlay(G, 1, aiPick(G));
+  await animateMove(m, G);
+  APP.busy = false; render(); afterState();
+}
+async function humanPlay(i){
+  if (!canAct()) return;
+  APP.busy = true;
+  const G = clone(S); const m = applyPlay(G, APP.me, i);
+  if (APP.mode==='cpu'){
+    await animateMove(m, G);
+    APP.busy = false; render(); afterState(); maybeAi();
+    return;
+  }
+  NET.animating = true;
+  const status = (G.phase==='summary' && G.summary.over) ? 'over' : 'play';
+  const write = NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status, G}).then(()=>null, e=>e);
+  await animateMove(m, G);
+  const err = await write;
+  NET.animating = false; APP.busy = false;
+  if (err){ toast(writeErr(err)); if (NET.gameDoc && NET.gameDoc.G) S = NET.gameDoc.G; }
+  render(); afterState(); flushPending();
+}
+
+/* ================= screens ================= */
+function show(name){
+  APP.screen = name;
+  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame']]) $(id).hidden = k!==name;
+  if (name!=='game') $('sumOv').hidden = true;
+  if (name==='entry') renderEntry();
+  if (name==='lobby') renderLobby();
+  window.scrollTo(0,0);
+}
+function loggedIn(){ return !!(NET.authUser && NET.player); }
+function setLogged(){}
+function renderEntry(){
+  const logged = NET.state==='ok' && loggedIn();
+  $('authLogged').hidden = !logged; $('authForms').hidden = logged;
+  if (logged) $('lgWho').textContent = '@'+NET.player.username;
+  const note = $('netNote');
+  note.hidden = NET.state==='ok';
+  note.textContent = NET.state==='connecting' ? 'Duke kontrolluar lidhjen…'
+    : (NET.state==='offline' ? 'S’ka lidhje me serverin. Kontrollo internetin. Me CPU mund të luash gjithsesi.' : 'Loja online s’është lidhur ende me Firebase (shiko README). Me CPU mund të luash gjithsesi.');
+  ['inUser','inPass','upUser','upPass','upPass2','inBtn','upBtn'].forEach(id=>$(id).disabled = NET.state!=='ok');
+}
+
+/* ================= accounts ================= */
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+async function hashPw(pw, salt){
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt:unb64(salt), iterations:120000, hash:'SHA-256'}, key, 256);
+  return b64(bits);
+}
+function writeErr(e){
+  const c = e && e.code || '';
+  if (c.includes('permission-denied')) return 'Nuk ke leje për këtë veprim. Kyçu prapë.';
+  if (c.includes('unavailable') || c.includes('network')) return 'S’ka lidhje me internetin. Provo prapë.';
+  if (c.includes('resource-exhausted')) return 'Serveri është i ngarkuar. Provo pas pak.';
+  return 'Nuk u ruajt. Provo prapë.';
+}
+const emailOf = u => u.toLowerCase() + '@' + USER_DOMAIN;
+const USER_RE = /^[a-zA-Z0-9_.]{3,16}$/;
+async function register(ev){
+  ev.preventDefault();
+  const u=$('upUser').value.trim(), pw=$('upPass').value, pw2=$('upPass2').value, err=$('upErr');
+  err.textContent='';
+  if (!USER_RE.test(u)) return err.textContent='Emri duhet të ketë 3–16 shkronja, numra, pikë ose _.';
+  if (pw.length<6) return err.textContent='Fjalëkalimi duhet të ketë të paktën 6 karaktere.';
+  if (pw!==pw2) return err.textContent='Fjalëkalimet nuk përputhen.';
+  const btn=$('upBtn'); btn.disabled=true; btn.textContent='Duke krijuar…';
+  try{
+    const key=u.toLowerCase();
+    const cred = await createUserWithEmailAndPassword(AUTH, emailOf(u), pw);
+    const uid = cred.user.uid;
+    await setDoc(fdoc(FDB,'usernames',key), {uid});
+    const player = {username:u, key, friends:[], results:{}, created:Date.now(), lastSeen:Date.now()};
+    await setDoc(fdoc(FDB,'players',uid), player);
+    NET.player = player; NET.players[uid] = player;
+    rememberUser(u); ['upUser','upPass','upPass2'].forEach(id=>$(id).value='');
+    show('lobby'); toast(`Mirë se erdhe, @${u}!`);
+  }catch(e){
+    const c = e.code||'';
+    err.textContent = c==='auth/email-already-in-use' ? 'Ky emër është i zënë. Zgjidh një tjetër.'
+      : c==='auth/weak-password' ? 'Fjalëkalimi është shumë i dobët.'
+      : c==='auth/operation-not-allowed' ? 'Pronari duhet të aktivizojë Email/Password në Firebase.'
+      : writeErr(e);
+  }
+  btn.disabled=false; btn.textContent='Krijo llogarinë';
+}
+async function login(ev){
+  ev.preventDefault();
+  const u=$('inUser').value.trim().replace(/^@/,''), pw=$('inPass').value, err=$('inErr');
+  err.textContent='';
+  if (!u || !pw) return err.textContent='Shkruaj emrin dhe fjalëkalimin.';
+  if (!USER_RE.test(u)) return err.textContent='Ky emër përdoruesi nuk është i vlefshëm.';
+  const btn=$('inBtn'); btn.disabled=true; btn.textContent='Duke u kyçur…';
+  try{
+    await signInWithEmailAndPassword(AUTH, emailOf(u), pw);
+    rememberUser($('inRemember').checked ? u : null);
+    $('inPass').value='';
+    // onAuthStateChanged loads the player and opens the lobby
+    NET.goLobby = true;
+  }catch(e){
+    const c = e.code||'';
+    err.textContent = (c==='auth/invalid-credential'||c==='auth/wrong-password'||c==='auth/user-not-found') ? 'Emri ose fjalëkalimi është gabim.'
+      : c==='auth/too-many-requests' ? 'Shumë tentime. Prit pak dhe provo prapë.'
+      : writeErr(e);
+  }
+  btn.disabled=false; btn.textContent='Kyçu';
+}
+async function logout(){
+  closeGameSub(); $('setOv').hidden=true;
+  try{ await signOut(AUTH); }catch(e){}
+  show('entry'); authTab(false); toast('Dole nga llogaria.');
+}
+function rememberUser(u){
+  try{ u ? localStorage.setItem('pishpirik-user', u) : localStorage.removeItem('pishpirik-user'); }catch(e){}
+  $('inRemember').checked = !!u;
+}
+function loadRemembered(){
+  let u=null; try{ u=localStorage.getItem('pishpirik-user'); }catch(e){}
+  $('inRemember').checked = !!u;
+  if (u){ $('inUser').value = u; }
+}
+function renderAccount(){
+  const box = $('accBox'); box.replaceChildren();
+  if (NET.state!=='ok'){
+    box.innerHTML = `<p class="empty">${NET.state==='connecting' ? 'Duke kontrolluar lidhjen…' : 'Loja online s’është e lidhur tani.'}</p>`;
+    return;
+  }
+  if (!loggedIn()){
+    const p=document.createElement('p'); p.className='empty'; p.textContent='Nuk je i kyçur. Kyçu për të luajtur me shokët.';
+    box.append(p, btn('Kyçu ose krijo llogari', ()=>{ $('setOv').hidden=true; if (APP.mode==='online') closeGameSub(); show('entry'); authTab(!NET.player); setTimeout(()=>$(NET.player?'inUser':'upUser').focus(), 50); }, true));
+    return;
+  }
+  const pl = NET.player, res = Object.values(pl.results||{});
+  const head=document.createElement('div'); head.className='acc-head';
+  const left=document.createElement('div');
+  const b=document.createElement('b'); b.textContent='@'+pl.username;
+  const s=document.createElement('span'); s.textContent=` · ${res.filter(x=>x==='w').length} fitore · ${res.filter(x=>x==='l').length} humbje · ${(pl.friends||[]).length} shokë`;
+  left.append(b, s);
+  head.append(left, btn('Dil nga llogaria', logout));
+  box.append(head);
+  box.insertAdjacentHTML('beforeend', `
+    <form id="fPw" novalidate>
+      <b style="font-size:14.5px">Ndrysho fjalëkalimin</b>
+      <div class="field"><label for="pwOld">Fjalëkalimi aktual</label><input type="password" id="pwOld" autocomplete="current-password"></div>
+      <div class="row2">
+        <div class="field"><label for="pwNew">I ri</label><input type="password" id="pwNew" autocomplete="new-password"></div>
+        <div class="field"><label for="pwNew2">Përsërite</label><input type="password" id="pwNew2" autocomplete="new-password"></div>
+      </div>
+      <p class="err" id="pwErr"></p>
+      <div class="form-end"><span></span><button class="btn primary" type="submit" id="pwBtn">Ruaj fjalëkalimin</button></div>
+    </form>`);
+  $('fPw').onsubmit = changePw;
+}
+async function changePw(ev){
+  ev.preventDefault();
+  const o=$('pwOld').value, n=$('pwNew').value, n2=$('pwNew2').value, err=$('pwErr');
+  err.textContent=''; err.classList.remove('ok');
+  if (n.length<6) return err.textContent='Fjalëkalimi i ri duhet të ketë të paktën 6 karaktere.';
+  if (n!==n2) return err.textContent='Fjalëkalimet e reja nuk përputhen.';
+  const b=$('pwBtn'); b.disabled=true;
+  try{
+    const user = AUTH.currentUser;
+    await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, o));
+    await updatePassword(user, n);
+    ['pwOld','pwNew','pwNew2'].forEach(id=>$(id).value='');
+    err.classList.add('ok'); err.textContent='Fjalëkalimi u ndryshua.';
+  }catch(e){
+    const c=e.code||'';
+    err.textContent = (c==='auth/invalid-credential'||c==='auth/wrong-password') ? 'Fjalëkalimi aktual është gabim.' : writeErr(e);
+  }
+  b.disabled=false;
+}
+function authTab(up){
+  $('tabIn').classList.toggle('on', !up); $('tabUp').classList.toggle('on', up);
+  $('fIn').hidden = up; $('fUp').hidden = !up;
+}
+
+/* ================= friends & lobby ================= */
+const nameOf = uid => NET.players[uid] ? '@'+NET.players[uid].username : 'Lojtar';
+async function addFriend(ev){
+  ev.preventDefault();
+  const u=$('addUser').value.trim().replace(/^@/,''), err=$('addErr');
+  err.textContent=''; err.classList.remove('ok');
+  if (!u) return;
+  try{
+    const s = await NET.db.doc('usernames/'+u.toLowerCase()).get();
+    if (!s.exists) return err.textContent=`Nuk u gjet asnjë @${u}.`;
+    const fid = s.data().uid;
+    if (fid===NET.uid) return err.textContent='Ky je ti.';
+    const friends = NET.player.friends || [];
+    if (friends.includes(fid)) return err.textContent=`@${u} është tashmë në listë.`;
+    await setFriends([...friends, fid]);
+    $('addUser').value=''; err.classList.add('ok');
+    const mutual = (NET.players[fid]?.friends||[]).includes(NET.uid);
+    err.textContent = mutual ? `Tani je shok me ${nameOf(fid)}.` : `Kërkesa iu dërgua ${nameOf(fid)}.`;
+  }catch(e){ err.textContent = writeErr(e); }
+}
+async function setFriends(list){
+  NET.player.friends = list;
+  await NET.db.doc('players/'+NET.uid).update({friends:list});
+  renderLobby();
+}
+async function invite(fid){
+  const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play'));
+  if (live){ if (live.status==='play') return openGame(live.id); return toast('Ke tashmë një ftesë të hapur me '+nameOf(fid)+'.'); }
+  try{ await NET.db.collection('games').add({p:[NET.uid, fid], status:'invite', created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
+  catch(e){ toast(writeErr(e)); }
+}
+async function acceptInvite(g){
+  try{ await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', created:g.created, G:newMatch()}); openGame(g.id); }
+  catch(e){ toast(writeErr(e)); }
+}
+async function dropGame(g){ try{ await NET.db.doc('games/'+g.id).delete(); }catch(e){ toast(writeErr(e)); } }
+
+function btn(label, fn, primary){ const b=document.createElement('button'); b.type='button'; b.className='btn'+(primary?' primary':''); b.textContent=label; b.onclick=fn; return b; }
+function rowEl(name, status, actions, dot){
+  const r=document.createElement('div'); r.className='row';
+  if (dot!==undefined){ const d=document.createElement('span'); d.className='dot'+(dot?' on':''); d.title = dot?'Online':'Jo online'; r.append(d); }
+  const g=document.createElement('div'); g.className='grow';
+  const n=document.createElement('span'); n.className='nm'; n.textContent=name;
+  const s=document.createElement('span'); s.className='st'; s.textContent=status;
+  g.append(n,s); r.append(g);
+  const a=document.createElement('div'); a.className='acts'; actions.forEach(x=>a.append(x)); r.append(a);
+  return r;
+}
+function renderLobby(){
+  if (APP.screen!=='lobby' || !NET.player) return;
+  const me=NET.uid, pl=NET.player;
+  $('lbWho').textContent = '@'+pl.username;
+  const res = Object.values(pl.results||{});
+  $('lbRec').textContent = `${res.filter(x=>x==='w').length} fitore · ${res.filter(x=>x==='l').length} humbje`;
+  const friends = pl.friends || [];
+  // people who added me but I haven't added
+  const reqs = Object.entries(NET.players).filter(([id,p])=>id!==me && (p.friends||[]).includes(me) && !friends.includes(id));
+  $('reqSec').hidden = !reqs.length;
+  $('reqList').replaceChildren(...reqs.map(([id])=>rowEl(nameOf(id), 'Të ka shtuar si shok', [btn('Prano', ()=>setFriends([...friends, id]).catch(e=>toast(writeErr(e))), true)], NET.online.has(id))));
+  const fl = $('frList'); fl.replaceChildren();
+  if (!friends.length) fl.innerHTML = '<div class="empty">Ende s’ke shokë. Shkruaj username-in e shokut sipër.</div>';
+  friends.forEach(id=>{
+    const mutual = (NET.players[id]?.friends||[]).includes(me);
+    const on = NET.online.has(id);
+    const acts = [];
+    if (mutual) acts.push(btn('Fto në lojë', ()=>invite(id), true));
+    acts.push(btn('Hiq', ()=>setFriends(friends.filter(x=>x!==id)).catch(e=>toast(writeErr(e)))));
+    fl.append(rowEl(nameOf(id), mutual ? (on ? 'Online tani' : 'Shok') : 'Në pritje që të të shtojë', acts, on));
+  });
+  const inv = NET.games.filter(g=>g.status==='invite' && g.p[1]===me);
+  $('invSec').hidden = !inv.length;
+  $('invList').replaceChildren(...inv.map(g=>rowEl(nameOf(g.p[0]), 'Të fton në lojë', [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
+  const gl = $('gmList'); gl.replaceChildren();
+  const mine = NET.games.filter(g=>!(g.status==='invite' && g.p[1]===me)).sort((a,b)=>(b.created||0)-(a.created||0));
+  if (!mine.length) gl.innerHTML = '<div class="empty">Asnjë lojë ende. Fto një shok nga lista.</div>';
+  mine.slice(0,12).forEach(g=>{
+    const opp = g.p[0]===me ? g.p[1] : g.p[0];
+    const i = g.p.indexOf(me), G = g.G;
+    let st='', acts=[];
+    if (g.status==='invite'){ st='Ftesa u dërgua, në pritje'; acts=[btn('Anulo', ()=>dropGame(g))]; }
+    else if (g.status==='play'){ st = G ? `${G.tot[i]} – ${G.tot[1-i]} · ` + (G.phase==='play' && G.turn===i ? 'Radha jote' : 'Në lojë') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
+    else if (g.status==='over' && G){ const w=G.tot[i]>G.tot[1-i]; st=`${w?'Fitove':'Humbe'} ${G.tot[i]} – ${G.tot[1-i]}`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
+    else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
+    gl.append(rowEl(nameOf(opp), st, acts, NET.online.has(opp)));
+  });
+}
+
+/* ================= online game ================= */
+function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null; } NET.gameId=null; NET.gameDoc=null; NET.pending=null; }
+function openGame(gid){
+  closeGameSub();
+  APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid;
+  $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
+  show('game');
+  NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(onGameSnap, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
+}
+function onGameSnap(snap){
+  if (APP.mode!=='online' || APP.screen!=='game') return;
+  if (!snap.exists){ toast('Kjo lojë nuk ekziston më.'); closeGameSub(); show('lobby'); return; }
+  const d = clone(snap.data());
+  NET.gameDoc = d;
+  APP.me = Math.max(0, d.p.indexOf(NET.uid));
+  APP.oppName = nameOf(d.p[1-APP.me]);
+  if (d.status==='invite' || !d.G){ setMsg(`Në pritje që ${APP.oppName} të pranojë ftesën…`, true); return; }
+  recordResult(d);
+  processGame(d.G);
+}
+async function processGame(G){
+  if (NET.animating || APP.busy){ NET.pending = G; return; }
+  if (S && G.seq===S.seq+1 && G.lastMove && G.lastMove.seq===G.seq && G.lastMove.by!==APP.me){
+    NET.animating = true;
+    await animateMove(G.lastMove, G);
+    NET.animating = false;
+    render(); afterState(); flushPending();
+  } else if (!S || G.seq!==S.seq){
+    const newRound = !S || G.round!==S.round;
+    S = G; render(); afterState();
+    if (newRound && G.phase==='play'){ sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); }
+  } else { render(); }
+}
+function flushPending(){ const p=NET.pending; NET.pending=null; if (p) processGame(p); }
+async function recordResult(d){
+  if (d.status!=='over' || !d.G || !NET.player) return;
+  const i = d.p.indexOf(NET.uid); if (i<0) return;
+  const res = NET.player.results || {};
+  if (res[NET.gameId]) return;
+  const r = d.G.tot[i]>d.G.tot[1-i] ? 'w' : 'l';
+  NET.player.results = {...res, [NET.gameId]:r};
+  try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
+}
+async function leaveOnline(){
+  if (!NET.gameDoc) return;
+  try{ await NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
+}
+
+/* ================= network: Firebase ================= */
+let FDB=null, AUTH=null;
+// Firestore can't hold arrays inside arrays, so the game state travels as JSON text in field G
+const wrapDoc = s => ({ id:s.id, exists:s.exists(), data:()=>{ const d=s.data(); if (d && typeof d.G==='string') return {...d, G:JSON.parse(d.G)}; return d; } });
+const enc = d => (d && d.G && typeof d.G==='object') ? {...d, G:JSON.stringify(d.G)} : d;
+const DB = {
+  doc(path){ const r=()=>fdoc(FDB, path); return {
+    get: async()=>wrapDoc(await getDoc(r())),
+    set: d=>setDoc(r(), enc(d)),
+    update: d=>setDoc(r(), enc(d), {merge:true}),
+    delete: ()=>deleteDoc(r()),
+    onSnapshot: (n,e)=>fsnap(r(), s=>n(wrapDoc(s)), e),
+  }; },
+  collection(path){
+    const base = fcol(FDB, path);
+    const mk = q => ({ where:(f,op,v)=>mk(query(q, where(f,op,v))), onSnapshot:(n,e)=>fsnap(q, s=>n({docs:s.docs.map(wrapDoc), size:s.size, empty:s.empty}), e) });
+    return {...mk(base), add: d=>addDoc(base, enc(d))};
+  },
+};
+const ONLINE_MS = 2*60*1000;
+let netSubs = [], beat = null;
+function stopNet(){ netSubs.forEach(f=>f()); netSubs=[]; clearInterval(beat); beat=null; NET.players={}; NET.player=null; NET.games=[]; NET.prevStatus={}; }
+function heartbeat(){ if (NET.uid && NET.player) DB.doc('players/'+NET.uid).update({lastSeen:Date.now()}).catch(()=>{}); }
+function computeOnline(){
+  const now=Date.now();
+  NET.online = new Set(Object.entries(NET.players).filter(([id,p])=>id!==NET.uid && p.lastSeen && now-p.lastSeen<ONLINE_MS).map(([id])=>id));
+}
+function startNet(uid){
+  let first = true;
+  netSubs.push(DB.collection('players').onSnapshot(snap=>{
+    const m={}; snap.docs.forEach(d=>m[d.id]=d.data());
+    NET.players=m; NET.player = m[uid] || NET.player;
+    computeOnline();
+    if (first){ first=false; heartbeat(); if (NET.goLobby && NET.player){ NET.goLobby=false; show('lobby'); } }
+    if (APP.screen==='entry') renderEntry();
+    if (APP.screen==='lobby') renderLobby();
+    if (APP.screen==='game' && APP.mode==='online' && NET.gameDoc){ APP.oppName = nameOf(NET.gameDoc.p[1-APP.me]); render(); }
+  }, ()=>{ NET.state='offline'; renderEntry(); }));
+  netSubs.push(DB.collection('games').where('p','array-contains',uid).onSnapshot(snap=>{
+    const list = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    const hadAny = Object.keys(NET.prevStatus).length>0;
+    list.forEach(g=>{
+      const prev = NET.prevStatus[g.id];
+      if (prev==='invite' && g.status==='play' && g.p[0]===uid && APP.screen!=='game') toast(`${nameOf(g.p[1])} pranoi ftesën. Shtyp Vazhdo.`);
+      if (prev===undefined && hadAny && g.status==='invite' && g.p[1]===uid){ toast(`${nameOf(g.p[0])} të fton në lojë.`); sfx.turn(); }
+    });
+    NET.prevStatus = Object.fromEntries(list.map(g=>[g.id, g.status])); NET.prevStatus.__='x';
+    NET.games = list;
+    if (APP.screen==='lobby') renderLobby();
+  }, ()=>{}));
+  beat = setInterval(()=>{ heartbeat(); computeOnline(); if (APP.screen==='lobby') renderLobby(); }, 60*1000);
+}
+async function initNet(){
+  if (!firebaseConfig || !firebaseConfig.apiKey || /VENDOS/.test(firebaseConfig.apiKey)){ NET.state='none'; renderEntry(); return; }
+  try{
+    const V = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    const [A, Au, Fs] = await Promise.all([import(V+'firebase-app.js'), import(V+'firebase-auth.js'), import(V+'firebase-firestore.js')]);
+    ({initializeApp} = A);
+    ({getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword} = Au);
+    ({getFirestore, getDoc, setDoc, deleteDoc, addDoc, query, where} = Fs);
+    fdoc = Fs.doc; fcol = Fs.collection; fsnap = Fs.onSnapshot;
+    const app = initializeApp(firebaseConfig);
+    AUTH = getAuth(app); FDB = getFirestore(app); NET.db = DB;
+  }catch(e){ NET.state='offline'; renderEntry(); return; }
+  onAuthStateChanged(AUTH, async user=>{
+    stopNet();
+    NET.authUser = user; NET.uid = user ? user.uid : null;
+    NET.state = 'ok';
+    if (user){
+      try{ const p = await DB.doc('players/'+user.uid).get(); if (p.exists) NET.player = p.data(); }catch(e){}
+      startNet(user.uid);
+      if (NET.goLobby && NET.player){ NET.goLobby=false; show('lobby'); }
+    } else if (APP.screen==='lobby' || (APP.screen==='game' && APP.mode==='online')){ closeGameSub(); show('entry'); }
+    if (APP.screen==='entry') renderEntry();
+    if (!$('setOv').hidden) renderAccount();
+  });
+}
+
+/* ================= wiring ================= */
+$('bHome').onclick = () => { if (APP.screen==='game' && APP.mode==='online') closeGameSub(); show('entry'); };
+$('bSet').onclick = openSettings;
+$('bRules').onclick = () => { $('rulesOv').hidden=false; };
+$('sSound').onchange = e => { SET.sound = e.target.checked; saveSet(); syncSetUI(); if (SET.sound) sfx.click(); };
+$('sVol').oninput = e => { SET.vol = +e.target.value; saveSet(); };
+$('sVol').onchange = () => sfx.play();
+$('sHints').onchange = e => { SET.hints = e.target.checked; saveSet(); if (S) render(); };
+$('sAnim').onchange = e => { SET.anim = e.target.checked; saveSet(); };
+document.querySelectorAll('#sLevel button').forEach(b=>b.onclick=()=>{ SET.level=b.dataset.v; saveSet(); syncSetUI(); sfx.click(); });
+$('inRemember').onchange = e => { if (!e.target.checked) rememberUser(null); };
+$('chCpu').onclick = startCpu;
+$('bCpu2').onclick = startCpu;
+$('bToLobby').onclick = () => show('lobby');
+$('bOut2').onclick = logout;
+$('tabIn').onclick = () => authTab(false);
+$('tabUp').onclick = () => authTab(true);
+$('fIn').onsubmit = login;
+$('fUp').onsubmit = register;
+$('fAdd').onsubmit = addFriend;
+$('bOut').onclick = logout;
+document.querySelectorAll('[data-go="entry"]').forEach(b=>b.onclick=()=>show('entry'));
+$('bBack').onclick = () => {
+  if (APP.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); }
+  else show('entry');
+};
+$('bGameAct').onclick = () => {
+  if (APP.mode==='cpu'){ if (!APP.busy) startCpu(); }
+  else leaveOnline();
+};
+$('bNext').onclick = nextRound;
+$('bSumMenu').onclick = () => { $('sumOv').hidden=true; $('bBack').onclick(); };
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').hidden=true);
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv') o.hidden=true; }));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else $('setOv').hidden=true; } });
+
+buildTiles();
+loadRemembered();
+syncSetUI();
+let saved = 0;
+try{ const v = parseInt(localStorage.getItem('pishpirik-deck'),10); if (v>=0 && v<THEMES.length) saved=v; }catch(e){}
+applyTheme(saved);
+
+show('entry');
+initNet();
+</script>
+</body>
+</html>
