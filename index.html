@@ -251,6 +251,22 @@ input:focus{border-color:var(--paper-ink); outline:none}
 .phr{display:flex; flex-wrap:wrap; gap:6px}
 .phr button{font:500 14px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:999px; padding:8px 12px; cursor:pointer}
 .phr button:hover{border-color:#bfae88}
+.snd-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:14px}
+.snd-head h3{margin:0 !important}
+#sndAllBar{margin:8px 0}
+#sndAllBar input,.snd-add input{font:15px var(--ui); width:100%; box-sizing:border-box; border:1.5px solid var(--paper-line); background:#fffaf0; color:var(--paper-ink); border-radius:10px; padding:9px 11px}
+.snd-list{display:flex; flex-direction:column; max-height:min(38vh, 320px); overflow-y:auto; margin-top:8px; border:1.5px solid var(--paper-line); border-radius:12px; background:#fffaf0}
+.srow2{display:flex; align-items:center; gap:4px; border-bottom:1px solid var(--paper-line); min-width:0}
+.srow2:last-child{border-bottom:0}
+.srow2 .send{flex:1; min-width:0; text-align:left; font:600 14px var(--ui); color:var(--paper-ink); background:none; border:0; padding:11px 12px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.srow2 .send:hover{background:#f3ead4}
+.srow2 .ic{flex:none; width:38px; height:38px; border:0; background:none; cursor:pointer; font-size:17px; border-radius:10px; color:var(--paper-ink)}
+.srow2 .ic:hover{background:#f3ead4}
+.srow2 .star{opacity:.35} .srow2 .star.on{opacity:1}
+.snd-empty{padding:16px; color:var(--paper-muted); font-size:13.5px; line-height:1.5}
+.snd-add{display:flex; gap:8px; margin-top:10px}
+.snd-add input{flex:1; min-width:0}
+.snd-note{margin:8px 0 0; font-size:12px; color:var(--paper-muted); line-height:1.45}
 .snd{display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:6px}
 .snd button{display:flex; align-items:center; gap:8px; font:600 13px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:12px; padding:9px 10px; cursor:pointer; text-align:left}
 .snd button span{font-size:22px}
@@ -517,7 +533,15 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   <div class="sheet chat-sheet" role="dialog" aria-label="Chat i shpejtë">
     <h3>Emoji</h3><div class="emo" id="chEmo"></div>
     <h3>Fjali</h3><div class="phr" id="chTxt"></div>
-    <h3>Tinguj</h3><div class="snd" id="chSnd"></div>
+    <div class="snd-head"><h3>Tinguj meme</h3>
+      <div class="seg" id="sndTabs" role="tablist"><button type="button" data-t="fav" class="on" role="tab">⭐ Të preferuarit</button><button type="button" data-t="all" role="tab">Të gjithë</button></div></div>
+    <div id="sndAllBar" hidden><input type="text" id="sndQ" placeholder="Kërko tingull… (p.sh. bruh, boom, sad)" autocomplete="off" aria-label="Kërko tingull"></div>
+    <div class="snd-list" id="chSnd"></div>
+    <form class="snd-add" id="sndAdd" novalidate>
+      <input type="text" id="sndUrl" placeholder="Ngjit linkun e një tingulli nga memeinstants.com" autocomplete="off" aria-label="Linku i tingullit">
+      <button class="btn" type="submit">Shto ⭐</button>
+    </form>
+    <p class="snd-note">Tingujt luhen direkt nga memeinstants.com. Prek emrin për ta dërguar, ▶ për ta dëgjuar vetëm ti, ⭐ për ta ruajtur.</p>
   </div>
 </div>
 
@@ -542,6 +566,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 
 <script type="module">
 import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
+import { SOUNDS } from "./sounds.js";
 // Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
 let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
 const VS = '︎';
@@ -915,7 +940,7 @@ async function animateMove(m, G){
     renderPile(m.before.concat([{c:m.card}]));
     await sleep(SET.anim ? 520 : 380);
     if (m.bonus){ burst(mine ? 'Ti' : APP.oppName, m.bonus); sfx.pishti();
-      if (APP.mode==='cpu' && Math.random()<.6) setTimeout(()=>cpuSay(mine ? ['s','sad'] : ['s','horn']), 1300); }
+      if (APP.mode==='cpu' && Math.random()<.6) setTimeout(()=>cpuSay(mine ? ['s',pickSlug(/sad|violin|trombone|cry/i)] : ['s',pickSlug(/horn|mlg|wow|vine boom/i)]), 1300); }
     else sfx.capture();
     if (SET.anim) $('pile').classList.add(mine ? 'sweep0' : 'sweep1');
     await sleep(SET.anim ? 440 : 150);
@@ -1350,13 +1375,11 @@ $('rGo').onclick = () => { SET.rounds = rndSel; saveSet(); $('rndOv').hidden = t
 const CHAT = {
   e: ['😂','😎','😡','😭','🔥','👏','🤔','🙈','💀','🍀','🃏','👑'],
   t: ['Hajde shpejt! ⏳','Lojë e mirë 👏','S’ke shans 😂','Pishpiriku po vjen 😎','Fat i madh 🍀','Prit pak…','Kurgjo s’ma ndien 😏','GG 🤝'],
-  s: {horn:['📯','Airhorn'], sad:['🎺','Wah wah wah'], rim:['🥁','Ba-dum-tss'], boom:['💥','Bum'], crick:['🦗','Bulkthat'],
-      clap:['👏','Duartrokitje'], bruh:['😐','Bruh'], drama:['🎻','Dun dun duun'], whistle:['🪈','Fishkëllimë'], laugh:['🤣','Hahaha']},
 };
 function buildChat(){
   $('chEmo').replaceChildren(...CHAT.e.map((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=x; b.setAttribute('aria-label',x); b.onclick=()=>sendChat('e',i); return b; }));
   $('chTxt').replaceChildren(...CHAT.t.map((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=x; b.onclick=()=>sendChat('t',i); return b; }));
-  $('chSnd').replaceChildren(...Object.entries(CHAT.s).map(([k,[em,lb]])=>{ const b=document.createElement('button'); b.type='button'; b.innerHTML=`<span>${em}</span>${lb}`; b.onclick=()=>sendChat('s',k); return b; }));
+  drawSounds();
 }
 let lastChat = 0;
 function sendChat(k, v){
@@ -1369,7 +1392,7 @@ function sendChat(k, v){
     NET.chatTs = now;
     NET.db.doc('games/'+NET.gameId).update({chat:{k, v, by:NET.uid, ts:now}}).catch(e=>toast(writeErr(e)));
   } else if (APP.mode==='cpu' && Math.random()<.45){
-    const replies = [['e',0],['e',1],['e',4],['e',6],['s','laugh'],['s','bruh'],['t',2],['t',7]];
+    const replies = [['e',0],['e',1],['e',4],['e',6],['s',pickSlug(/laugh|haha|hehe/i)],['s',pickSlug(/bruh/i)],['t',2],['t',7]];
     setTimeout(()=>cpuSay(replies[Math.floor(Math.random()*replies.length)]), 1100+Math.random()*900);
   }
 }
@@ -1381,38 +1404,91 @@ function showChat(who, k, v){
   const b = document.createElement('div'); b.className='bubble';
   if (k==='e' && CHAT.e[v]){ b.classList.add('big'); b.textContent = CHAT.e[v]; }
   else if (k==='t' && CHAT.t[v]){ b.textContent = CHAT.t[v]; }
-  else if (k==='s' && CHAT.s[v]){ b.textContent = CHAT.s[v][0]+' '+CHAT.s[v][1]; if (SET.chatSound || who==='me') meme(v); }
+  else if (k==='s' && SLUG_RE.test(v)){ b.textContent = '🔊 ' + sndTitle(v); if (SET.chatSound || who==='me') playSound(v); }
   else return;
   if (who!=='me' && k!=='s') sfx.click();
   seat.append(b); setTimeout(()=>b.remove(), 3100);
 }
 
-/* meme sounds, synthesised (no recordings) */
-function osc(c, t, type, f0, f1, dur, g, dest){
-  const o=c.createOscillator(), e=c.createGain(); o.type=type;
-  o.frequency.setValueAtTime(f0, t); if (f1 && f1!==f0) o.frequency.exponentialRampToValueAtTime(f1, t+dur);
-  e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(g, t+.015); e.gain.setValueAtTime(g, t+Math.max(.02,dur-.06)); e.gain.exponentialRampToValueAtTime(0.0001, t+dur);
-  o.connect(e); e.connect(dest||SND.bus); o.start(t); o.stop(t+dur+.05); return o;
+/* meme sounds: played straight from memeinstants.com, nothing copied */
+const SLUG_RE = /^[a-z0-9][a-z0-9-]{2,150}$/;
+const SND_URL = slug => 'https://d2lt87072f138r.cloudfront.net/assets/sounds/' + slug.replace(/-/g,'_') + '.mp3';
+const SND_MAP = new Map(SOUNDS.map(([sl,t])=>[sl,t]));
+const pretty = sl => sl.replace(/-[0-9a-f]{6}-v\d+$/,'').replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+const sndTitle = sl => SND_MAP.get(sl) || (customTitles()[sl]) || pretty(sl);
+function pickSlug(re){ const hit = SOUNDS.find(([sl,t])=>re.test(t)||re.test(sl)); return hit ? hit[0] : SOUNDS[0][0]; }
+let curAudio = null;
+function playSound(slug){
+  if (!SET.sound || !SET.vol || !SLUG_RE.test(slug)) return;
+  try{
+    if (curAudio){ curAudio.pause(); curAudio = null; }
+    const a = new Audio(SND_URL(slug)); a.volume = Math.min(1, SET.vol/100);
+    a.play().catch(()=>{}); curAudio = a;
+    setTimeout(()=>{ if (curAudio===a){ a.pause(); curAudio=null; } }, 8000);
+  }catch(e){}
 }
-function lp(c, f){ const x=c.createBiquadFilter(); x.type='lowpass'; x.frequency.value=f; x.connect(SND.bus); return x; }
-function formant(c, freqs){ const g=c.createGain(); freqs.forEach(([f,q,a])=>{ const b=c.createBiquadFilter(); b.type='bandpass'; b.frequency.value=f; b.Q.value=q; const v=c.createGain(); v.gain.value=a; g.connect(b); b.connect(v); v.connect(SND.bus); }); return g; }
-function meme(k){
-  const c = ac(); if (!c) return; const t = c.currentTime+.02;
-  if (k==='horn'){ const f=lp(c,3200); [[0,.13],[.18,.13],[.36,.55]].forEach(([d,len])=>{ [466,470,932,698].forEach((hz,i)=>osc(c,t+d,'sawtooth',hz*.97,hz,len,i<2?.16:.07,f)); }); }
-  else if (k==='sad'){ const f=lp(c,1400); [[293.7,.45],[277.2,.45],[261.6,.45],[246.9,1.3]].forEach(([hz,len],i)=>{ const o=osc(c,t+i*.5,'sawtooth',hz,hz,len,.22,f);
-      if (i===3){ const l=c.createOscillator(), lg=c.createGain(); l.frequency.value=5.5; lg.gain.value=9; l.connect(lg); lg.connect(o.frequency); l.start(t+1.6); l.stop(t+3); } }); }
-  else if (k==='rim'){ thud(c,t,.45,150); thud(c,t+.16,.5,95); grain(c,t+.34,{type:'highpass',f:6500,q:.4,att:.002,dec:.7,g:.35}); grain(c,t+.34,{f:2200,q:1.5,att:.001,dec:.06,g:.4}); }
-  else if (k==='boom'){ const ws=c.createWaveShaper(), cv=new Float32Array(512); for(let i=0;i<512;i++){ const x=i/256-1; cv[i]=Math.tanh(3*x); } ws.curve=cv; ws.connect(SND.bus);
-      osc(c,t,'sine',140,38,1.4,.9,ws); grain(c,t,{type:'lowpass',f:200,q:.7,att:.003,dec:.5,g:.8}); }
-  else if (k==='crick'){ for(let r=0;r<2;r++) for(let ch=0;ch<3;ch++) for(let p=0;p<4;p++) osc(c,t+r*.9+ch*.16+p*.022,'sine',4600,4600,.016,.12); }
-  else if (k==='clap'){ for(let i=0;i<70;i++){ const tt=t+Math.random()*1.6, env=Math.sin(Math.PI*(tt-t)/1.6); grain(c,tt,{f:rnd(900,2200),q:1.2,att:.001,dec:.03,g:.12+.25*env,pan:rnd(-.6,.6)}); } }
-  else if (k==='bruh'){ const fm=formant(c,[[650,6,1],[1100,7,.6],[2400,8,.25]]);
-      for(let i=0;i<6;i++) grain(c,t+i*.018,{f:900,q:2,att:.002,dec:.012,g:.25});
-      osc(c,t+.08,'sawtooth',118,88,.5,.55,fm); }
-  else if (k==='drama'){ const f=lp(c,1800); [[196,.22,0],[196,.22,.28],[164.8,1.2,.56]].forEach(([hz,len,d])=>{ osc(c,t+d,'sawtooth',hz,hz,len,.2,f); osc(c,t+d,'sawtooth',hz/2,hz/2,len,.14,f); }); }
-  else if (k==='whistle'){ osc(c,t,'sine',520,1900,.55,.22); osc(c,t+.55,'sine',1900,640,.6,.22); }
-  else if (k==='laugh'){ const fm=formant(c,[[800,5,1],[1250,6,.6]]); for(let i=0;i<5;i++){ const tt=t+i*.17; grain(c,tt,{type:'highpass',f:1500,q:.5,att:.005,dec:.04,g:.12}); osc(c,tt+.03,'sawtooth',260-i*12,230-i*12,.11,.5,fm); } }
+// favourites: in the account when logged in, otherwise in this browser
+const FAV_MAX = 60;
+function customTitles(){ try{ return JSON.parse(localStorage.getItem('pishpirik-sndnames')||'{}'); }catch(e){ return {}; } }
+function getFavs(){
+  if (loggedIn() && Array.isArray(NET.player.favSounds)) return NET.player.favSounds.filter(x=>SLUG_RE.test(x));
+  try{ const f = JSON.parse(localStorage.getItem('pishpirik-favs')||'null'); if (Array.isArray(f)) return f.filter(x=>SLUG_RE.test(x)); }catch(e){}
+  return SOUNDS.slice(0,8).map(x=>x[0]);
 }
+async function setFavs(list){
+  list = [...new Set(list)].slice(0, FAV_MAX);
+  try{ localStorage.setItem('pishpirik-favs', JSON.stringify(list)); }catch(e){}
+  if (loggedIn()){
+    NET.player.favSounds = list;
+    try{ await NET.db.doc('players/'+NET.uid).update({favSounds:list}); }catch(e){ toast(writeErr(e)); }
+  }
+}
+function toggleFav(slug){
+  const f = getFavs(); const i = f.indexOf(slug);
+  if (i>=0) f.splice(i,1); else { if (f.length>=FAV_MAX) return toast(`Mund të kesh deri në ${FAV_MAX} të preferuar.`); f.unshift(slug); }
+  setFavs(f); drawSounds();
+}
+let sndTab = 'fav';
+function drawSounds(){
+  const box = $('chSnd'); if (!box) return;
+  const favs = getFavs(), favSet = new Set(favs);
+  let list;
+  if (sndTab==='fav') list = favs.map(sl=>[sl, sndTitle(sl)]);
+  else {
+    const q = ($('sndQ').value||'').trim().toLowerCase();
+    list = q ? SOUNDS.filter(([sl,t])=>t.toLowerCase().includes(q) || sl.includes(q.replace(/\s+/g,'-'))) : SOUNDS;
+    list = list.slice(0, 80);
+  }
+  if (!list.length){
+    box.innerHTML = `<div class="snd-empty">${sndTab==='fav' ? 'S’ke ende të preferuar. Te “Të gjithë” shtyp ⭐ te tingujt që të pëlqejnë.' : 'S’u gjet asnjë tingull me këtë emër.'}</div>`;
+    return;
+  }
+  box.replaceChildren(...list.map(([sl,t])=>{
+    const r=document.createElement('div'); r.className='srow2';
+    const send=document.createElement('button'); send.type='button'; send.className='send'; send.textContent=t; send.title='Dërgoje në chat'; send.onclick=()=>sendChat('s', sl);
+    const pv=document.createElement('button'); pv.type='button'; pv.className='ic'; pv.textContent='▶'; pv.setAttribute('aria-label','Dëgjoje vetëm ti: '+t); pv.onclick=()=>playSound(sl);
+    const st=document.createElement('button'); st.type='button'; st.className='ic star'+(favSet.has(sl)?' on':''); st.textContent='⭐'; st.setAttribute('aria-label', (favSet.has(sl)?'Hiqe nga':'Shtoje te')+' të preferuarit: '+t); st.setAttribute('aria-pressed', favSet.has(sl)); st.onclick=()=>toggleFav(sl);
+    r.append(send, pv, st); return r;
+  }));
+}
+document.querySelectorAll('#sndTabs button').forEach(b=>b.onclick=()=>{
+  sndTab = b.dataset.t;
+  document.querySelectorAll('#sndTabs button').forEach(x=>x.classList.toggle('on', x===b));
+  $('sndAllBar').hidden = sndTab!=='all'; drawSounds();
+  if (sndTab==='all') setTimeout(()=>$('sndQ').focus(), 30);
+});
+$('sndQ').oninput = drawSounds;
+$('sndAdd').onsubmit = e => {
+  e.preventDefault();
+  const v = $('sndUrl').value.trim();
+  const m = v.match(/memeinstants\.com\/[a-z]{2}\/sounds\/[a-z]{2}\/([a-z0-9-]+)/i);
+  if (!m || !SLUG_RE.test(m[1].toLowerCase())) return toast('Ngjit linkun e faqes së një tingulli nga memeinstants.com.');
+  const sl = m[1].toLowerCase();
+  if (!SND_MAP.has(sl)){ const ct = customTitles(); ct[sl] = pretty(sl); try{ localStorage.setItem('pishpirik-sndnames', JSON.stringify(ct)); }catch(e){} }
+  const f = getFavs(); if (!f.includes(sl)) f.unshift(sl); setFavs(f);
+  $('sndUrl').value=''; sndTab='fav'; document.querySelectorAll('#sndTabs button').forEach(x=>x.classList.toggle('on', x.dataset.t==='fav')); $('sndAllBar').hidden=true;
+  drawSounds(); playSound(sl); toast('U shtua te të preferuarit ⭐');
+};
 
 /* ================= network: Firebase ================= */
 let FDB=null, AUTH=null;
@@ -1523,7 +1599,7 @@ $('bGameAct').onclick = () => {
   else leaveOnline();
 };
 $('bNext').onclick = nextRound;
-$('bChat').onclick = () => { $('chatOv').hidden = false; };
+$('bChat').onclick = () => { drawSounds(); $('chatOv').hidden = false; };
 $('sChatS').onchange = e => { SET.chatSound = e.target.checked; saveSet(); };
 $('bSumMenu').onclick = () => { $('sumOv').hidden=true; $('bBack').onclick(); };
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').hidden=true);
