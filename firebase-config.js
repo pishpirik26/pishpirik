@@ -1,12 +1,12 @@
-// Ngjite këtu konfigurimin nga Firebase Console:
-// Project settings → General → Your apps → Web app → "SDK setup and configuration" → Config
+// Konfigurimi i projektit Firebase "pishpirik" (pishpirik-7550f).
+// Këto vlera janë publike sipas dizajnit të Firebase; siguria vjen nga firestore.rules.
 export const firebaseConfig = {
-  apiKey: "VENDOS_API_KEY_KETU",
-  authDomain: "projekti-yt.firebaseapp.com",
-  projectId: "projekti-yt",
-  storageBucket: "projekti-yt.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:0000000000000000"
+  apiKey: "AIzaSyDCfgBV5KtlUviyihkYGtZuhroHZISV-bc",
+  authDomain: "pishpirik-7550f.firebaseapp.com",
+  projectId: "pishpirik-7550f",
+  storageBucket: "pishpirik-7550f.firebasestorage.app",
+  messagingSenderId: "105744464734",
+  appId: "1:105744464734:web:5e3238b110dd0150a6adcf"
 };
 
 // Emri i përdoruesit kthehet në një email të brendshëm (p.sh. arben@pishpirik.game)
