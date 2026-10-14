@@ -199,6 +199,63 @@ input:focus{border-color:var(--paper-ink); outline:none}
 .round-wrap{justify-self:end; text-align:right}
 .round-wrap .label b{display:block; font-family:var(--display); font-size:20px; color:var(--cream)}
 .msg{text-align:center; min-height:22px; font-size:14.5px; color:var(--cream)}
+.msg:empty{display:none}
+/* turn signs */
+.seat{position:relative}
+.sc .who{display:flex; align-items:center; gap:6px}
+.sc.right .who{justify-content:flex-end}
+.tdot{width:9px; height:9px; border-radius:50%; background:transparent; flex:none}
+[data-turn="me"] #tdot0, [data-turn="opp"] #tdot1{background:var(--brass); box-shadow:0 0 0 0 rgba(216,173,85,.7); animation:ping 1.4s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(216,173,85,.7)} 100%{box-shadow:0 0 0 9px rgba(216,173,85,0)}}
+.pips{display:flex; gap:4px; margin-top:4px}
+.sc.right .pips{justify-content:flex-end}
+.pips i{width:9px; height:9px; border-radius:50%; border:1.5px solid rgba(239,230,210,.35); box-sizing:border-box}
+.pips i.on{background:var(--brass); border-color:var(--brass)}
+.turn-arrow{width:34px; height:34px; display:grid; place-items:center; color:var(--brass); margin:6px 0 0 auto; transition:transform .35s cubic-bezier(.3,1.4,.5,1), opacity .2s; opacity:0}
+[data-turn="me"] .turn-arrow{opacity:1; transform:rotate(0deg)}
+[data-turn="opp"] .turn-arrow{opacity:1; transform:rotate(180deg)}
+.turn-arrow svg{animation:nudge 1.1s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(-2px)} 50%{transform:translateY(4px)}}
+[data-turn="opp"] .mine .hand .card{filter:brightness(.72) saturate(.75)}
+[data-turn="me"] .mine .hand{filter:drop-shadow(0 0 14px rgba(216,173,85,.35))}
+.think{position:absolute; left:50%; top:calc(var(--ch) * .5); transform:translate(-50%,-50%); display:none; gap:5px; background:var(--paper); border-radius:999px; padding:8px 11px; box-shadow:0 6px 16px rgba(0,0,0,.35); z-index:3}
+.think i{width:7px; height:7px; border-radius:50%; background:var(--paper-ink); animation:dots 1s ease-in-out infinite}
+.think i:nth-child(2){animation-delay:.15s} .think i:nth-child(3){animation-delay:.3s}
+@keyframes dots{0%,80%,100%{transform:translateY(0); opacity:.35} 40%{transform:translateY(-5px); opacity:1}}
+[data-turn="opp"] .think{display:flex}
+/* chat */
+.chat-fab{position:fixed; z-index:30; right:max(16px, calc(env(safe-area-inset-right, 0px) + 12px)); bottom:calc(18px + env(safe-area-inset-bottom, 0px));
+  width:54px; height:54px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+  background:var(--face); color:var(--red); border:2px solid var(--back-edge); box-shadow:0 0 0 2px var(--back-frame), 0 8px 20px rgba(0,0,0,.45)}
+.chat-fab svg{filter:drop-shadow(var(--glow))}
+.chat-fab:focus-visible{outline:2px solid var(--brass); outline-offset:4px}
+.bubble{position:absolute; left:50%; z-index:6; transform:translateX(-50%); background:var(--paper); color:var(--paper-ink); border-radius:18px; padding:9px 14px;
+  font-weight:600; font-size:15px; box-shadow:0 10px 24px rgba(0,0,0,.45); max-width:min(78vw, 320px); text-align:center; pointer-events:none;
+  animation:bub 3s ease both}
+.bubble.big{font-size:44px; line-height:1; padding:8px 12px; background:transparent; box-shadow:none; filter:drop-shadow(0 6px 12px rgba(0,0,0,.45))}
+.bubble small{display:block; font-size:11.5px; font-weight:500; color:var(--paper-muted); margin-top:2px}
+.opp .bubble{top:calc(var(--ch) + 4px)}
+.mine .bubble{bottom:calc(var(--ch) + 22px)}
+@keyframes bub{0%{opacity:0; transform:translate(-50%,8px) scale(.6)} 12%{opacity:1; transform:translate(-50%,0) scale(1.06)} 20%{transform:translate(-50%,0) scale(1)} 85%{opacity:1} 100%{opacity:0; transform:translate(-50%,-6px)}}
+.overlay.bottom{place-items:end center}
+.chat-sheet{width:min(560px, 100%)}
+.emo{display:grid; grid-template-columns:repeat(6, minmax(0,1fr)); gap:6px}
+.emo button{font-size:28px; line-height:1; padding:8px 0; border:0; background:#efe5cc; border-radius:12px; cursor:pointer}
+.emo button:hover{background:#e6d9b8}
+.phr{display:flex; flex-wrap:wrap; gap:6px}
+.phr button{font:500 14px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:999px; padding:8px 12px; cursor:pointer}
+.phr button:hover{border-color:#bfae88}
+.snd{display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:6px}
+.snd button{display:flex; align-items:center; gap:8px; font:600 13px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:12px; padding:9px 10px; cursor:pointer; text-align:left}
+.snd button span{font-size:22px}
+.snd button:hover{border-color:#bfae88}
+.chat-sheet h3{margin:14px 0 8px}
+.chat-sheet h3:first-of-type{margin-top:4px}
+/* rounds picker */
+.rgrid{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:8px; margin:6px 0 4px}
+.rgrid button{font:700 20px var(--display); padding:12px 0; border-radius:12px; border:1.5px solid var(--paper-line); background:#fffaf0; color:var(--paper-ink); cursor:pointer; font-variant-numeric:tabular-nums}
+.rgrid button.on{background:var(--paper-ink); color:var(--paper); border-color:var(--paper-ink)}
+.rhint{color:var(--paper-muted); font-size:13px; margin:8px 0 0}
 .msg.wait{color:var(--muted)}
 
 /* cards */
@@ -376,18 +433,23 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
       <button class="btn" type="button" id="bGameAct"></button>
     </div>
     <div class="board">
-      <div class="sc me"><span class="who" id="name0">Ti</span><span class="pts" id="tot0">0</span></div>
-      <div class="goal">deri në<b>101</b></div>
-      <div class="sc right"><span class="who" id="name1">Kompjuteri</span><span class="pts" id="tot1">0</span></div>
+      <div class="sc me"><span class="who"><span class="tdot" id="tdot0"></span><span id="name0">Ti</span></span><span class="pts" id="tot0">0</span><span class="pips" id="pips0"></span></div>
+      <div class="goal" id="goalLbl">raundi<b>1/5</b></div>
+      <div class="sc right"><span class="who"><span id="name1">Kompjuteri</span><span class="tdot" id="tdot1"></span></span><span class="pts" id="tot1">0</span><span class="pips" id="pips1"></span></div>
     </div>
-    <section class="seat opp"><div class="hand" id="hand1"></div><div class="stats" id="stats1"></div></section>
+    <section class="seat opp"><div class="hand" id="hand1"></div><div class="think" aria-label="Po mendon"><i></i><i></i><i></i></div><div class="stats" id="stats1"></div></section>
     <section class="mid-table">
       <div class="deck-wrap"><div class="deck" id="deck"></div><div class="label" id="deckLbl"></div></div>
       <div class="pile" id="pile"></div>
-      <div class="round-wrap"><div class="label" id="roundLbl"></div></div>
+      <div class="round-wrap"><div class="label" id="roundLbl"></div><div class="turn-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
     </section>
     <div class="msg" id="msg"></div>
     <section class="seat mine"><div class="hand" id="hand0"></div><div class="stats" id="stats0"></div></section>
+    <button class="chat-fab" id="bChat" type="button" aria-label="Chat" title="Chat">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 5.5h16v10H9.5L5 19.5v-4H4z"/><circle cx="9" cy="10.5" r=".6" fill="currentColor"/><circle cx="12" cy="10.5" r=".6" fill="currentColor"/><circle cx="15" cy="10.5" r=".6" fill="currentColor"/>
+      </svg>
+    </button>
   </section>
 </div>
 
@@ -405,6 +467,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     <div class="sgroup">
       <h3>Loja</h3>
       <label class="srow" for="sHints"><span><b>Ndihma</b><small>Ndriço kartat që e marrin grumbullin</small></span><input type="checkbox" class="sw" id="sHints"></label>
+      <label class="srow" for="sChatS"><span><b>Tingujt e chat-it</b><small>Tingujt meme që dërgon shoku</small></span><input type="checkbox" class="sw" id="sChatS"></label>
       <label class="srow" for="sAnim"><span><b>Animacionet</b><small>Kartat fluturojnë në grumbull</small></span><input type="checkbox" class="sw" id="sAnim"></label>
       <div class="srow"><span><b>Niveli i CPU</b><small>Sa mirë luan kompjuteri</small></span>
         <div class="seg" id="sLevel" role="radiogroup" aria-label="Niveli i CPU">
@@ -438,9 +501,27 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
       <li><b>Pishpirik:</b> kur në mes ka vetëm një kartë dhe ti e merr me të njëjtin numër, fiton 10 pikë. Fant mbi fant jep 20.</li>
       <li>Kur mbarojnë kartat në dorë ndahen nga 4 të reja. Kartat që mbeten në fund i merr ai që mori i fundit.</li>
       <li>Pikët e raundit: më shumë karta 3, çdo As 1, çdo Fant 1, 2 spathi (2♣) 2, 10 karo (10♦) 3, plus pishpirikët.</li>
-      <li>Fiton kush arrin i pari 101 pikë.</li>
+      <li>Para lojës zgjidhni sa raunde (1–10). Raundin e fiton kush ka më shumë pikë, lojën kush fiton më shumë raunde.</li>
     </ol>
     <div class="row-end"><button class="btn primary" type="button" data-close>Mbyll</button></div>
+  </div>
+</div>
+
+<div class="overlay bottom" id="chatOv" hidden>
+  <div class="sheet chat-sheet" role="dialog" aria-label="Chat i shpejtë">
+    <h3>Emoji</h3><div class="emo" id="chEmo"></div>
+    <h3>Fjali</h3><div class="phr" id="chTxt"></div>
+    <h3>Tinguj</h3><div class="snd" id="chSnd"></div>
+  </div>
+</div>
+
+<div class="overlay" id="rndOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="rndH" style="width:min(440px,100%)">
+    <h2 id="rndH">Sa raunde?</h2>
+    <p class="sub">Raundin e fiton kush ka më shumë pikë. Lojën e fiton kush fiton më shumë raunde.</p>
+    <div class="rgrid" id="rGrid"></div>
+    <p class="rhint" id="rHint"></p>
+    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button><button class="btn primary" type="button" id="rGo">Fillo</button></div>
   </div>
 </div>
 
@@ -460,7 +541,6 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-const GOAL = 101;
 
 const THEMES = [
   {name:'Klasike', ds:'Kuq e bardhë, si në kafene', v:{face:'#fbf8f1',ink:'#1b1b1b',red:'#c0262d',font:"'Playfair Display',Georgia,serif",fw:'700',rad:'8px',glow:'none',bd:'rgba(0,0,0,.18)',
@@ -492,16 +572,16 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 
 let S = null;                       // the game state on screen
 const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false};
-const NET = {state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
+const NET = {chatTs:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
              gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}};
 
 /* ================= settings ================= */
-const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal'};
+const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal', rounds:5, chatSound:true};
 try{ Object.assign(SET, JSON.parse(localStorage.getItem('pishpirik-settings')||'{}')); }catch(e){}
 function saveSet(){ try{ localStorage.setItem('pishpirik-settings', JSON.stringify(SET)); }catch(e){} }
 function syncSetUI(){
   $('sSound').checked = SET.sound; $('sVol').value = SET.vol; $('sVol').disabled = !SET.sound;
-  $('sHints').checked = SET.hints; $('sAnim').checked = SET.anim;
+  $('sHints').checked = SET.hints; $('sAnim').checked = SET.anim; $('sChatS').checked = SET.chatSound;
   document.querySelectorAll('#sLevel button').forEach(b=>{ const on=b.dataset.v===SET.level; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
 }
 function openSettings(){ syncSetUI(); renderAccount(); $('setOv').hidden=false; }
@@ -659,7 +739,9 @@ function buildTiles(){
 }
 
 /* ================= game engine (pure state) ================= */
-function newMatch(){ const G = {tot:[0,0], round:0, starter:0, seq:0}; startRound(G); return G; }
+function newMatch(rounds){ const G = {rounds:Math.min(10, Math.max(1, rounds||5)), wins:[0,0], ties:0, round:0, starter:0, seq:0}; startRound(G); return G; }
+const winsOf = G => G.wins || [0,0];
+const roundsOf = G => G.rounds || 5;
 function startRound(G){
   G.round++;
   G.deck = newDeck();
@@ -703,9 +785,12 @@ function endRound(G){
   const t = [tally(G,0), tally(G,1)];
   const most = t[0].n>t[1].n ? 0 : t[1].n>t[0].n ? 1 : -1;
   const pts = t.map((x,k)=>x.aces+x.jacks+x.two+x.ten+x.pis+(most===k?3:0));
-  G.tot[0]+=pts[0]; G.tot[1]+=pts[1];
-  const over = (G.tot[0]>=GOAL || G.tot[1]>=GOAL) && G.tot[0]!==G.tot[1];
-  G.summary = {t, most, pts, over};
+  G.wins = winsOf(G); G.rounds = roundsOf(G);
+  const rw = pts[0]>pts[1] ? 0 : pts[1]>pts[0] ? 1 : -1;
+  if (rw>=0) G.wins[rw]++; else G.ties = (G.ties||0)+1;
+  const left = G.rounds - G.round;
+  const over = left<=0 || G.wins[0] > G.wins[1]+left || G.wins[1] > G.wins[0]+left;
+  G.summary = {t, most, pts, over, rw};
   G.phase = 'summary'; G.starter = 1-G.starter;
 }
 function aiPick(G){
@@ -741,22 +826,10 @@ function canAct(){
   return true;
 }
 function msgFor(G){
-  const me=APP.me, opp=APP.oppName;
   if (APP.mode==='online' && NET.gameDoc && NET.gameDoc.status==='left'){
-    return NET.gameDoc.leftBy===NET.uid ? 'E le këtë lojë.' : `${opp} e la lojën.`;
+    return NET.gameDoc.leftBy===NET.uid ? 'E le këtë lojë.' : `${APP.oppName} e la lojën.`;
   }
-  if (G.phase==='summary') return 'Raundi mbaroi.';
-  const m = G.lastMove; let s='';
-  if (m){
-    const card = m.card.r + m.card.s + VS;
-    if (m.bonus) s = m.by===me ? `Bëre pishpirik me ${card}! +${m.bonus}.` : `${opp} bëri pishpirik me ${card}! +${m.bonus}.`;
-    else if (m.captured) s = m.by===me ? `More ${m.captured} karta me ${card}.` : `${opp} mori ${m.captured} karta me ${card}.`;
-    else s = m.by===me ? `Hodhe ${card}.` : `${opp} hodhi ${card}.`;
-    if (m.dealt) s += ' U ndanë karta të reja.';
-  }
-  if (G.turn===me) s += ' Radha jote.';
-  else if (APP.mode==='online') s += ` Radha e ${opp}.`;
-  return s.trim();
+  return '';
 }
 function renderPile(items){
   const p = $('pile'); p.className='pile'; p.replaceChildren();
@@ -773,7 +846,13 @@ function render(){
   if (!S) return;
   const me = APP.me, op = 1-me;
   $('name0').textContent = 'Ti'; $('name1').textContent = APP.oppName;
-  $('tot0').textContent = S.tot[me]; $('tot1').textContent = S.tot[op];
+  const W = winsOf(S), R = roundsOf(S);
+  $('tot0').textContent = W[me]; $('tot1').textContent = W[op];
+  const need = Math.floor(R/2)+1;
+  [[me,'pips0'],[op,'pips1']].forEach(([k,id])=>{ $(id).innerHTML = Array.from({length:need},(_,i)=>`<i class="${i<W[k]?'on':''}"></i>`).join(''); });
+  $('goalLbl').innerHTML = `raundi<b>${Math.min(S.round,R)}/${R}</b>`;
+  const st = APP.mode==='online' && NET.gameDoc ? NET.gameDoc.status : 'play';
+  $('scrGame').dataset.turn = (S.phase==='play' && st==='play') ? (S.turn===me ? 'me' : 'opp') : '';
   $('hand1').replaceChildren(...S.hands[op].map(()=>backEl()));
   const h0 = $('hand0'); h0.replaceChildren();
   const top = S.pile.length ? S.pile[S.pile.length-1].c : null;
@@ -789,13 +868,13 @@ function render(){
   for (let i=0;i<Math.min(3, Math.ceil(S.deck.length/8));i++) d.append(backEl());
   $('deckLbl').textContent = S.deck.length ? `${S.deck.length} në pako` : 'Pako mbaroi';
   renderPile(S.pile);
-  $('roundLbl').innerHTML = `Raundi<b>${S.round}</b>`;
+  $('roundLbl').textContent = '';
   [[me,'stats0'],[op,'stats1']].forEach(([k,id])=>{
     const parts = [`<span class="chip">Mori <b>${S.cap[k].length}</b> karta</span>`];
     if (S.pisN[k]) parts.push(`<span class="chip pis">Pishpirik ×<b>${S.pisN[k]}</b> · +${S.pis[k]}</span>`);
     $(id).innerHTML = parts.join('');
   });
-  setMsg(msgFor(S), S.turn!==me && S.phase==='play');
+  setMsg(msgFor(S), false);
   if (APP.mode==='cpu'){
     $('modeLbl').textContent = 'Kundër kompjuterit';
     $('bGameAct').textContent = 'Lojë e re'; $('bGameAct').hidden = false;
@@ -829,7 +908,8 @@ async function animateMove(m, G){
   if (m.captured){
     renderPile(m.before.concat([{c:m.card}]));
     await sleep(SET.anim ? 520 : 380);
-    if (m.bonus){ burst(mine ? 'Ti' : APP.oppName, m.bonus); sfx.pishti(); }
+    if (m.bonus){ burst(mine ? 'Ti' : APP.oppName, m.bonus); sfx.pishti();
+      if (APP.mode==='cpu' && Math.random()<.6) setTimeout(()=>cpuSay(mine ? ['s','sad'] : ['s','horn']), 1300); }
     else sfx.capture();
     if (SET.anim) $('pile').classList.add(mine ? 'sweep0' : 'sweep1');
     await sleep(SET.anim ? 440 : 150);
@@ -858,7 +938,7 @@ function afterState(){
     if (key!==lastSumKey){
       lastSumKey = key;
       const me=APP.me;
-      setTimeout(()=>{ if (!S.summary.over) sfx.round(); else if (S.tot[me]>S.tot[1-me]) sfx.win(); else sfx.lose(); }, 200);
+      const W=winsOf(S).slice(), over=S.summary.over; setTimeout(()=>{ if (!over) sfx.round(); else if (W[me]>W[1-me]) sfx.win(); else if (W[me]<W[1-me]) sfx.lose(); else sfx.round(); }, 200);
     }
     showSummary();
   } else $('sumOv').hidden = true;
@@ -876,14 +956,16 @@ function showSummary(){
     ${row('10 karo (10♦'+VS+')', t[me].ten, t[op].ten)}
     ${row('Pishpirik', t[me].pis, t[op].pis)}
     <tr class="sum"><td>Ky raund</td><td>${pts[me]}</td><td>${pts[op]}</td></tr>
-    <tr class="tot"><td>Gjithsej</td><td>${S.tot[me]}</td><td>${S.tot[op]}</td></tr></tbody>`;
+    <tr class="tot"><td>Raunde të fituara</td><td>${winsOf(S)[me]}</td><td>${winsOf(S)[op]}</td></tr></tbody>`;
+  const W = winsOf(S), R = roundsOf(S), rw = S.summary.rw;
+  const oppN = APP.mode==='cpu' ? 'kompjuteri' : APP.oppName;
+  const roundTxt = rw===me ? 'E fitove raundin' : rw===op ? `Raundin e fitoi ${oppN}` : 'Raundi doli barazim';
   if (over){
-    const win = S.tot[me]>S.tot[op];
-    $('sumH').textContent = win ? 'Fitove!' : (APP.mode==='cpu' ? 'Fitoi kompjuteri' : `Fitoi ${APP.oppName}`);
-    $('sumSub').textContent = `Loja mbaroi ${S.tot[me]} me ${S.tot[op]}.`;
+    $('sumH').textContent = W[me]>W[op] ? 'Fitove lojën!' : W[me]<W[op] ? (APP.mode==='cpu' ? 'Fitoi kompjuteri' : `Fitoi ${APP.oppName}`) : 'Barazim!';
+    $('sumSub').textContent = `${roundTxt} ${pts[me]}–${pts[op]}. Rezultati final në raunde: ${W[me]}–${W[op]}.`;
   } else {
-    $('sumH').textContent = `Raundi ${S.round} mbaroi`;
-    $('sumSub').textContent = `Deri në ${GOAL}: ti ke ${Math.max(0,GOAL-S.tot[me])} pikë mbetur, ${APP.mode==='cpu'?'kompjuteri':APP.oppName} ${Math.max(0,GOAL-S.tot[op])}.`;
+    $('sumH').textContent = `Raundi ${S.round} nga ${R}`;
+    $('sumSub').textContent = `${roundTxt} ${pts[me]}–${pts[op]}. Rezultati: ${W[me]}–${W[op]}.`;
   }
   const nb = $('bNext');
   if (APP.mode==='online' && APP.me!==0){
@@ -895,26 +977,28 @@ function showSummary(){
 }
 async function nextRound(){
   if (!S || S.phase!=='summary') return;
-  const G = S.summary.over ? newMatch() : (()=>{ const g=clone(S); startRound(g); return g; })();
+  if (APP.mode==='cpu' && S.summary.over){ $('sumOv').hidden = true; startCpu(); return; }
+  const G = S.summary.over ? newMatch(roundsOf(S)) : (()=>{ const g=clone(S); startRound(g); return g; })();
   $('sumOv').hidden = true;
   sfx.shuffle(); setTimeout(()=>sfx.deal(), 900);
   if (APP.mode==='cpu'){ S=G; render(); maybeAi(); return; }
   S = G; render();
-  try{ await NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status:'play', G}); }
+  try{ await NET.db.doc('games/'+NET.gameId).update({status:'play', G}); }
   catch(e){ toast(writeErr(e)); }
 }
 
 /* ================= local (CPU) play ================= */
-function startCpu(){
+function startCpu(){ pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
+function startCpuWith(rounds){
   closeGameSub();
   APP.mode='cpu'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false;
-  S = newMatch();
+  S = newMatch(rounds);
   show('game'); render(); afterState(); sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); maybeAi();
 }
 function maybeAi(){ if (APP.mode==='cpu' && S && S.phase==='play' && S.turn===1) setTimeout(aiTurn, 800); }
 async function aiTurn(){
   if (APP.mode!=='cpu' || !S || S.turn!==1 || S.phase!=='play' || APP.busy) return;
-  APP.busy = true; setMsg('Kompjuteri po mendon…', true);
+  APP.busy = true;
   await sleep(450);
   if (APP.mode!=='cpu'){ APP.busy=false; return; }
   const G = clone(S); const m = applyPlay(G, 1, aiPick(G));
@@ -932,7 +1016,7 @@ async function humanPlay(i){
   }
   NET.animating = true;
   const status = (G.phase==='summary' && G.summary.over) ? 'over' : 'play';
-  const write = NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status, G}).then(()=>null, e=>e);
+  const write = NET.db.doc('games/'+NET.gameId).update({status, G}).then(()=>null, e=>e);
   await animateMove(m, G);
   const err = await write;
   NET.animating = false; APP.busy = false;
@@ -1122,14 +1206,16 @@ async function setFriends(list){
   await NET.db.doc('players/'+NET.uid).update({friends:list});
   renderLobby();
 }
-async function invite(fid){
+function invite(fid){
   const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play'));
   if (live){ if (live.status==='play') return openGame(live.id); return toast('Ke tashmë një ftesë të hapur me '+nameOf(fid)+'.'); }
-  try{ await NET.db.collection('games').add({p:[NET.uid, fid], status:'invite', created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
-  catch(e){ toast(writeErr(e)); }
+  pickRounds(`Sa raunde me ${nameOf(fid)}?`, 'Dërgo ftesën', async rounds=>{
+    try{ await NET.db.collection('games').add({p:[NET.uid, fid], status:'invite', rounds, created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
+    catch(e){ toast(writeErr(e)); }
+  });
 }
 async function acceptInvite(g){
-  try{ await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', created:g.created, G:newMatch()}); openGame(g.id); }
+  try{ await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G:newMatch(g.rounds||5)}); openGame(g.id); }
   catch(e){ toast(writeErr(e)); }
 }
 async function dropGame(g){ try{ await NET.db.doc('games/'+g.id).delete(); }catch(e){ toast(writeErr(e)); } }
@@ -1168,7 +1254,7 @@ function renderLobby(){
   });
   const inv = NET.games.filter(g=>g.status==='invite' && g.p[1]===me);
   $('invSec').hidden = !inv.length;
-  $('invList').replaceChildren(...inv.map(g=>rowEl(nameOf(g.p[0]), 'Të fton në lojë', [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
+  $('invList').replaceChildren(...inv.map(g=>rowEl(nameOf(g.p[0]), `Të fton në lojë · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
   const gl = $('gmList'); gl.replaceChildren();
   const mine = NET.games.filter(g=>!(g.status==='invite' && g.p[1]===me)).sort((a,b)=>(b.created||0)-(a.created||0));
   if (!mine.length) gl.innerHTML = '<div class="empty">Asnjë lojë ende. Fto një shok nga lista.</div>';
@@ -1176,9 +1262,9 @@ function renderLobby(){
     const opp = g.p[0]===me ? g.p[1] : g.p[0];
     const i = g.p.indexOf(me), G = g.G;
     let st='', acts=[];
-    if (g.status==='invite'){ st='Ftesa u dërgua, në pritje'; acts=[btn('Anulo', ()=>dropGame(g))]; }
-    else if (g.status==='play'){ st = G ? `${G.tot[i]} – ${G.tot[1-i]} · ` + (G.phase==='play' && G.turn===i ? 'Radha jote' : 'Në lojë') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
-    else if (g.status==='over' && G){ const w=G.tot[i]>G.tot[1-i]; st=`${w?'Fitove':'Humbe'} ${G.tot[i]} – ${G.tot[1-i]}`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
+    if (g.status==='invite'){ st=`Ftesa u dërgua (${g.rounds||5} raunde), në pritje`; acts=[btn('Anulo', ()=>dropGame(g))]; }
+    else if (g.status==='play'){ st = G ? `${winsOf(G)[i]} – ${winsOf(G)[1-i]} · raundi ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
+    else if (g.status==='over' && G){ const Wg=winsOf(G); st=`${Wg[i]>Wg[1-i]?'Fitove':Wg[i]<Wg[1-i]?'Humbe':'Barazim'} ${Wg[i]} – ${Wg[1-i]} në raunde`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
     else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
     gl.append(rowEl(nameOf(opp), st, acts, NET.online.has(opp)));
   });
@@ -1188,7 +1274,7 @@ function renderLobby(){
 function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null; } NET.gameId=null; NET.gameDoc=null; NET.pending=null; }
 function openGame(gid){
   closeGameSub();
-  APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid;
+  APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid; NET.chatTs=null;
   $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
   show('game');
   NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(onGameSnap, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
@@ -1200,6 +1286,11 @@ function onGameSnap(snap){
   NET.gameDoc = d;
   APP.me = Math.max(0, d.p.indexOf(NET.uid));
   APP.oppName = nameOf(d.p[1-APP.me]);
+  const ch = d.chat;
+  if (ch && ch.ts){
+    if (NET.chatTs!==null && ch.ts>NET.chatTs && ch.by!==NET.uid) showChat('opp', ch.k, ch.v);
+    NET.chatTs = Math.max(NET.chatTs||0, ch.ts);
+  } else if (NET.chatTs===null) NET.chatTs = 0;
   if (d.status==='invite' || !d.G){ setMsg(`Në pritje që ${APP.oppName} të pranojë ftesën…`, true); return; }
   recordResult(d);
   processGame(d.G);
@@ -1223,13 +1314,98 @@ async function recordResult(d){
   const i = d.p.indexOf(NET.uid); if (i<0) return;
   const res = NET.player.results || {};
   if (res[NET.gameId]) return;
-  const r = d.G.tot[i]>d.G.tot[1-i] ? 'w' : 'l';
+  const Wd = winsOf(d.G); const r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd';
   NET.player.results = {...res, [NET.gameId]:r};
   try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
 }
 async function leaveOnline(){
   if (!NET.gameDoc) return;
-  try{ await NET.db.doc('games/'+NET.gameId).set({...NET.gameDoc, status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
+  try{ await NET.db.doc('games/'+NET.gameId).update({status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
+}
+
+
+/* ================= rounds picker ================= */
+let rndCb = null, rndSel = 5;
+function pickRounds(title, cta, cb){
+  rndCb = cb; rndSel = SET.rounds || 5;
+  $('rndH').textContent = title; $('rGo').textContent = cta;
+  drawRounds(); $('rndOv').hidden = false;
+}
+function drawRounds(){
+  $('rGrid').replaceChildren(...Array.from({length:10},(_,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent=i+1; b.className = i+1===rndSel ? 'on' : '';
+    b.setAttribute('aria-pressed', i+1===rndSel); b.onclick=()=>{ rndSel=i+1; drawRounds(); sfx.click(); }; return b; }));
+  const need = Math.floor(rndSel/2)+1;
+  $('rHint').textContent = rndSel===1 ? 'Një raund, kush merr më shumë pikë fiton.' : `Fiton kush merr i pari ${need} raunde nga ${rndSel}.`;
+}
+$('rGo').onclick = () => { SET.rounds = rndSel; saveSet(); $('rndOv').hidden = true; const cb=rndCb; rndCb=null; if (cb) cb(rndSel); };
+
+/* ================= quick chat ================= */
+const CHAT = {
+  e: ['😂','😎','😡','😭','🔥','👏','🤔','🙈','💀','🍀','🃏','👑'],
+  t: ['Hajde shpejt! ⏳','Lojë e mirë 👏','S’ke shans 😂','Pishpiriku po vjen 😎','Fat i madh 🍀','Prit pak…','Kurgjo s’ma ndien 😏','GG 🤝'],
+  s: {horn:['📯','Airhorn'], sad:['🎺','Wah wah wah'], rim:['🥁','Ba-dum-tss'], boom:['💥','Bum'], crick:['🦗','Bulkthat'],
+      clap:['👏','Duartrokitje'], bruh:['😐','Bruh'], drama:['🎻','Dun dun duun'], whistle:['🪈','Fishkëllimë'], laugh:['🤣','Hahaha']},
+};
+function buildChat(){
+  $('chEmo').replaceChildren(...CHAT.e.map((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=x; b.setAttribute('aria-label',x); b.onclick=()=>sendChat('e',i); return b; }));
+  $('chTxt').replaceChildren(...CHAT.t.map((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=x; b.onclick=()=>sendChat('t',i); return b; }));
+  $('chSnd').replaceChildren(...Object.entries(CHAT.s).map(([k,[em,lb]])=>{ const b=document.createElement('button'); b.type='button'; b.innerHTML=`<span>${em}</span>${lb}`; b.onclick=()=>sendChat('s',k); return b; }));
+}
+let lastChat = 0;
+function sendChat(k, v){
+  const now = Date.now();
+  if (now-lastChat < 1200) return;
+  lastChat = now;
+  $('chatOv').hidden = true;
+  showChat('me', k, v);
+  if (APP.mode==='online' && NET.gameId){
+    NET.chatTs = now;
+    NET.db.doc('games/'+NET.gameId).update({chat:{k, v, by:NET.uid, ts:now}}).catch(e=>toast(writeErr(e)));
+  } else if (APP.mode==='cpu' && Math.random()<.45){
+    const replies = [['e',0],['e',1],['e',4],['e',6],['s','laugh'],['s','bruh'],['t',2],['t',7]];
+    setTimeout(()=>cpuSay(replies[Math.floor(Math.random()*replies.length)]), 1100+Math.random()*900);
+  }
+}
+function cpuSay([k,v]){ if (APP.mode==='cpu' && APP.screen==='game') showChat('opp', k, v); }
+function showChat(who, k, v){
+  const seat = document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
+  if (!seat) return;
+  seat.querySelectorAll('.bubble').forEach(b=>b.remove());
+  const b = document.createElement('div'); b.className='bubble';
+  if (k==='e' && CHAT.e[v]){ b.classList.add('big'); b.textContent = CHAT.e[v]; }
+  else if (k==='t' && CHAT.t[v]){ b.textContent = CHAT.t[v]; }
+  else if (k==='s' && CHAT.s[v]){ b.textContent = CHAT.s[v][0]+' '+CHAT.s[v][1]; if (SET.chatSound || who==='me') meme(v); }
+  else return;
+  if (who!=='me' && k!=='s') sfx.click();
+  seat.append(b); setTimeout(()=>b.remove(), 3100);
+}
+
+/* meme sounds, synthesised (no recordings) */
+function osc(c, t, type, f0, f1, dur, g, dest){
+  const o=c.createOscillator(), e=c.createGain(); o.type=type;
+  o.frequency.setValueAtTime(f0, t); if (f1 && f1!==f0) o.frequency.exponentialRampToValueAtTime(f1, t+dur);
+  e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(g, t+.015); e.gain.setValueAtTime(g, t+Math.max(.02,dur-.06)); e.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(e); e.connect(dest||SND.bus); o.start(t); o.stop(t+dur+.05); return o;
+}
+function lp(c, f){ const x=c.createBiquadFilter(); x.type='lowpass'; x.frequency.value=f; x.connect(SND.bus); return x; }
+function formant(c, freqs){ const g=c.createGain(); freqs.forEach(([f,q,a])=>{ const b=c.createBiquadFilter(); b.type='bandpass'; b.frequency.value=f; b.Q.value=q; const v=c.createGain(); v.gain.value=a; g.connect(b); b.connect(v); v.connect(SND.bus); }); return g; }
+function meme(k){
+  const c = ac(); if (!c) return; const t = c.currentTime+.02;
+  if (k==='horn'){ const f=lp(c,3200); [[0,.13],[.18,.13],[.36,.55]].forEach(([d,len])=>{ [466,470,932,698].forEach((hz,i)=>osc(c,t+d,'sawtooth',hz*.97,hz,len,i<2?.16:.07,f)); }); }
+  else if (k==='sad'){ const f=lp(c,1400); [[293.7,.45],[277.2,.45],[261.6,.45],[246.9,1.3]].forEach(([hz,len],i)=>{ const o=osc(c,t+i*.5,'sawtooth',hz,hz,len,.22,f);
+      if (i===3){ const l=c.createOscillator(), lg=c.createGain(); l.frequency.value=5.5; lg.gain.value=9; l.connect(lg); lg.connect(o.frequency); l.start(t+1.6); l.stop(t+3); } }); }
+  else if (k==='rim'){ thud(c,t,.45,150); thud(c,t+.16,.5,95); grain(c,t+.34,{type:'highpass',f:6500,q:.4,att:.002,dec:.7,g:.35}); grain(c,t+.34,{f:2200,q:1.5,att:.001,dec:.06,g:.4}); }
+  else if (k==='boom'){ const ws=c.createWaveShaper(), cv=new Float32Array(512); for(let i=0;i<512;i++){ const x=i/256-1; cv[i]=Math.tanh(3*x); } ws.curve=cv; ws.connect(SND.bus);
+      osc(c,t,'sine',140,38,1.4,.9,ws); grain(c,t,{type:'lowpass',f:200,q:.7,att:.003,dec:.5,g:.8}); }
+  else if (k==='crick'){ for(let r=0;r<2;r++) for(let ch=0;ch<3;ch++) for(let p=0;p<4;p++) osc(c,t+r*.9+ch*.16+p*.022,'sine',4600,4600,.016,.12); }
+  else if (k==='clap'){ for(let i=0;i<70;i++){ const tt=t+Math.random()*1.6, env=Math.sin(Math.PI*(tt-t)/1.6); grain(c,tt,{f:rnd(900,2200),q:1.2,att:.001,dec:.03,g:.12+.25*env,pan:rnd(-.6,.6)}); } }
+  else if (k==='bruh'){ const fm=formant(c,[[650,6,1],[1100,7,.6],[2400,8,.25]]);
+      for(let i=0;i<6;i++) grain(c,t+i*.018,{f:900,q:2,att:.002,dec:.012,g:.25});
+      osc(c,t+.08,'sawtooth',118,88,.5,.55,fm); }
+  else if (k==='drama'){ const f=lp(c,1800); [[196,.22,0],[196,.22,.28],[164.8,1.2,.56]].forEach(([hz,len,d])=>{ osc(c,t+d,'sawtooth',hz,hz,len,.2,f); osc(c,t+d,'sawtooth',hz/2,hz/2,len,.14,f); }); }
+  else if (k==='whistle'){ osc(c,t,'sine',520,1900,.55,.22); osc(c,t+.55,'sine',1900,640,.6,.22); }
+  else if (k==='laugh'){ const fm=formant(c,[[800,5,1],[1250,6,.6]]); for(let i=0;i<5;i++){ const tt=t+i*.17; grain(c,tt,{type:'highpass',f:1500,q:.5,att:.005,dec:.04,g:.12}); osc(c,tt+.03,'sawtooth',260-i*12,230-i*12,.11,.5,fm); } }
 }
 
 /* ================= network: Firebase ================= */
@@ -1341,12 +1517,15 @@ $('bGameAct').onclick = () => {
   else leaveOnline();
 };
 $('bNext').onclick = nextRound;
+$('bChat').onclick = () => { $('chatOv').hidden = false; };
+$('sChatS').onchange = e => { SET.chatSound = e.target.checked; saveSet(); };
 $('bSumMenu').onclick = () => { $('sumOv').hidden=true; $('bBack').onclick(); };
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').hidden=true);
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv') o.hidden=true; }));
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else $('setOv').hidden=true; } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else { $('setOv').hidden=true; $('chatOv').hidden=true; $('rndOv').hidden=true; } } });
 
 buildTiles();
+buildChat();
 loadRemembered();
 syncSetUI();
 let saved = 0;
