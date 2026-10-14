@@ -1,6 +1,6 @@
-# Pishpirik online
+# Kafeneja
 
-Lojë Pishpirik në web: luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online.
+Lojëra kafeneje në web: **Pishpirik** (letra) dhe **Bilardo** (8-Ball, 9-Ball, Kundër orës, Stërvitje). Luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online.
 Faqja rri në **GitHub Pages** (falas), llogaritë dhe lojërat në **Firebase** (falas për shumicën e rasteve).
 
 ## Skedarët
