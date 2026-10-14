@@ -2,7 +2,7 @@
 <html lang="sq">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="description" content="Pishpirik online: luaj me shokët ose me CPU.">
 <meta name="theme-color" content="#102b1d">
 <link rel="manifest" href="manifest.webmanifest">
@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Pishpirik">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='3' width='20' height='26' rx='3' fill='%23fbf8f1' stroke='%23b3212b' stroke-width='2'/%3E%3Ctext x='16' y='21' font-size='13' text-anchor='middle' fill='%23b3212b' font-family='serif'%3EJ%3C/text%3E%3C/svg%3E">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}input,textarea{-webkit-user-select:text;user-select:text}img,canvas{-webkit-user-drag:none;user-drag:none}</style>
 <title>Pishpirik</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -862,6 +862,19 @@ const sfx = {
   blPot(){ const c=ac(); if(!c) return; const t=c.currentTime+.01; thud(c,t,.35,70); grain(c,t+.02,{type:'lowpass',f:700,q:1,att:.003,dec:.12,g:.35}); for(let i=0;i<4;i++) grain(c,t+.08+i*.05,{f:rnd(1500,2600),q:3,att:.001,dec:.02,g:.12/(i+1)}); },
   blRack(){ const c=ac(); if(!c) return; const t=c.currentTime+.01; for(let i=0;i<9;i++) grain(c,t+i*.035+Math.random()*.02,{f:rnd(2800,4200),q:2.5,att:.0008,dec:.015,g:.18}); },
 };
+
+
+/* ================= no zoom, no copy/paste ================= */
+(()=>{
+  const stop = e => e.preventDefault();
+  ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t, stop, {passive:false}));
+  document.addEventListener('touchmove', e=>{ if (e.touches && e.touches.length>1) e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchstart', e=>{ if (e.touches && e.touches.length>1) e.preventDefault(); }, {passive:false});
+  document.addEventListener('wheel', e=>{ if (e.ctrlKey) e.preventDefault(); }, {passive:false});
+  document.addEventListener('keydown', e=>{ if ((e.ctrlKey||e.metaKey) && ['+','-','=','0','c','x','v','a'].includes(e.key.toLowerCase()) && !(e.key.toLowerCase()==='a' && e.target.closest('input,textarea'))) e.preventDefault(); });
+  ['copy','cut','paste','contextmenu','dragstart'].forEach(t=>document.addEventListener(t, stop));
+  document.addEventListener('selectstart', e=>{ if (!e.target.closest || !e.target.closest('input,textarea')) e.preventDefault(); });
+})();
 
 /* ================= cards ================= */
 function newDeck(){
