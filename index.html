@@ -90,70 +90,57 @@ header{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-b
 .gsel button.on{background:var(--brass); color:#1d1608}
 .gsel button:focus-visible{outline:2px solid var(--cream); outline-offset:2px}
 .mini-card{width:16px; height:22px; border-radius:3px; background:var(--face); color:var(--red); font:700 11px var(--font); display:grid; place-items:center; box-shadow:0 1px 3px rgba(0,0,0,.35)}
-.mini-tile{width:18px; height:24px; border-radius:4px; background:#fbf6e8; color:#1e5bb8; font:800 12px var(--ui); display:grid; place-items:center; box-shadow:0 2px 0 #cbbd98}
-/* ---------- tiles ---------- */
-.tile{--tw:30px; width:var(--tw); height:calc(var(--tw) * 1.38); box-sizing:border-box; border-radius:calc(var(--tw) * .16); flex:none; user-select:none; -webkit-user-select:none; touch-action:none;
-  background:linear-gradient(180deg, #fffdf7 0%, #f6efdc 100%); box-shadow:0 calc(var(--tw)*.07) 0 #cdbf9b, 0 3px 7px rgba(0,0,0,.35);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:calc(var(--tw)*.04); position:relative; cursor:grab}
-.tile b{font:800 calc(var(--tw) * .56)/1 var(--ui); letter-spacing:-.02em}
-.tile i{width:calc(var(--tw) * .2); height:calc(var(--tw) * .2); border-radius:50%; border:max(1.5px, calc(var(--tw)*.05)) solid currentColor; box-sizing:border-box}
-.tile.c-r{color:#c8202b} .tile.c-k{color:#1d1d1d} .tile.c-b{color:#1f5fc8} .tile.c-y{color:#d28a00}
-.tile.joker{color:#c8202b} .tile.joker b{font-size:calc(var(--tw) * .62)}
-.tile.wild::after{content:"★"; position:absolute; top:1px; right:2px; font-size:calc(var(--tw) * .3); color:var(--brass-deep)}
-.tile.sel{transform:translateY(calc(var(--tw) * -.28)); box-shadow:0 0 0 2px var(--brass), 0 8px 14px rgba(0,0,0,.4)}
-.tile.fresh{animation:fresh 1.2s ease}
-@keyframes fresh{0%{transform:translateY(-14px) scale(1.1); box-shadow:0 0 0 3px var(--live), 0 10px 18px rgba(0,0,0,.4)} 100%{transform:none}}
-.tile.pop{animation:tpop .45s cubic-bezier(.2,1.5,.4,1)}
-@keyframes tpop{0%{transform:scale(.4) rotate(-12deg); opacity:.2} 100%{transform:none; opacity:1}}
-.tile.ghost{position:fixed; z-index:80; pointer-events:none; transform:scale(1.12) rotate(-3deg); box-shadow:0 14px 28px rgba(0,0,0,.5)}
-/* ---------- okey table ---------- */
-.ok-table{display:grid; grid-template-columns:1fr minmax(0,1.25fr) 1fr; grid-template-rows:auto auto auto; gap:10px 8px; align-items:center; justify-items:center;
-  background:radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.06), transparent 70%); border-radius:18px; padding:8px 4px}
-.ok-seat{position:relative; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; max-width:100%}
-.ok-seat .av{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font:800 17px var(--display); background:#2d6a50; color:var(--cream); border:2px solid rgba(239,230,210,.25)}
-.ok-seat.cpu .av{background:#3a3f4b}
-.ok-seat.on .av{border-color:var(--brass); box-shadow:0 0 0 0 rgba(216,173,85,.7); animation:ping 1.4s ease-out infinite}
-.ok-seat .nm{font-size:12.5px; font-weight:600; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.ok-seat .meta{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--muted)}
-.ok-seat .cnt::before{content:""; display:inline-block; width:8px; height:11px; border-radius:2px; background:#f6efdc; margin-right:4px; vertical-align:-1px}
-.ok-seat .think{position:static; transform:none; display:flex; padding:5px 8px}
-.ok-seat .think[hidden]{display:none}
-.ok-disc{position:relative; width:46px; height:62px; border-radius:9px; border:1.5px dashed rgba(239,230,210,.18); display:grid; place-items:center}
-button.ok-disc,button.ok-deck{font:inherit; color:inherit; padding:0; cursor:default; -webkit-appearance:none; appearance:none}
-button.ok-disc{background:transparent}
-.ok-disc .tile{--tw:40px; cursor:inherit}
-.ok-disc .under{position:absolute; right:-7px; bottom:-7px; font-size:10.5px; background:rgba(0,0,0,.45); border-radius:999px; padding:1px 6px; color:var(--cream); font-variant-numeric:tabular-nums}
-.ok-disc.take, .ok-deck.take{cursor:pointer; border-color:var(--brass); box-shadow:0 0 0 3px rgba(216,173,85,.35), 0 0 18px rgba(216,173,85,.45); animation:glow 1.3s ease-in-out infinite}
-.ok-disc.drop, .ok-ind.drop{border-color:var(--live); box-shadow:0 0 0 3px rgba(95,211,138,.3)}
-@keyframes glow{50%{box-shadow:0 0 0 5px rgba(216,173,85,.15), 0 0 26px rgba(216,173,85,.55)}}
-.ok-center{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap}
-.ok-deck{position:relative; width:46px; height:62px; border-radius:9px; display:grid; place-items:center; background:repeating-linear-gradient(0deg, #e9dfc5 0 3px, #d8cba8 3px 4px); box-shadow:0 4px 10px rgba(0,0,0,.35); border:1.5px solid transparent}
-.ok-deck span{font:800 15px var(--ui); color:#5a4a28; font-variant-numeric:tabular-nums}
-.ok-ind{display:flex; flex-direction:column; align-items:center; gap:3px; padding:5px; border-radius:10px; border:1.5px solid transparent; cursor:pointer}
-.ok-ind .tile{--tw:34px; transform:rotate(-8deg)}
-.ok-ind small{font-size:10.5px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
-.ok-me{position:relative; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:12px; color:var(--muted)}
-.ok-me b{color:var(--cream); font-size:13px}
-.rack{--tw:26px; display:grid; grid-template-columns:repeat(13, minmax(0,1fr)); column-gap:3px; row-gap:10px; padding:10px 8px 12px; border-radius:14px;
-  background:linear-gradient(180deg, #9b6a3e 0%, #7a4f2c 55%, #5e3c21 100%); box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 10px 22px rgba(0,0,0,.4)}
-.rack .slot{aspect-ratio:1/1.38; border-radius:5px; background:rgba(0,0,0,.16); display:grid; place-items:center; min-width:0}
-.rack .tile{width:100%; height:100%}
-[data-turn="draw"] .rack, [data-turn="throw"] .rack{box-shadow:inset 0 2px 0 rgba(255,255,255,.18), 0 0 0 2px rgba(216,173,85,.55), 0 10px 22px rgba(0,0,0,.4)}
-.ok-actions{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
-.ok-actions .btn[hidden]{display:none}
-.ok-seat .bubble{top:100%}
-.ok-me .bubble{bottom:100%}
-.ok-sum-hand{display:flex; flex-wrap:wrap; gap:10px; margin:6px 0 14px}
-.ok-sum-hand .grp{display:flex; gap:3px}
-.ok-sum-hand .tile{--tw:28px; cursor:default}
-.inv-row{padding:9px 0; border-bottom:1px solid var(--paper-line)}
-.inv-row:last-child{border-bottom:0}
+.mini-ball{width:20px; height:20px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #fff 0 8%, #2a2a2a 9% 100%); box-shadow:0 1px 3px rgba(0,0,0,.4); position:relative}
+.mini-ball::after{content:"8"; position:absolute; inset:5px; border-radius:50%; background:#fbf8ee; color:#151515; font:800 8px/10px var(--ui); text-align:center}
+.hero-balls{display:flex; gap:6px; align-items:flex-end; height:70px; margin-bottom:6px}
+.hero-balls i{width:42px; height:42px; border-radius:50%; box-shadow:0 6px 12px rgba(0,0,0,.4); position:relative; background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.75) 0 6%, transparent 30%), var(--c)}
+.hero-balls i.s{background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.75) 0 6%, transparent 30%), linear-gradient(#f7f4ea 0 24%, var(--c) 24% 76%, #f7f4ea 76%)}
+.hero-balls i b{position:absolute; inset:11px; border-radius:50%; background:#fbf8ee; color:#151515; font:800 12px/20px var(--ui); text-align:center}
+/* ---------- billiards ---------- */
+.bl-bar{display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; background:rgba(0,0,0,.2); border-radius:12px; padding:8px 10px}
+.bl-p{position:relative; display:flex; flex-direction:column; gap:4px; min-width:0}
+.bl-p.right{align-items:flex-end; text-align:right}
+.bl-p .who{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; letter-spacing:.04em; min-width:0}
+.bl-p .who span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bl-p.right .who{flex-direction:row-reverse}
+.bl-p .row{display:flex; flex-wrap:wrap; gap:3px; align-items:center; min-height:16px; font-size:11.5px}
+.bl-p.right .row{justify-content:flex-end}
+.bl-p.on .tdot{background:var(--brass); animation:ping 1.4s ease-out infinite}
+.bl-p .muted{color:var(--muted)}
+.bl-p .big{font-family:var(--display); font-size:24px; line-height:1}
+.bb{display:inline-block; width:13px; height:13px; border-radius:50%; background:var(--c); box-shadow:inset -2px -2px 3px rgba(0,0,0,.3)}
+.bb.s{background:linear-gradient(#f7f4ea 0 25%, var(--c) 25% 75%, #f7f4ea 75%)}
+.bl-p .pips{margin-left:4px}
+.bl-mid{display:flex; flex-direction:column; align-items:center; font-size:11px; color:var(--muted)}
+.bl-mid b{font-family:var(--display); font-size:17px; color:var(--cream)}
+.bl-mid .clock{font-size:30px; color:var(--brass); font-variant-numeric:tabular-nums}
+.bl-mid .clock.hot{color:#ff7a6b}
+.bl-wrap{position:relative; display:flex; justify-content:center; touch-action:none}
+#blCanvas{display:block; border-radius:18px; box-shadow:0 14px 30px rgba(0,0,0,.45); touch-action:none; cursor:crosshair}
+[data-turn="me"] #blCanvas{box-shadow:0 0 0 2px rgba(216,173,85,.6), 0 14px 30px rgba(0,0,0,.45)}
+.bl-hint{position:absolute; top:10px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.6); color:var(--cream); font-size:12.5px; padding:6px 12px; border-radius:999px; pointer-events:none; white-space:nowrap; max-width:90%; overflow:hidden; text-overflow:ellipsis}
+.bl-ctrl{display:grid; grid-template-columns:auto 1fr auto auto auto; gap:8px; align-items:center}
+.chat-fab.inline{position:static; width:44px; height:44px; box-shadow:0 0 0 2px var(--back-frame), 0 4px 10px rgba(0,0,0,.35)}
+.bl-ctrl .btn{padding:11px 14px}
+.bl-pow{display:flex; flex-direction:column; gap:3px}
+.bl-pow small{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); text-align:center}
+#blPow{width:100%; accent-color:var(--brass); height:28px}
+#blShoot{font-size:15px; padding:12px 20px}
+#blShoot[disabled]{opacity:.45}
+.bl-practice{display:flex; gap:6px; flex-wrap:wrap; justify-content:center}
+.bl-practice .btn.on{background:var(--brass); color:#1d1608}
+.bl-p .bubble{top:100%}
+.mode-list{display:grid; gap:10px}
+.mode-list button{display:grid; grid-template-columns:auto 1fr; gap:4px 12px; align-items:center; text-align:left; font:inherit; color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:14px; padding:13px 14px; cursor:pointer}
+.mode-list button:hover{border-color:var(--paper-ink)}
+.mode-list button b{grid-column:2; font-family:var(--display); font-size:18px}
+.mode-list button span:not(.ic){grid-column:2; font-size:13px; color:var(--paper-muted)}
+.mode-list .ic{grid-column:1; grid-row:1 / span 2; font-size:26px}
 .gt-choices{display:grid; gap:10px}
 .gt-choices button{display:flex; flex-direction:column; gap:3px; text-align:left; font:inherit; color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:14px; padding:14px 16px; cursor:pointer}
 .gt-choices button b{font-family:var(--display); font-size:19px}
 .gt-choices button span{font-size:13px; color:var(--paper-muted)}
 .gt-choices button:hover{border-color:var(--paper-ink)}
-@media (max-width:420px){ .ok-seat .av{width:34px; height:34px; font-size:15px} .ok-disc,.ok-deck{width:40px; height:54px} .ok-disc .tile{--tw:34px} }
 
 /* ---------- paper panels (auth, lobby) ---------- */
 .panel{background:var(--paper); color:var(--paper-ink); border-radius:16px; padding:20px; box-sizing:border-box; min-width:0}
@@ -453,10 +440,11 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   <section class="screen" id="scrEntry">
     <div class="gsel" id="gameSel" role="tablist" aria-label="Zgjidh lojën">
       <button type="button" data-g="pishpirik" role="tab"><span class="mini-card">J</span>Pishpirik</button>
-      <button type="button" data-g="okey" role="tab"><span class="mini-tile">7</span>Lojë me gurë</button>
+      <button type="button" data-g="bill" role="tab"><span class="mini-ball"></span>Bilardo</button>
     </div>
     <div class="hero">
       <div class="fan" id="fan"></div>
+      <div class="hero-balls" id="heroBalls" hidden><i style="--c:#f2c200"><b>1</b></i><i class="s" style="--c:#d42a1f"><b>11</b></i><i style="--c:#141414"><b>8</b></i><i class="s" style="--c:#1f4fbf"><b>10</b></i></div>
       <h1 id="heroH">Pishpirik</h1>
       <p>Kyçu për të luajtur me shokët, ose luaj me CPU pa llogari.</p>
     </div>
@@ -550,41 +538,36 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     </button>
   </section>
 
-  <!-- OKEY -->
-  <section class="screen" id="scrOkey" hidden>
+  <!-- BILLIARDS -->
+  <section class="screen" id="scrBill" hidden>
     <div class="gbar">
-      <button class="btn" type="button" id="okBack">← Menyja</button>
-      <span class="mode" id="okModeLbl"></span>
-      <button class="btn" type="button" id="okAct"></button>
+      <button class="btn" type="button" id="blBack">← Menyja</button>
+      <span class="mode" id="blModeLbl"></span>
+      <button class="btn" type="button" id="blAct"></button>
     </div>
-    <div class="ok-table">
-      <div class="ok-disc" id="okDisc2" aria-label="Gurët e hedhur"></div>
-      <div class="ok-seat" id="okSeat2"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
-      <div class="ok-disc" id="okDisc1" aria-label="Gurët e hedhur"></div>
-      <div class="ok-seat" id="okSeat3"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
-      <div class="ok-center">
-        <button class="ok-deck" id="okDeck" type="button" aria-label="Merr nga pakoja"><span id="okDeckN"></span></button>
-        <div class="ok-ind" id="okIndWrap" title="Hidhe gurin këtu për ta mbyllur"><div id="okInd"></div><small>Treguesi</small></div>
-        <div class="label" id="okRound" style="flex-basis:100%"></div>
-      </div>
-      <div class="ok-seat" id="okSeat1"><span class="av"></span><span class="nm"></span><span class="meta"><span class="cnt"></span><span class="pips"></span></span><div class="think" hidden><i></i><i></i><i></i></div></div>
-      <button class="ok-disc" id="okDisc3" type="button" aria-label="Merr gurin e hedhur nga e majta"></button>
-      <div class="ok-me" id="okMe"><b>Ti</b><span class="pips" id="okMePips"></span></div>
-      <button class="ok-disc" id="okDisc0" type="button" aria-label="Hidhe gurin këtu"></button>
+    <div class="bl-bar">
+      <div class="bl-p" id="blP0"><span class="who"><span class="tdot"></span><span id="blN0">Ti</span></span><span class="row" id="blS0"></span></div>
+      <div class="bl-mid" id="blMid"></div>
+      <div class="bl-p right" id="blP1"><span class="who"><span class="tdot"></span><span id="blN1">CPU</span></span><span class="row" id="blS1"></span></div>
     </div>
-    <div class="rack" id="okRack" aria-label="Gurët e tu"></div>
-    <div class="ok-actions">
-      <button class="btn" type="button" id="okSortRun">Rendit seritë</button>
-      <button class="btn" type="button" id="okSortPair">Rendit çiftet</button>
-      <button class="btn primary" type="button" id="okThrow" hidden>Hidhe</button>
-      <button class="btn primary" type="button" id="okClose" hidden>Mbyll ✓</button>
-    </div>
-    <div class="msg" id="okMsg"></div>
-    <button class="chat-fab" id="bChat2" type="button" aria-label="Chat" title="Chat">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <div class="bl-wrap" id="blWrap"><canvas id="blCanvas" aria-label="Tavolina e bilardos. Prek tavolinën për të synuar."></canvas><div class="bl-hint" id="blHint" hidden></div></div>
+    <div class="bl-ctrl">
+      <button class="btn" type="button" id="blL" aria-label="Rrotullo majtas">◀</button>
+      <label class="bl-pow" for="blPow"><input type="range" id="blPow" min="3" max="100" value="55"><small>Forca</small></label>
+      <button class="btn" type="button" id="blR" aria-label="Rrotullo djathtas">▶</button>
+      <button class="btn primary" type="button" id="blShoot">Gjuaj</button>
+      <button class="chat-fab inline" id="bChat3" type="button" aria-label="Chat" title="Chat">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4 5.5h16v10H9.5L5 19.5v-4H4z"/><circle cx="9" cy="10.5" r=".6" fill="currentColor"/><circle cx="12" cy="10.5" r=".6" fill="currentColor"/><circle cx="15" cy="10.5" r=".6" fill="currentColor"/>
       </svg>
     </button>
+    </div>
+    <div class="bl-practice" id="blPracticeBar" hidden>
+      <button class="btn" type="button" id="blRack8">Rirendit 15</button>
+      <button class="btn" type="button" id="blRack9">Rirendit 9</button>
+      <button class="btn" type="button" id="blCueHand">Topi në dorë</button>
+      <button class="btn" type="button" id="blMoveBalls">Lëviz topat</button>
+    </div>
   </section>
 </div>
 
@@ -628,13 +611,13 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   <div class="sheet" role="dialog" aria-labelledby="rulesH">
     <h2 id="rulesH">Si luhet Pishpiriku</h2>
     <p class="sub" id="rulesSub">Pako me 52 karta, dy lojtarë.</p>
-    <ol class="rules" id="rulesOkey" hidden>
-      <li>4 lojtarë, 106 gurë: numrat 1–13 në 4 ngjyra, nga dy herë, plus 2 gurë me yll (okey false).</li>
-      <li>Guri në mes është <b>treguesi</b>. Guri me një numër më lart dhe me të njëjtën ngjyrë është <b>okey</b>: zëvendëson cilindo gur. Te gurët e tu ka një yll të vogël në qoshe. Gurët me yll vlejnë sa okey-ja.</li>
-      <li>Secili ka 14 gurë, ai që fillon 15. Kur të vjen radha, merr një gur nga pakoja ose gurin që e hodhi lojtari në të majtë, pastaj hidh një gur djathtas.</li>
-      <li><b>Mbyll:</b> kur 14 gurët e tu janë të gjithë në seri (e njëjta ngjyrë me radhë, p.sh. 4-5-6 ose 12-13-1) ose grupe (i njëjti numër në ngjyra të ndryshme, 3 ose 4), ose në 7 çifte, hidhe të 15-tin mbi tregues dhe e fiton raundin.</li>
-      <li>Guret i rregullon duke i tërhequr në dërrasë, ose prek një gur dhe pastaj një vend bosh. "Rendit seritë" dhe "Rendit çiftet" i rregullojnë vetë.</li>
-      <li>Nëse mbarojnë gurët e pakos, raundi del barazim. Lojën e fiton kush fiton më shumë raunde.</li>
+    <ol class="rules" id="rulesBill" hidden>
+      <li><b>Synimi:</b> prek ose tërhiq gishtin mbi tavolinë. Vija e bardhë tregon ku godet i bardhi dhe ku shkon topi. Me ◀ ▶ e rregullon imët, me shiritin zgjedh forcën, pastaj shtyp <b>Gjuaj</b>.</li>
+      <li><b>8-Ball:</b> i pari që fut një top pas thyerjes merr grupin e tij, të plotat (1–7) ose të vijat (9–15). Fut të gjitha tuat, pastaj të zezën (8). Nëse e fut të zezën para kohe, ose bashkë me të bardhin, humb.</li>
+      <li><b>9-Ball:</b> gjithmonë duhet ta prekësh fillimisht topin me numrin më të vogël. Kush e fut 9-shin me goditje të rregullt fiton, edhe nëse e fut me ndihmën e një topi tjetër.</li>
+      <li><b>Faull:</b> kur bie i bardhi, kur s'prek asnjë top, ose kur prek fillimisht topin e gabuar. Kundërshtari merr <b>topin në dorë</b> dhe e vendos të bardhin ku të dojë. Pas thyerjes e vendos vetëm poshtë vijës.</li>
+      <li>Kur fut topin tënd pa faull, vazhdon të gjuash ti.</li>
+      <li><b>Kundër orës:</b> 60 sekonda. Çdo top i futur vlen 1 pikë, i bardhi i futur −1. Kur e pastron tavolinën, merr +15 sekonda.</li>
     </ol>
     <ol class="rules" id="rulesPish">
       <li>Secili merr 4 karta. Në mes vendosen 4 karta, por duket vetëm e sipërmja.</li>
@@ -666,13 +649,26 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   </div>
 </div>
 
-<div class="overlay" id="okSumOv" hidden>
-  <div class="sheet" role="dialog" aria-labelledby="okSumH" style="width:min(560px,100%)">
-    <h2 id="okSumH"></h2>
-    <p class="sub" id="okSumSub"></p>
-    <div class="ok-sum-hand" id="okSumHand"></div>
-    <table class="tally"><thead><tr><th>Lojtari</th><th>Raunde</th></tr></thead><tbody id="okSumTable"></tbody></table>
-    <div class="row-end"><button class="btn" type="button" id="okSumMenu">Menyja</button><button class="btn primary" type="button" id="okNext">Raundi tjetër</button></div>
+<div class="overlay" id="blModeOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="blModeH" style="width:min(440px,100%)">
+    <h2 id="blModeH">Çfarë bilardoje?</h2>
+    <p class="sub">Zgjidh llojin e lojës.</p>
+    <div class="mode-list">
+      <button type="button" data-mode="8ball"><span class="ic">🎱</span><b>8-Ball</b><span>Të plotat kundër të vijave, në fund e zeza. Kundër CPU.</span></button>
+      <button type="button" data-mode="9ball"><span class="ic">9️⃣</span><b>9-Ball</b><span>Godit gjithmonë më të voglin. Kush fut 9-shin fiton.</span></button>
+      <button type="button" data-mode="time"><span class="ic">⏱️</span><b>Kundër orës</b><span>Fut sa më shumë topa për 60 sekonda. Mund ta thyesh rekordin.</span></button>
+      <button type="button" data-mode="practice"><span class="ic">🎯</span><b>Stërvitje</b><span>Pa kundërshtar. Lëviz topat dhe provo goditje.</span></button>
+    </div>
+    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="blSumOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="blSumH" style="width:min(460px,100%)">
+    <h2 id="blSumH"></h2>
+    <p class="sub" id="blSumSub"></p>
+    <table class="tally" id="blSumTable"></table>
+    <div class="row-end"><button class="btn" type="button" id="blSumMenu">Menyja</button><button class="btn primary" type="button" id="blNext">Loja tjetër</button></div>
   </div>
 </div>
 
@@ -681,22 +677,11 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     <h2 id="gtH">Në cilën lojë?</h2>
     <p class="sub">Zgjidh lojën për ftesën.</p>
     <div class="gt-choices">
-      <button type="button" id="gtPish"><b>Pishpirik</b><span>Ti dhe shoku, 1 kundër 1</span></button>
-      <button type="button" id="gtOkey"><b>Lojë me gurë</b><span>Deri në 4 në tavolinë, vendet e lira i zë CPU-ja</span></button>
+      <button type="button" id="gtPish"><b>Pishpirik</b><span>Lojë me letra, 1 kundër 1</span></button>
+      <button type="button" id="gtB8"><b>Bilardo · 8-Ball</b><span>Të plotat kundër të vijave</span></button>
+      <button type="button" id="gtB9"><b>Bilardo · 9-Ball</b><span>Kush fut 9-shin fiton</span></button>
     </div>
     <div class="row-end"><button class="btn" type="button" data-close>Anulo</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="okInvOv" hidden>
-  <div class="sheet" role="dialog" aria-labelledby="okInvH" style="width:min(440px,100%)">
-    <h2 id="okInvH">Lojë me gurë</h2>
-    <p class="sub">Zgjidh deri në 3 shokë. Kush s’pranon, vendin e tij e zë CPU-ja.</p>
-    <div class="list" id="okInvList"></div>
-    <h3 style="margin:16px 0 6px">Sa raunde?</h3>
-    <div class="rgrid" id="okInvR"></div>
-    <p class="rhint" id="okInvHint"></p>
-    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button><button class="btn primary" type="button" id="okInvGo">Dërgo ftesat</button></div>
   </div>
 </div>
 
@@ -746,7 +731,7 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let S = null;                       // the game state on screen
-const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, game:(()=>{ try{ return localStorage.getItem('pishpirik-game')==='okey' ? 'okey' : 'pishpirik'; }catch(e){ return 'pishpirik'; } })()};
+const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, game:(()=>{ try{ return localStorage.getItem('pishpirik-game')==='bill' ? 'bill' : 'pishpirik'; }catch(e){ return 'pishpirik'; } })()};
 const NET = {chatTs:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
              gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}};
 
@@ -871,8 +856,11 @@ const sfx = {
     grain(c, t+.42, {type:'lowpass', f:420, q:.9, att:.002, dec:.08, g:.3}); thud(c, t+.42, .14, 80);
   },
   click(){ const c=ac(); if(!c) return; flick(c, c.currentTime+.005, 0, .22); },
-  tile(){ const c=ac(); if(!c) return; const t=c.currentTime+.005;
-    grain(c, t, {type:'highpass', f:rnd(2600,3400), q:.9, att:.001, dec:.03, g:.5}); grain(c, t, {f:rnd(1100,1400), q:3, att:.001, dec:.05, g:.35}); thud(c, t, .2, rnd(150,190)); },
+  blCue(p){ const c=ac(); if(!c) return; const t=c.currentTime+.005; grain(c,t,{type:'highpass',f:2400,q:.8,att:.001,dec:.02,g:.25+.4*p}); thud(c,t,.12+.2*p,130); },
+  blHit(p){ const c=ac(); if(!c) return; const g=Math.min(.9, .08+p*1.6); if (g<.1) return; const t=c.currentTime+.002; grain(c,t,{f:rnd(3200,4200),q:2.5,att:.0008,dec:.018,g}); grain(c,t,{type:'highpass',f:5000,q:.6,att:.0008,dec:.01,g:g*.5}); },
+  blRail(p){ const c=ac(); if(!c) return; const g=Math.min(.6,.05+p*1.1); if (g<.08) return; const t=c.currentTime+.002; thud(c,t,g,95); grain(c,t,{type:'lowpass',f:500,q:.9,att:.002,dec:.05,g:g*.6}); },
+  blPot(){ const c=ac(); if(!c) return; const t=c.currentTime+.01; thud(c,t,.35,70); grain(c,t+.02,{type:'lowpass',f:700,q:1,att:.003,dec:.12,g:.35}); for(let i=0;i<4;i++) grain(c,t+.08+i*.05,{f:rnd(1500,2600),q:3,att:.001,dec:.02,g:.12/(i+1)}); },
+  blRack(){ const c=ac(); if(!c) return; const t=c.currentTime+.01; for(let i=0;i<9;i++) grain(c,t+i*.035+Math.random()*.02,{f:rnd(2800,4200),q:2.5,att:.0008,dec:.015,g:.18}); },
 };
 
 /* ================= cards ================= */
@@ -1165,7 +1153,7 @@ async function nextRound(){
 }
 
 /* ================= local (CPU) play ================= */
-function startCpu(){ if (APP.game==='okey') return okStartCpu(); pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
+function startCpu(){ if (APP.game==='bill') return blPickMode(); pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
 function startCpuWith(rounds){
   closeGameSub();
   APP.mode='cpu'; APP.game='pishpirik'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false;
@@ -1204,8 +1192,8 @@ async function humanPlay(i){
 /* ================= screens ================= */
 function show(name){
   APP.screen = name;
-  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame'],['okey','scrOkey']]) $(id).hidden = k!==name;
-  if (name!=='okey') $('okSumOv').hidden = true;
+  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame'],['bill','scrBill']]) $(id).hidden = k!==name;
+  if (name!=='bill'){ $('blSumOv').hidden = true; clearInterval(BLS.tick); }
   if (name!=='game') $('sumOv').hidden = true;
   if (name==='entry') renderEntry();
   if (name==='lobby') renderLobby();
@@ -1384,9 +1372,17 @@ async function setFriends(list){
   await NET.db.doc('players/'+NET.uid).update({friends:list});
   renderLobby();
 }
-function invite(fid){ chooseGameFor(fid); }
+function invite(fid){ $('gtOv').dataset.fid = fid; $('gtOv').hidden = false; }
+function inviteBill(fid, mode){
+  const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play') && g.type==='billiard');
+  if (live){ if (live.status==='play') return openGame(live.id); return toast('Ke tashmë një ftesë bilardoje me '+nameOf(fid)+'.'); }
+  pickRounds(`Sa lojëra ${BL_MODES[mode]} me ${nameOf(fid)}?`, 'Dërgo ftesën', async rounds=>{
+    try{ await NET.db.collection('games').add({type:'billiard', mode, p:[NET.uid, fid], status:'invite', rounds, created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
+    catch(e){ toast(writeErr(e)); }
+  });
+}
 function invitePishpirik(fid){
-  const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play'));
+  const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play') && g.type!=='billiard');
   if (live){ if (live.status==='play') return openGame(live.id); return toast('Ke tashmë një ftesë të hapur me '+nameOf(fid)+'.'); }
   pickRounds(`Sa raunde me ${nameOf(fid)}?`, 'Dërgo ftesën', async rounds=>{
     try{ await NET.db.collection('games').add({p:[NET.uid, fid], status:'invite', rounds, created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
@@ -1394,7 +1390,7 @@ function invitePishpirik(fid){
   });
 }
 async function acceptInvite(g){
-  try{ await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G:newMatch(g.rounds||5)}); openGame(g.id); }
+  try{ await NET.db.doc('games/'+g.id).set(g.type==='billiard' ? {type:'billiard', mode:g.mode, p:g.p, status:'play', rounds:g.rounds||3, created:g.created, G:blNewMatch(g.mode, g.rounds||3)} : {p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G:newMatch(g.rounds||5)}); openGame(g.id); }
   catch(e){ toast(writeErr(e)); }
 }
 async function dropGame(g){ try{ await NET.db.doc('games/'+g.id).delete(); }catch(e){ toast(writeErr(e)); } }
@@ -1431,48 +1427,28 @@ function renderLobby(){
     acts.push(btn('Hiq', ()=>setFriends(friends.filter(x=>x!==id)).catch(e=>toast(writeErr(e)))));
     fl.append(rowEl(nameOf(id), mutual ? (on ? 'Online tani' : 'Shok') : 'Në pritje që të të shtojë', acts, on));
   });
-  const isOk = g => g.type==='okey';
-  const games = NET.games.filter(g=>!(isOk(g) && (g.acc||{})[me]===false));
-  const isInviteForMe = g => g.status==='invite' && g.p[0]!==me && (isOk(g) ? (g.acc||{})[me]===undefined : g.p[1]===me);
-  const inv = games.filter(isInviteForMe);
+  const inv = NET.games.filter(g=>g.status==='invite' && g.p[1]===me);
   $('invSec').hidden = !inv.length;
-  $('invList').replaceChildren(...inv.map(g=> isOk(g)
-    ? rowEl(nameOf(g.p[0]), `Lojë me gurë · ${g.rounds||5} raunde · ${g.p.length-1>1 ? 'me '+g.p.slice(1).filter(x=>x!==me).map(nameOf).join(', ') : 'ti dhe CPU'}`, [btn('Prano', ()=>okAccept(g,true), true), btn('Refuzo', ()=>okAccept(g,false))], NET.online.has(g.p[0]))
-    : rowEl(nameOf(g.p[0]), `Pishpirik · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
+  $('invList').replaceChildren(...inv.map(g=>rowEl(nameOf(g.p[0]), g.type==='billiard' ? `Bilardo ${BL_MODES[g.mode]} · ${g.rounds||3} lojëra` : `Pishpirik · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
   const gl = $('gmList'); gl.replaceChildren();
-  const mine = games.filter(g=>!isInviteForMe(g)).sort((a,b)=>(b.created||0)-(a.created||0));
+  const mine = NET.games.filter(g=>!(g.status==='invite' && g.p[1]===me)).sort((a,b)=>(b.created||0)-(a.created||0));
   if (!mine.length) gl.innerHTML = '<div class="empty">Asnjë lojë ende. Fto një shok nga lista.</div>';
   mine.slice(0,12).forEach(g=>{
-    const i = g.p.indexOf(me), G = g.G;
-    let st='', acts=[], title;
-    if (isOk(g)){
-      const others = g.p.filter(x=>x!==me);
-      title = 'Gurë · ' + (others.map(nameOf).join(', ') || 'CPU');
-      const acc = g.acc||{};
-      if (g.status==='invite'){
-        const yes = g.p.slice(1).filter(x=>acc[x]===true).length, tot = g.p.length-1;
-        if (g.p[0]===me){ st=`Pranuan ${yes}/${tot} · ${g.rounds||5} raunde`; acts=[btn('Fillo', ()=>okHostStart(g), true), btn('Anulo', ()=>dropGame(g))]; }
-        else { st=`Në pritje që ${nameOf(g.p[0])} ta nisë`; acts=[btn('Dil', ()=>okAccept(g,false))]; }
-      } else if (g.status==='play' && G){ st=`Raundi ${Math.min(G.round,G.rounds)}/${G.rounds} · ti ${G.wins[i]} raunde` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : ''); acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
-      else if (g.status==='over' && G){ const mx=Math.max(...G.wins); st = G.wins[i]===mx ? 'Fitove' : 'Humbe'; st += ` · ${G.wins[i]} raunde`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
-      else { st='Loja u mbyll'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-      gl.append(rowEl(title, st, acts));
-      return;
-    }
     const opp = g.p[0]===me ? g.p[1] : g.p[0];
-    title = 'Pishpirik · ' + nameOf(opp);
+    const i = g.p.indexOf(me), G = g.G;
+    let st='', acts=[];
     if (g.status==='invite'){ st=`Ftesa u dërgua (${g.rounds||5} raunde), në pritje`; acts=[btn('Anulo', ()=>dropGame(g))]; }
-    else if (g.status==='play'){ st = G ? `${winsOf(G)[i]} – ${winsOf(G)[1-i]} · raundi ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
+    else if (g.status==='play'){ st = G ? `${g.type==='billiard' ? BL_MODES[g.mode]+' · ' : ''}${winsOf(G)[i]} – ${winsOf(G)[1-i]} · ${g.type==='billiard' ? 'loja' : 'raundi'} ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë'; acts=[btn('Vazhdo', ()=>openGame(g.id), true)]; }
     else if (g.status==='over' && G){ const Wg=winsOf(G); st=`${Wg[i]>Wg[1-i]?'Fitove':Wg[i]<Wg[1-i]?'Humbe':'Barazim'} ${Wg[i]} – ${Wg[1-i]} në raunde`; acts=[btn('Shiko', ()=>openGame(g.id)), btn('Fshi', ()=>dropGame(g))]; }
     else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-    gl.append(rowEl(title, st, acts, NET.online.has(opp)));
+    gl.append(rowEl((g.type==='billiard' ? '🎱 ' : '🃏 ') + nameOf(opp), st, acts, NET.online.has(opp)));
   });
 }
 
 /* ================= online game ================= */
 function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null; } NET.gameId=null; NET.gameDoc=null; NET.pending=null; }
 function openGame(gid){
-  const gg = NET.games.find(x=>x.id===gid); if (gg && gg.type==='okey') return openOkey(gid);
+  const gg = NET.games.find(x=>x.id===gid); if (gg && gg.type==='billiard') return openBill(gid);
   closeGameSub();
   APP.mode='online'; APP.game='pishpirik'; APP.busy=false; S=null; NET.gameId=gid; NET.chatTs=null;
   $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
@@ -1514,9 +1490,7 @@ async function recordResult(d){
   const i = d.p.indexOf(NET.uid); if (i<0) return;
   const res = NET.player.results || {};
   if (res[NET.gameId]) return;
-  let r;
-  if (d.type==='okey'){ const W=d.G.wins, mx=Math.max(...W), top=W.filter(x=>x===mx).length; r = W[i]===mx ? (top>1 ? 'd' : 'w') : 'l'; }
-  else { const Wd = winsOf(d.G); r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd'; }
+  const Wd = winsOf(d.G); const r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd';
   NET.player.results = {...res, [NET.gameId]:r};
   try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
 }
@@ -1566,9 +1540,9 @@ function sendChat(k, v){
     setTimeout(()=>cpuSay(replies[Math.floor(Math.random()*replies.length)]), 1100+Math.random()*900);
   }
 }
-function cpuSay([k,v]){ if (APP.mode==='cpu' && (APP.screen==='game' || APP.screen==='okey')) showChat('opp', k, v); }
+function cpuSay([k,v]){ if (APP.mode==='cpu' && (APP.screen==='game' || APP.screen==='bill')) showChat('opp', k, v); }
 function showChat(who, k, v){
-  const seat = APP.screen==='okey' ? (who==='me' ? $('okMe') : $('okSeat'+(typeof who==='number' ? who : 1+Math.floor(Math.random()*3)))) : document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
+  const seat = APP.screen==='bill' ? $(who==='me' ? 'blP0' : 'blP1') : document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
   if (!seat) return;
   seat.querySelectorAll('.bubble').forEach(b=>b.remove());
   const b = document.createElement('div'); b.className='bubble';
@@ -1582,573 +1556,684 @@ function showChat(who, k, v){
 
 
 /* =====================================================================
-   LOJË ME GURË (Okey klasik) — 106 gurë, 4 lojtarë, 14 gurë + i 15-ti e mbyll
+   BILARDO — 8-Ball, 9-Ball, Kundër orës, Stërvitje (CPU + online)
+   Tavolina logjike 500 × 1000 (2:1), topi i bardhë gjuan lart.
+   Fizika përdor vetëm + − × ÷ dhe √, kështu që goditja e njëjtë del njësoj në çdo shfletues.
    ===================================================================== */
-const OK_COL = ['r','k','b','y'];
-const OK_CI = {r:0,k:1,b:2,y:3};
-const OK_BOTS = ['Arbi','Drita','Gëzimi'];
-const okParse = id => id[0]==='X' ? {x:true} : {c:id[0], n:parseInt(id.slice(1),10)};
-function okAllTiles(){ const t=[]; for (const c of OK_COL) for (let n=1;n<=13;n++) for (const s of ['a','b']) t.push(c+n+s); t.push('Xa','Xb'); return t; }
-function okVal(id, O){
-  const p = okParse(id);
-  if (p.x) return {c:O.c, n:O.n, w:false};
-  if (p.c===O.c && p.n===O.n) return {c:p.c, n:p.n, w:true};
-  return {c:p.c, n:p.n, w:false};
-}
-function okCounts(ids, O){
-  const cnt = [0,1,2,3].map(()=>new Array(15).fill(0)); let J=0;
-  for (const id of ids){ const v=okVal(id,O); if (v.w) J++; else cnt[OK_CI[v.c]][v.n]++; }
-  return {cnt, J};
-}
-/* Partition solver. needAll=true: every tile must be in a set (returns null if impossible).
-   needAll=false: maximise tiles placed in sets. Sets are runs (same colour, consecutive, 12-13-1 allowed)
-   or groups (same number, different colours, 3-4). 'J' marks a wild okey tile. */
-function okSolve(cnt, J, needAll){
-  const memo = new Map();
-  const key = () => cnt.map(r=>r.slice(1,14).join('')).join('|') + '#' + J;
-  const first = () => { for (let c=0;c<4;c++) for (let n=1;n<=13;n++) if (cnt[c][n]>0) return [c,n]; return null; };
-  function rec(){
-    const f = first();
-    if (!f) return {score:0, sets:[]};
-    const k = key(); if (memo.has(k)) return memo.get(k);
-    const [c,n] = f; let best = null;
-    const consider = (res, set) => { if (!res) return; const sc = res.score + set.length; if (!best || sc > best.score) best = {score:sc, sets:[set, ...res.sets]}; };
-    // groups with this tile
-    const others = [0,1,2,3].filter(o=>o>c && cnt[o][n]>0);
-    const subsets = [[]];
-    for (const o of others){ const L=subsets.length; for (let i=0;i<L;i++) subsets.push([...subsets[i], o]); }
-    for (const sub of subsets){
-      for (let j=0; j<=Math.min(J,2); j++){
-        const size = 1+sub.length+j; if (size<3 || size>4) continue;
-        cnt[c][n]--; sub.forEach(o=>cnt[o][n]--); J-=j;
-        consider(rec(), [[c,n], ...sub.map(o=>[o,n]), ...Array(j).fill('J')]);
-        cnt[c][n]++; sub.forEach(o=>cnt[o][n]++); J+=j;
-      }
-    }
-    // runs where this is the first real tile (wild tiles may stand before it)
-    for (let pre=0; pre<=J && n-pre>=1; pre++){
-      const members = [...Array(pre).fill('J'), [c,n]]; let jUse = pre; const taken = [];
-      cnt[c][n]--;
-      let k2 = n;
-      while (true){
-        if (members.length>=3){ J-=jUse; consider(rec(), members.slice()); J+=jUse; }
-        k2++; if (k2>13) break;
-        if (cnt[c][k2]>0){ cnt[c][k2]--; taken.push(k2); members.push([c,k2]); }
-        else if (jUse<J){ jUse++; members.push('J'); }
-        else break;
-      }
-      taken.forEach(t=>cnt[c][t]++); cnt[c][n]++;
-    }
-    // runs that wrap: ..., 12, 13, 1
-    if (n===1){
-      for (let L=3; L<=13; L++){
-        const members=[]; let jUse=0; const taken=[]; let ok=true;
-        for (let p=14-(L-1); p<=13; p++){
-          if (cnt[c][p]>0){ cnt[c][p]--; taken.push(p); members.push([c,p]); }
-          else if (jUse<J){ jUse++; members.push('J'); }
-          else { ok=false; break; }
-        }
-        if (ok){ cnt[c][1]--; members.push([c,1]); J-=jUse; consider(rec(), members); J+=jUse; cnt[c][1]++; }
-        taken.forEach(t=>cnt[c][t]++);
-        if (!ok) break;
-      }
-    }
-    // leave this tile out (only when maximising)
-    if (!needAll){ cnt[c][n]--; const r=rec(); cnt[c][n]++; if (r && (!best || r.score>best.score)) best = {score:r.score, sets:r.sets}; }
-    memo.set(k, best); return best;
+const BL = {W:500, H:1000, R:11.5, RAIL:34};
+const BL_DT = 1/240, BL_DECEL = 520, BL_E_CUSH = 0.78, BL_E_BALL = 0.95, BL_MAXV = 2400, BL_STOP = 4;
+const BL_COL = {1:'#f2c200',2:'#1f4fbf',3:'#d42a1f',4:'#5b2a86',5:'#f07a12',6:'#14804a',7:'#7a1c22',8:'#141414'};
+const blColor = n => BL_COL[n>8 ? n-8 : n];
+const blGroup = n => n===8 ? 'eight' : (n<8 ? 'solid' : 'stripe');
+const BL_HEAD_Y = BL.H*0.75, BL_FOOT_Y = BL.H*0.27;
+const BL_MODES = {'8ball':'8-Ball', '9ball':'9-Ball', time:'Kundër orës', practice:'Stërvitje'};
+
+/* ---------- racks ---------- */
+function blRack(mode){
+  const {W,R} = BL, balls = [{n:0, x:W/2, y:BL_HEAD_Y, vx:0, vy:0, in:false}];
+  const dy = R*2*0.866+0.3, dx = R*2+0.3;
+  const put = (n,row,col,rowLen) => balls.push({n, x:W/2 + (col-(rowLen-1)/2)*dx, y:BL_FOOT_Y - row*dy, vx:0, vy:0, in:false});
+  if (mode==='9ball'){
+    const others = shuffle([2,3,4,5,6,7,8]);
+    const layout = [[1],[others[0],others[1]],[others[2],9,others[3]],[others[4],others[5]],[others[6]]];
+    layout.forEach((row,r)=>row.forEach((n,c)=>put(n,r,c,row.length)));
+  } else {
+    const solids = shuffle([1,2,3,4,5,6,7]), stripes = shuffle([9,10,11,12,13,14,15]);
+    const cornerS = solids.pop(), cornerT = stripes.pop();
+    const rest = shuffle([...solids, ...stripes]);
+    const rows = [];
+    for (let r=0;r<5;r++) rows.push(Array(r+1).fill(null));
+    rows[2][1] = 8;
+    if (Math.random()<.5){ rows[4][0]=cornerS; rows[4][4]=cornerT; } else { rows[4][0]=cornerT; rows[4][4]=cornerS; }
+    rows.forEach(row=>{ for (let i=0;i<row.length;i++) if (row[i]===null) row[i]=rest.pop(); });
+    rows.forEach((row,r)=>row.forEach((n,c)=>put(n,r,c,row.length)));
   }
-  return rec();
-}
-function okPairsInfo(ids, O){
-  const m = new Map(); let J=0;
-  for (const id of ids){ const v=okVal(id,O); if (v.w){ J++; continue; } const k=v.c+v.n; m.set(k,(m.get(k)||0)+1); }
-  let pairs=0, single=0; m.forEach(v=>{ pairs+=Math.floor(v/2); single+=v%2; });
-  return {pairs, single, J};
-}
-function okIsWin(ids, O){
-  if (ids.length!==14) return null;
-  const {cnt,J} = okCounts(ids,O);
-  if (okSolve(cnt,J,true)) return 'sets';
-  const p = okPairsInfo(ids,O);
-  if (p.single<=p.J && (p.J-p.single)%2===0) return 'pairs';
-  return null;
-}
-function okEval(ids, O){
-  const {cnt,J} = okCounts(ids,O);
-  const r = okSolve(cnt,J,false);
-  let s = r.score*10 + J*6;
-  const vals = ids.map(id=>okVal(id,O)).filter(v=>!v.w);
-  for (let i=0;i<vals.length;i++) for (let j=i+1;j<vals.length;j++){
-    const a=vals[i], b=vals[j];
-    if (a.c===b.c){ const d=Math.abs(a.n-b.n); if (d===1||d===12) s+=2; else if (d===2) s+=1; else if (d===0) s+=1; }
-    else if (a.n===b.n) s+=1.5;
-  }
-  const p = okPairsInfo(ids,O);
-  const ps = (p.pairs + J)*14;
-  return (p.pairs>=5) ? Math.max(s, ps) : s;
+  return balls;
 }
 
-/* ---------- match / round state ---------- */
-function okNewMatch(seats, rounds){
-  const G = {type:'okey', seats, rounds:Math.min(10,Math.max(1,rounds||5)), wins:[0,0,0,0], round:0, starter:Math.floor(Math.random()*4), seq:0};
-  okNewRound(G); return G;
+/* ---------- physics ---------- */
+function blPocketHit(b){
+  const {W,H,R} = BL;
+  if ((b.x-0)*(b.x-0)+(b.y-0)*(b.y-0) < 26*26) return true;
+  if ((b.x-W)*(b.x-W)+(b.y-0)*(b.y-0) < 26*26) return true;
+  if ((b.x-0)*(b.x-0)+(b.y-H)*(b.y-H) < 26*26) return true;
+  if ((b.x-W)*(b.x-W)+(b.y-H)*(b.y-H) < 26*26) return true;
+  if (Math.abs(b.y-H/2) < 19 && (b.x < R+2 || b.x > W-R-2)) return true;
+  return false;
 }
-function okNewRound(G){
+function blStep(balls, ev){
+  const {W,H,R} = BL, dt = BL_DT, D = 2*R;
+  for (const b of balls) if (!b.in){ b.x += b.vx*dt; b.y += b.vy*dt; }
+  for (let i=0;i<balls.length;i++){
+    const a = balls[i]; if (a.in) continue;
+    for (let j=i+1;j<balls.length;j++){
+      const b = balls[j]; if (b.in) continue;
+      const dx = b.x-a.x, dy = b.y-a.y, d2 = dx*dx+dy*dy;
+      if (d2 >= D*D || d2===0) continue;
+      const d = Math.sqrt(d2), nx = dx/d, ny = dy/d;
+      const rel = (a.vx-b.vx)*nx + (a.vy-b.vy)*ny;
+      if (rel > 0){
+        const imp = rel*(1+BL_E_BALL)/2;
+        a.vx -= imp*nx; a.vy -= imp*ny; b.vx += imp*nx; b.vy += imp*ny;
+        if (ev){
+          if (ev.first===null && (a.n===0 || b.n===0)) ev.first = a.n===0 ? b.n : a.n;
+          ev.hits.push(rel);
+        }
+      }
+      const push = (D-d)/2;
+      a.x -= nx*push; a.y -= ny*push; b.x += nx*push; b.y += ny*push;
+    }
+  }
+  for (const b of balls){
+    if (b.in) continue;
+    if (blPocketHit(b)){ b.in = true; b.vx = 0; b.vy = 0; if (ev) ev.pots.push(b.n); continue; }
+    let hit = 0;
+    if (b.x < R){ b.x = R; if (b.vx<0){ hit=-b.vx; b.vx = -b.vx*BL_E_CUSH; } }
+    else if (b.x > W-R){ b.x = W-R; if (b.vx>0){ hit=b.vx; b.vx = -b.vx*BL_E_CUSH; } }
+    if (b.y < R){ b.y = R; if (b.vy<0){ hit=Math.max(hit,-b.vy); b.vy = -b.vy*BL_E_CUSH; } }
+    else if (b.y > H-R){ b.y = H-R; if (b.vy>0){ hit=Math.max(hit,b.vy); b.vy = -b.vy*BL_E_CUSH; } }
+    if (hit && ev){ ev.rails.push(hit); if (ev.first!==null) ev.railAfter = true; }
+    const sp2 = b.vx*b.vx+b.vy*b.vy;
+    if (sp2>0){
+      const sp = Math.sqrt(sp2), ns = sp - BL_DECEL*dt;
+      if (ns < BL_STOP){ b.vx = 0; b.vy = 0; } else { b.vx *= ns/sp; b.vy *= ns/sp; }
+    }
+  }
+}
+const blMoving = balls => balls.some(b=>!b.in && (b.vx!==0 || b.vy!==0));
+function blNewEv(){ return {first:null, pots:[], hits:[], rails:[], railAfter:false}; }
+function blSimulate(balls, vx, vy){
+  const cue = balls.find(b=>b.n===0); cue.vx = vx; cue.vy = vy;
+  const ev = blNewEv(); let steps = 0;
+  while (blMoving(balls) && steps < 240*25){ blStep(balls, ev); steps++; }
+  return ev;
+}
+function blFreeSpot(balls, x, y, ignoreN){
+  const {W,H,R} = BL;
+  const ok = (px,py) => px>=R && px<=W-R && py>=R && py<=H-R && !balls.some(b=>!b.in && b.n!==ignoreN && (b.x-px)*(b.x-px)+(b.y-py)*(b.y-py) < (2*R+1)*(2*R+1));
+  if (ok(x,y)) return {x,y};
+  for (let r=2*R; r<400; r+=R) for (let a=0; a<16; a++){ const px=x+Math.cos(a*Math.PI/8)*r, py=y+Math.sin(a*Math.PI/8)*r; if (ok(px,py)) return {x:px, y:py}; }
+  return {x, y};
+}
+function blRespot(G, n){
+  const b = G.balls.find(x=>x.n===n); if (!b) return;
+  b.in = false; b.vx = b.vy = 0;
+  const p = blFreeSpot(G.balls, BL.W/2, BL_FOOT_Y, n); b.x = p.x; b.y = p.y;
+}
+
+/* ---------- match state ---------- */
+function blNewMatch(mode, rounds){
+  const G = {type:'billiard', mode, rounds: (mode==='8ball'||mode==='9ball') ? Math.min(10,Math.max(1,rounds||3)) : 1, wins:[0,0], round:0, starter:0, seq:0, score:0};
+  blNewFrame(G); return G;
+}
+function blNewFrame(G){
   G.round++;
-  const t = shuffle(okAllTiles());
-  const ii = t.findIndex(x=>x[0]!=='X');
-  const ind = t.splice(ii,1)[0], ip = okParse(ind);
-  G.indicator = ind; G.okey = {c:ip.c, n: ip.n%13+1};
-  G.hands = [[],[],[],[]];
-  for (let r=0;r<14;r++) for (let s=0;s<4;s++) G.hands[s].push(t.pop());
-  G.hands[G.starter].push(t.pop());
-  G.deck = t; G.discards = [[],[],[],[]];
-  G.turn = G.starter; G.drawn = true; G.phase = 'play'; G.summary = null; G.lastMove = null; G.finishTile = null;
+  G.balls = blRack(G.mode==='9ball' ? '9ball' : '8ball');
+  if (G.mode==='time'){ const e = G.balls.find(b=>b.n===8); if (e && Math.random()<.5){} }
+  G.turn = G.starter; G.groups = [null,null]; G.isBreak = true; G.ballInHand = true; G.bihKitchen = true;
+  G.phase = 'play'; G.summary = null; G.lastShot = null; G.foulNote = null;
   G.seq = (G.seq||0)+1;
 }
-function okDraw(G, p, src){
-  if (G.phase!=='play' || G.turn!==p || G.drawn) return false;
-  let tile;
-  if (src==='left'){ const L=G.discards[(p+3)%4]; if (!L.length) return false; tile=L.pop(); }
-  else { if (!G.deck.length) return false; tile=G.deck.pop(); }
-  G.hands[p].push(tile); G.drawn = true;
-  G.lastMove = {by:p, kind:'draw', src, tile: src==='left' ? tile : null};
-  G.seq++; return true;
+function blRemaining(G, grp){ return G.balls.filter(b=>!b.in && b.n!==0 && blGroup(b.n)===grp).length; }
+function blLowest(G){ let m=99; for (const b of G.balls) if (!b.in && b.n>0 && b.n<m) m=b.n; return m; }
+function blLegalTargets(G){
+  const me = G.turn;
+  if (G.mode==='9ball') return [blLowest(G)];
+  if (G.mode!=='8ball') return G.balls.filter(b=>!b.in && b.n!==0).map(b=>b.n);
+  const g = G.groups[me];
+  if (!g) return G.balls.filter(b=>!b.in && b.n!==0 && b.n!==8).map(b=>b.n);
+  const mine = G.balls.filter(b=>!b.in && blGroup(b.n)===g).map(b=>b.n);
+  return mine.length ? mine : [8];
 }
-function okDiscard(G, p, id){
-  if (G.phase!=='play' || G.turn!==p || !G.drawn) return false;
-  const i = G.hands[p].indexOf(id); if (i<0) return false;
-  G.hands[p].splice(i,1); G.discards[p].push(id);
-  G.turn = (p+1)%4; G.drawn = false;
-  G.lastMove = {by:p, kind:'discard', tile:id};
-  if (!G.deck.length) okEnd(G, -1, null);
-  G.seq++; return true;
-}
-function okFinish(G, p, id){
-  if (G.phase!=='play' || G.turn!==p || !G.drawn) return false;
-  const rest = G.hands[p].filter(x=>x!==id);
-  if (rest.length!==14) return false;
-  const how = okIsWin(rest, G.okey); if (!how) return false;
-  G.hands[p] = rest; G.finishTile = id;
-  G.lastMove = {by:p, kind:'finish', tile:id};
-  okEnd(G, p, how, okVal(id,G.okey).w);
-  G.seq++; return true;
-}
-function okEnd(G, w, how, withOkey){
+function blEndFrame(G, w, note){
   G.phase = 'summary';
   if (w>=0) G.wins[w]++;
   const left = G.rounds - G.round;
-  const s = [...G.wins].sort((a,b)=>b-a);
-  const over = left<=0 || s[0] > s[1]+left;
-  G.summary = {winner:w, how, over, okey: !!withOkey};
-  G.starter = (G.starter+1)%4;
+  const over = left<=0 || Math.abs(G.wins[0]-G.wins[1]) > left;
+  G.summary = {winner:w, note, over};
+  G.starter = 1-G.starter;
 }
-
-/* ---------- CPU ---------- */
-function okAiDrawSrc(G, p){
-  const L = G.discards[(p+3)%4]; if (!L.length || SET.level==='easy') return 'deck';
-  const top = L[L.length-1]; const O = G.okey; const hand = G.hands[p];
-  if (okVal(top,O).w) return 'left';
-  const withTop = [...hand, top];
-  for (const id of withTop){ if (okIsWin(withTop.filter(x=>x!==id), O)) return 'left'; }
-  const base = okEval(hand, O) + 7;
-  let best = -Infinity;
-  for (const id of new Set(hand)){ const v=okEval(withTop.filter(x=>x!==id), O); if (v>best) best=v; }
-  return best > base + (SET.level==='hard' ? 2 : 5) ? 'left' : 'deck';
-}
-function okAiDiscard(G, p){
-  const O = G.okey, hand = G.hands[p];
-  for (const id of hand){ if (okIsWin(hand.filter(x=>x!==id), O)) return {finish:id}; }
-  const cands = hand.filter(id=>!okVal(id,O).w);
-  const pool = cands.length ? cands : hand;
-  if (SET.level==='easy' && Math.random()<.25) return {id: pool[Math.floor(Math.random()*pool.length)]};
-  let best=null, bestV=-Infinity; const seen=new Set();
-  for (const id of pool){
-    const v0 = okVal(id,O), k = v0.c+v0.n; if (seen.has(k)) continue; seen.add(k);
-    const v = okEval(hand.filter(x=>x!==id), O) + (SET.level==='hard' ? 0 : Math.random()*1.5);
-    if (v>bestV){ bestV=v; best=id; }
+/* apply rules after the balls stop. pre = {lowest, remain} measured before the shot */
+function blResolve(G, ev, pre){
+  const me = G.turn, op = 1-me;
+  const pots = ev.pots.filter(n=>n!==0), cuePot = ev.pots.includes(0);
+  let foul = false, keep = false, winner = null, note = '';
+  if (G.mode==='time' || G.mode==='practice'){
+    if (G.mode==='time'){ G.score = Math.max(0, (G.score||0) + pots.length - (cuePot ? 1 : 0)); }
+    if (cuePot){ const c=G.balls.find(b=>b.n===0); c.in=false; const p=blFreeSpot(G.balls, BL.W/2, BL_HEAD_Y, 0); c.x=p.x; c.y=p.y; G.ballInHand = true; G.bihKitchen = false; }
+    else G.ballInHand = G.mode==='practice' ? G.ballInHand && false : false;
+    G.isBreak = false; G.foulNote = cuePot ? 'Topi i bardhë ra' : null;
+    if (G.mode==='time' && G.balls.filter(b=>b.n!==0 && !b.in).length===0){ G.balls = blRack('8ball'); G.rackBonus = (G.rackBonus||0)+1; G.ballInHand = true; G.bihKitchen = true; G.isBreak = true; }
+    G.lastEv = {pots, cuePot};
+    G.seq++; return;
   }
-  return {id: best};
-}
-
-/* ---------- UI state ---------- */
-const OK = {G:null, me:0, mode:'cpu', gid:null, doc:null, rack:Array(26).fill(null), sel:null, fresh:null, busy:false, round:0, pending:null, timer:null};
-function okTileHTML(id, O, mine){
-  const p = okParse(id);
-  if (p.x) return `<div class="tile joker" data-id="${id}"><b>★</b><i></i></div>`;
-  const wild = mine && O && p.c===O.c && p.n===O.n;
-  return `<div class="tile c-${p.c}${wild?' wild':''}" data-id="${id}"><b>${p.n}</b><i></i></div>`;
-}
-function okName(a){
-  const s = OK.G.seats[a];
-  if (a===OK.me) return 'Ti';
-  if (s.k==='h') return nameOf(s.uid);
-  return OK.mode==='cpu' ? OK_BOTS[(a-OK.me+3)%4] : 'CPU';
-}
-function okDriver(){
-  if (OK.mode==='cpu') return true;
-  const i = OK.G.seats.findIndex(s=>s.k==='h');
-  return i===OK.me;
-}
-function okSyncRack(){
-  const hand = OK.G.hands[OK.me]; const hs = new Set(hand);
-  for (let i=0;i<26;i++) if (OK.rack[i] && !hs.has(OK.rack[i])) OK.rack[i]=null;
-  const placed = new Set(OK.rack.filter(Boolean));
-  for (const id of hand) if (!placed.has(id)){ const i=OK.rack.indexOf(null); if (i>=0){ OK.rack[i]=id; OK.fresh=id; } }
-  if (OK.sel && !hs.has(OK.sel)) OK.sel=null;
-}
-function okArrange(mode){
-  if (!OK.G) return;
-  const ids = OK.G.hands[OK.me].slice(), O = OK.G.okey;
-  const groups = [];
-  const pool = {}; ids.forEach(id=>{ const v=okVal(id,O); const k=v.w?'J':(OK_CI[v.c]+':'+v.n); (pool[k]=pool[k]||[]).push(id); });
-  if (mode==='pairs'){
-    Object.keys(pool).filter(k=>k!=='J').forEach(k=>{ while (pool[k].length>=2) groups.push(pool[k].splice(0,2)); });
+  if (G.mode==='9ball'){
+    if (cuePot){ foul = true; note = 'Topi i bardhë ra'; }
+    else if (ev.first===null){ foul = true; note = 'S’preku asnjë top'; }
+    else if (ev.first!==pre.lowest){ foul = true; note = `Duhej prekur fillimisht ${pre.lowest}-shi`; }
+    if (pots.includes(9)){ if (!foul) winner = me; else blRespot(G, 9); }
+    keep = !foul && pots.length>0;
   } else {
-    const {cnt,J} = okCounts(ids,O); const r = okSolve(cnt,J,false);
-    for (const set of r.sets) groups.push(set.map(m=> m==='J' ? pool.J.pop() : pool[m[0]+':'+m[1]].pop()));
+    const myG = G.groups[me];
+    const clearedBefore = !!myG && pre.remain[myG]===0;
+    if (cuePot){ foul = true; note = 'Topi i bardhë ra'; }
+    else if (ev.first===null){ foul = true; note = 'S’preku asnjë top'; }
+    else if (myG){ if (clearedBefore ? ev.first!==8 : blGroup(ev.first)!==myG){ foul = true; note = 'Preke fillimisht topin e gabuar'; } }
+    else if (ev.first===8 && !G.isBreak){ foul = true; note = 'S’lejohet të preket e zeza i pari'; }
+    if (pots.includes(8)){
+      if (G.isBreak) blRespot(G, 8);
+      else if (!foul && clearedBefore) winner = me;
+      else { winner = op; note = cuePot ? 'E zeza dhe i bardhi ranë bashkë' : 'E zeza ra para kohe'; }
+    }
+    if (winner===null){
+      if (!myG && !G.isBreak && !foul){
+        const f = pots.find(n=>n!==8);
+        if (f){ const g = blGroup(f); G.groups[me] = g; G.groups[op] = g==='solid' ? 'stripe' : 'solid'; }
+      }
+      const mg = G.groups[me];
+      keep = !foul && (G.isBreak ? pots.some(n=>n!==8) : pots.some(n=> mg ? blGroup(n)===mg : n!==8));
+    }
   }
-  const rest = Object.values(pool).flat().filter(Boolean);
-  rest.sort((a,b)=>{ const A=okVal(a,O), B=okVal(b,O); if (A.w!==B.w) return A.w?1:-1; return (OK_CI[A.c]-OK_CI[B.c]) || (A.n-B.n); });
-  if (rest.length) groups.push(rest);
-  const slots = Array(26).fill(null); let row=0, col=0;
-  for (const g of groups){
-    if (col>0 && col+g.length>13){ row++; col=0; }
-    for (const id of g){ if (col>=13){ row++; col=0; } if (row>1) break; slots[row*13+col++] = id; }
-    col++;
-  }
-  const placed = new Set(slots.filter(Boolean));
-  ids.filter(id=>!placed.has(id)).forEach(id=>{ slots[slots.indexOf(null)] = id; });
-  OK.rack = slots; OK.sel = null; okRender();
-}
-function okRender(){
-  const G = OK.G; if (!G) return;
-  const me = OK.me, O = G.okey;
-  const myTurn = G.phase==='play' && G.turn===me;
-  const needDraw = myTurn && !G.drawn, canThrow = myTurn && G.drawn;
-  const st = OK.mode==='online' && OK.doc ? OK.doc.status : 'play';
-  const pips = a => { const need=Math.floor(G.rounds/2)+1; return Array.from({length:need},(_,i)=>`<i class="${i<G.wins[a]?'on':''}"></i>`).join(''); };
-  for (const r of [1,2,3]){
-    const a=(me+r)%4, el=$('okSeat'+r);
-    el.classList.toggle('on', G.phase==='play' && G.turn===a);
-    el.classList.toggle('cpu', G.seats[a].k!=='h');
-    const nm = okName(a);
-    el.querySelector('.av').textContent = (nm[0]==='@' ? nm[1] : nm[0]).toUpperCase();
-    el.querySelector('.nm').textContent = nm;
-    el.querySelector('.cnt').textContent = G.hands[a].length;
-    el.querySelector('.pips').innerHTML = pips(a);
-    el.querySelector('.think').hidden = !(G.phase==='play' && G.turn===a && st==='play');
-  }
-  $('okMePips').innerHTML = pips(me);
-  for (const r of [0,1,2,3]){
-    const a=(me+r)%4, pile=G.discards[a], top=pile[pile.length-1], el=$('okDisc'+r);
-    el.innerHTML = (top ? okTileHTML(top, O, false) : '') + (pile.length>1 ? `<span class="under">${pile.length}</span>` : '');
-    const lm = G.lastMove;
-    if (lm && lm.kind==='discard' && lm.by===a && top===lm.tile){ const t=el.querySelector('.tile'); if (t) t.classList.add('pop'); }
-  }
-  $('okDisc3').classList.toggle('take', needDraw && G.discards[(me+3)%4].length>0);
-  $('okDisc0').classList.toggle('drop', canThrow);
-  $('okDeck').classList.toggle('take', needDraw && G.deck.length>0);
-  $('okDeckN').textContent = G.deck.length;
-  $('okInd').innerHTML = okTileHTML(G.indicator, null, false);
-  $('okIndWrap').classList.toggle('drop', canThrow);
-  $('okRound').textContent = `Raundi ${Math.min(G.round,G.rounds)}/${G.rounds}`;
-  $('scrOkey').dataset.turn = (G.phase==='play' && st==='play') ? (myTurn ? (needDraw ? 'draw' : 'throw') : 'wait') : '';
-  // rack
-  okSyncRack();
-  const rack = $('okRack');
-  rack.innerHTML = OK.rack.map((id,i)=>`<div class="slot" data-slot="${i}">${id ? okTileHTML(id, O, true) : ''}</div>`).join('');
-  if (OK.sel){ const t=rack.querySelector(`.tile[data-id="${OK.sel}"]`); if (t) t.classList.add('sel'); }
-  if (OK.fresh){ const t=rack.querySelector(`.tile[data-id="${OK.fresh}"]`); if (t) t.classList.add('fresh'); OK.fresh=null; }
-  const sw = rack.querySelector('.slot')?.getBoundingClientRect().width || 26;
-  rack.style.setProperty('--tw', sw+'px');
-  $('okThrow').hidden = !(canThrow && OK.sel);
-  $('okClose').hidden = !(canThrow && OK.sel);
-  $('okSortRun').hidden = $('okSortPair').hidden = !!(canThrow && OK.sel);
-  let msg = '';
-  if (OK.mode==='online' && OK.doc && OK.doc.status==='left') msg = 'Të gjithë shokët e lanë lojën.';
-  $('okMsg').textContent = msg;
-  if (OK.mode==='cpu'){ $('okModeLbl').textContent = 'Kundër CPU'; $('okAct').textContent = 'Lojë e re'; }
-  else { $('okModeLbl').innerHTML = '<span class="live"></span>Online'; $('okAct').textContent = 'Lëre lojën'; }
+  G.isBreak = false;
+  G.lastEv = {pots, cuePot, foul, note};
+  if (winner!==null){ blEndFrame(G, winner, note); G.seq++; return; }
+  if (cuePot){ const c=G.balls.find(b=>b.n===0); c.in=false; const p=blFreeSpot(G.balls, BL.W/2, BL_HEAD_Y, 0); c.x=p.x; c.y=p.y; }
+  G.ballInHand = foul; G.bihKitchen = false;
+  G.foulNote = foul ? note : null;
+  if (!keep) G.turn = op;
+  G.seq++;
 }
 
-/* ---------- moves ---------- */
-async function okCommit(G, extra){
-  OK.G = G; okRender();
-  if (OK.mode==='online'){
-    OK.busy = true;
-    try{ await NET.db.doc('games/'+OK.gid).update({status: (G.phase==='summary' && G.summary && G.summary.over) ? 'over' : 'play', G, ...(extra||{})}); }
-    catch(e){ toast(writeErr(e)); if (OK.doc && OK.doc.G) { OK.G = OK.doc.G; okRender(); } }
-    OK.busy = false;
-    if (OK.pending){ const d=OK.pending; OK.pending=null; okApplyDoc(d); return; }
+/* ---------- CPU aiming ---------- */
+function blPocketTargets(){ const {W,H}=BL; return [[12,12,'c'],[W-12,12,'c'],[12,H-12,'c'],[W-12,H-12,'c'],[3,H/2,'s'],[W-3,H/2,'s']]; }
+function blSegClear(balls, ax, ay, bx, by, skip){
+  const R=BL.R, vx=bx-ax, vy=by-ay, L2=vx*vx+vy*vy || 1;
+  for (const b of balls){
+    if (b.in || skip.includes(b.n)) continue;
+    let t = ((b.x-ax)*vx + (b.y-ay)*vy)/L2; t = Math.max(0, Math.min(1, t));
+    const px=ax+vx*t-b.x, py=ay+vy*t-b.y;
+    if (px*px+py*py < (2*R-0.5)*(2*R-0.5)) return false;
   }
-  okAfter();
+  return true;
 }
-function okAfter(){
-  const G = OK.G; if (!G) return;
-  if (G.phase==='summary'){ okShowSummary(); return; }
-  $('okSumOv').hidden = true;
-  clearTimeout(OK.timer);
-  if (G.seats[G.turn].k!=='h' && okDriver() && (OK.mode==='cpu' || (OK.doc && OK.doc.status==='play'))) OK.timer = setTimeout(okCpuStep, G.drawn ? 700 : 600);
+function blBestShot(G, cuePos){
+  const balls = G.balls, R = BL.R;
+  const cue = cuePos || balls.find(b=>b.n===0);
+  const targets = blLegalTargets(G);
+  let best = null;
+  for (const n of targets){
+    const t = balls.find(b=>b.n===n); if (!t || t.in) continue;
+    for (const [px,py,kind] of blPocketTargets()){
+      const dxp=px-t.x, dyp=py-t.y, d2=Math.hypot(dxp,dyp); if (d2<1) continue;
+      const ux=dxp/d2, uy=dyp/d2;
+      if (kind==='s' && Math.abs(ux) < 0.42) continue;
+      const gx=t.x-ux*2*R, gy=t.y-uy*2*R;
+      const cx=gx-cue.x, cy=gy-cue.y, d1=Math.hypot(cx,cy); if (d1<1) continue;
+      const cxn=cx/d1, cyn=cy/d1, cos = cxn*ux+cyn*uy;
+      if (cos < 0.22) continue;
+      if (!blSegClear(balls, cue.x, cue.y, gx, gy, [0, n])) continue;
+      if (!blSegClear(balls, t.x, t.y, px, py, [0, n])) continue;
+      const score = cos*cos / (1 + d1/700 + d2/450);
+      if (!best || score>best.score){
+        const vImp = Math.sqrt(2*BL_DECEL*(d2+40))/cos;
+        const v0 = Math.min(BL_MAXV, Math.max(420, Math.sqrt(vImp*vImp + 2*BL_DECEL*d1)*1.18));
+        best = {score, ax:cxn, ay:cyn, v:v0, target:n};
+      }
+    }
+  }
+  return best;
 }
-function okCpuStep(){
-  if (APP.screen!=='okey' || OK.busy) return;
-  const G = clone(OK.G), p = G.turn;
-  if (G.phase!=='play' || G.seats[p].k==='h') return;
-  if (!G.drawn){
-    const src = okAiDrawSrc(G,p);
-    if (!okDraw(G,p,src)) { if (!okDraw(G,p,'deck')) return; }
-    sfx.tile && sfx.tile();
+function blCpuPlan(G){
+  const R = BL.R, level = SET.level;
+  let cuePlace = null;
+  const cue = G.balls.find(b=>b.n===0);
+  if (G.ballInHand){
+    let bestPos = null, bestScore = -1;
+    for (let i=0;i<60;i++){
+      const x = R + Math.random()*(BL.W-2*R);
+      const y = G.bihKitchen ? BL_HEAD_Y + Math.random()*(BL.H-R-BL_HEAD_Y) : R + Math.random()*(BL.H-2*R);
+      if (G.balls.some(b=>!b.in && b.n!==0 && (b.x-x)*(b.x-x)+(b.y-y)*(b.y-y) < (2*R+2)*(2*R+2))) continue;
+      const s = blBestShot(G, {x,y});
+      if (s && s.score>bestScore){ bestScore=s.score; bestPos={x,y}; }
+    }
+    cuePlace = bestPos || blFreeSpot(G.balls, cue.x, cue.y, 0);
+  }
+  const from = cuePlace || cue;
+  let ax, ay, v;
+  if (G.isBreak && G.mode!=='practice'){
+    const apex = G.balls.find(b=>b.n===(G.mode==='9ball' ? 1 : G.balls.filter(x=>x.n!==0).sort((a,b)=>b.y-a.y)[0].n));
+    const tx = apex.x + (Math.random()-.5)*4, ty = apex.y;
+    const d = Math.hypot(tx-from.x, ty-from.y); ax=(tx-from.x)/d; ay=(ty-from.y)/d; v = BL_MAXV*0.96;
   } else {
-    const d = okAiDiscard(G,p);
-    if (d.finish){ okFinish(G,p,d.finish); }
-    else okDiscard(G,p,d.id);
-    sfx.tile && sfx.tile();
-    if (OK.mode==='cpu' && G.phase==='summary' && G.summary.winner===p && Math.random()<.7) setTimeout(()=>cpuSay(['e',1]), 600);
+    const s = blBestShot(G, cuePlace);
+    if (s){ ax=s.ax; ay=s.ay; v=s.v; }
+    else {
+      const tg = blLegalTargets(G).map(n=>G.balls.find(b=>b.n===n)).filter(b=>b && !b.in)
+        .sort((a,b)=>Math.hypot(a.x-from.x,a.y-from.y)-Math.hypot(b.x-from.x,b.y-from.y))[0];
+      const tx = tg ? tg.x : BL.W/2, ty = tg ? tg.y : BL.H/2;
+      const d = Math.hypot(tx-from.x, ty-from.y) || 1; ax=(tx-from.x)/d; ay=(ty-from.y)/d; v = 900;
+    }
   }
-  okCommit(G);
-}
-function okCanAct(){ return OK.G && OK.G.phase==='play' && OK.G.turn===OK.me && !OK.busy && (OK.mode==='cpu' || (OK.doc && OK.doc.status==='play')); }
-function okHumanDraw(src){
-  if (!okCanAct() || OK.G.drawn) return;
-  const G = clone(OK.G);
-  if (!okDraw(G, OK.me, src)) return;
-  sfx.tile(); okCommit(G);
-}
-function okHumanThrow(id){
-  id = id || OK.sel; if (!id || !okCanAct() || !OK.G.drawn) return;
-  const G = clone(OK.G);
-  if (!okDiscard(G, OK.me, id)) return;
-  OK.sel = null; sfx.tile(); okCommit(G);
-}
-function okHumanFinish(id){
-  id = id || OK.sel; if (!id || !okCanAct() || !OK.G.drawn) return;
-  const G = clone(OK.G);
-  if (!okFinish(G, OK.me, id)){ toast('Gurët ende s’janë të rregulluar. Duhen 14 gurë në seri, grupe ose 7 çifte.'); sfx.click(); return; }
-  OK.sel = null; sfx.pishti(); okCommit(G);
-}
-function okMoveTo(id, slot){
-  const from = OK.rack.indexOf(id); if (from<0 || slot===from) return;
-  const other = OK.rack[slot]; OK.rack[slot] = id; OK.rack[from] = other || null;
-  OK.sel = null; sfx.click(); okRender();
+  const noise = (level==='easy' ? 3.2 : level==='hard' ? 0.35 : 1.1) * Math.PI/180 * (Math.random()*2-1);
+  const c = Math.cos(noise), s2 = Math.sin(noise);
+  const rx = ax*c - ay*s2, ry = ax*s2 + ay*c;
+  return {cue: cuePlace, vx: rx*v, vy: ry*v};
 }
 
-/* ---------- rack drag & tap ---------- */
-let okDrag = null;
-function okRackDown(e){
-  const t = e.target.closest('.tile');
-  if (!t){ const s=e.target.closest('.slot'); if (s && OK.sel) okMoveTo(OK.sel, +s.dataset.slot); return; }
-  okDrag = {id:t.dataset.id, x:e.clientX, y:e.clientY, el:t, moved:false, ghost:null, pid:e.pointerId};
-  try{ t.setPointerCapture(e.pointerId); }catch(_){}
+/* ---------- UI ---------- */
+const BLS = {G:null, mode:'cpu', me:0, gid:null, doc:null, aim:{x:0, y:-1}, power:0.55, anim:false, busy:false, pending:null, timer:null, drag:null, moveBalls:false, endAt:0, tick:null, scale:1, best:0};
+function blCanvas(){ return $('blCanvas'); }
+function blFit(){
+  const cv = blCanvas(); const wrap = $('blWrap');
+  const totalW = BL.W+2*BL.RAIL, totalH = BL.H+2*BL.RAIL;
+  const availW = wrap.clientWidth || 360;
+  const top = wrap.getBoundingClientRect().top + window.scrollY;
+  const availH = Math.max(340, window.innerHeight - Math.max(0, top - window.scrollY) - 112);
+  const s = Math.min(availW/totalW, availH/totalH);
+  const dpr = Math.min(2.5, window.devicePixelRatio||1);
+  cv.style.width = Math.round(totalW*s)+'px'; cv.style.height = Math.round(totalH*s)+'px';
+  cv.width = Math.round(totalW*s*dpr); cv.height = Math.round(totalH*s*dpr);
+  BLS.scale = s*dpr;
 }
-function okRackMove(e){
-  if (!okDrag) return;
-  const dx=e.clientX-okDrag.x, dy=e.clientY-okDrag.y;
-  if (!okDrag.moved && Math.hypot(dx,dy)>7){
-    okDrag.moved = true;
-    const r = okDrag.el.getBoundingClientRect();
-    const g = okDrag.el.cloneNode(true); g.classList.add('ghost'); g.style.width=r.width+'px'; g.style.height=r.height+'px';
-    g.style.setProperty('--tw', r.width+'px');
-    document.body.append(g); okDrag.ghost=g; okDrag.off={x:okDrag.x-r.left, y:okDrag.y-r.top};
-    okDrag.el.style.opacity='.25';
+function blToTable(e){
+  const r = blCanvas().getBoundingClientRect();
+  const s = r.width/(BL.W+2*BL.RAIL);
+  return {x:(e.clientX-r.left)/s - BL.RAIL, y:(e.clientY-r.top)/s - BL.RAIL};
+}
+function blMyTurn(){ const G=BLS.G; if (!G || G.phase!=='play' || BLS.anim || BLS.busy) return false; if (G.mode==='time'||G.mode==='practice') return true; if (BLS.mode==='online' && (!BLS.doc || BLS.doc.status!=='play')) return false; return G.turn===BLS.me; }
+function blFirstContact(cx, cy, ax, ay){
+  const R=BL.R, balls=BLS.G.balls; let best=null;
+  for (const b of balls){
+    if (b.in || b.n===0) continue;
+    const fx=b.x-cx, fy=b.y-cy, t=fx*ax+fy*ay; if (t<=0) continue;
+    const perp2 = fx*fx+fy*fy - t*t, D=2*R; if (perp2 > D*D) continue;
+    const back = Math.sqrt(D*D-perp2), dist = t-back;
+    if (!best || dist<best.d) best={d:dist, b};
   }
-  if (okDrag.ghost){ okDrag.ghost.style.left=(e.clientX-okDrag.off.x)+'px'; okDrag.ghost.style.top=(e.clientY-okDrag.off.y)+'px'; }
+  let railD = Infinity; const {W,H}=BL;
+  if (ax>0) railD=Math.min(railD,(W-R-cx)/ax); if (ax<0) railD=Math.min(railD,(R-cx)/ax);
+  if (ay>0) railD=Math.min(railD,(H-R-cy)/ay); if (ay<0) railD=Math.min(railD,(R-cy)/ay);
+  if (best && best.d<railD) return {d:best.d, ball:best.b};
+  return {d:railD, ball:null};
 }
-function okRackUp(e){
-  if (!okDrag) return;
-  const d = okDrag; okDrag = null;
-  if (!d.moved){ OK.sel = (OK.sel===d.id) ? null : d.id; sfx.click(); okRender(); return; }
-  d.ghost.remove(); d.el.style.opacity='';
-  const hit = document.elementFromPoint(e.clientX, e.clientY);
-  const slot = hit && hit.closest('#okRack .slot');
-  if (slot) return okMoveTo(d.id, +slot.dataset.slot);
-  if (hit && hit.closest('#okDisc0')) return okHumanThrow(d.id);
-  if (hit && hit.closest('#okIndWrap')) return okHumanFinish(d.id);
-  okRender();
+function blDraw(){
+  const G=BLS.G, cv=blCanvas(); if (!G || !cv) return;
+  const ctx=cv.getContext('2d'), s=BLS.scale, {W,H,R,RAIL}=BL;
+  ctx.setTransform(s,0,0,s,0,0);
+  const TW=W+2*RAIL, TH=H+2*RAIL;
+  ctx.clearRect(0,0,TW,TH);
+  // rails
+  const wood=ctx.createLinearGradient(0,0,TW,0); wood.addColorStop(0,'#5a3519'); wood.addColorStop(.5,'#7b4a24'); wood.addColorStop(1,'#5a3519');
+  ctx.fillStyle=wood; blRound(ctx,0,0,TW,TH,26); ctx.fill();
+  ctx.translate(RAIL,RAIL);
+  // felt
+  const felt=ctx.createRadialGradient(W/2,H/2,60,W/2,H/2,H*0.7); felt.addColorStop(0,'#2f8a60'); felt.addColorStop(1,'#1c5e40');
+  ctx.fillStyle=felt; ctx.fillRect(-6,-6,W+12,H+12);
+  ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=6; ctx.strokeRect(-3,-3,W+6,H+6);
+  // diamonds
+  ctx.fillStyle='#e8d7a8';
+  for (let i=1;i<4;i++){ const x=W*i/4; [-RAIL/2-3, H+RAIL/2+3].forEach(y=>{ ctx.beginPath(); ctx.arc(x,y,3,0,7); ctx.fill(); }); }
+  for (let i=1;i<8;i++){ if (i===4) continue; const y=H*i/8; [-RAIL/2-3, W+RAIL/2+3].forEach(x=>{ ctx.beginPath(); ctx.arc(x,y,3,0,7); ctx.fill(); }); }
+  // pockets
+  ctx.fillStyle='#0b0b0b';
+  [[0,0],[W,0],[0,H],[W,H]].forEach(([x,y])=>{ ctx.beginPath(); ctx.arc(x,y,24,0,7); ctx.fill(); });
+  [[-5,H/2],[W+5,H/2]].forEach(([x,y])=>{ ctx.beginPath(); ctx.arc(x,y,21,0,7); ctx.fill(); });
+  // kitchen line when placing on break
+  const mine = blMyTurn();
+  if (G.ballInHand && G.bihKitchen && mine){ ctx.strokeStyle='rgba(255,255,255,.25)'; ctx.setLineDash([8,8]); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(0,BL_HEAD_Y); ctx.lineTo(W,BL_HEAD_Y); ctx.stroke(); ctx.setLineDash([]); }
+  // aim guide + cue (before balls so balls overlap the line)
+  const cue = G.balls.find(b=>b.n===0);
+  const showAim = mine && !cue.in && !BLS.anim && !(BLS.drag && BLS.drag.kind==='ball');
+  if (showAim){
+    const {x:ax, y:ay} = BLS.aim;
+    const fc = blFirstContact(cue.x, cue.y, ax, ay);
+    const gx = cue.x+ax*fc.d, gy = cue.y+ay*fc.d;
+    ctx.strokeStyle='rgba(255,255,255,.75)'; ctx.lineWidth=2; ctx.setLineDash([6,6]);
+    ctx.beginPath(); ctx.moveTo(cue.x, cue.y); ctx.lineTo(gx, gy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(gx, gy, R, 0, 7); ctx.strokeStyle='rgba(255,255,255,.8)'; ctx.stroke();
+    if (fc.ball){
+      const nx=(fc.ball.x-gx)/(2*R), ny=(fc.ball.y-gy)/(2*R);
+      const legal = (G.mode==='time'||G.mode==='practice') ? true : blLegalTargets(G).includes(fc.ball.n);
+      ctx.strokeStyle = legal ? 'rgba(255,255,255,.9)' : 'rgba(255,90,90,.9)'; ctx.lineWidth=2.5;
+      ctx.beginPath(); ctx.moveTo(fc.ball.x, fc.ball.y); ctx.lineTo(fc.ball.x+nx*90, fc.ball.y+ny*90); ctx.stroke();
+      const dot=ax*nx+ay*ny, tx=ax-dot*nx, ty=ay-dot*ny;
+      ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.beginPath(); ctx.moveTo(gx,gy); ctx.lineTo(gx+tx*60, gy+ty*60); ctx.stroke();
+    }
+  }
+  // balls
+  for (const b of G.balls){ if (!b.in) blDrawBall(ctx, b); }
+  // cue stick
+  if ((showAim || BLS.cpuAim) && !cue.in){
+    const a = BLS.cpuAim || BLS.aim, pull = 14 + (BLS.cpuAim ? 40 : BLS.power*70);
+    const sx = cue.x - a.x*pull, sy = cue.y - a.y*pull, ex = sx - a.x*330, ey = sy - a.y*330;
+    const g=ctx.createLinearGradient(sx,sy,ex,ey); g.addColorStop(0,'#f2e6c8'); g.addColorStop(.04,'#2a2a2a'); g.addColorStop(.06,'#d9b98a'); g.addColorStop(.7,'#9c6b3c'); g.addColorStop(1,'#3c2412');
+    ctx.strokeStyle=g; ctx.lineCap='round';
+    ctx.lineWidth=5; ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx-a.x*160, sy-a.y*160); ctx.stroke();
+    ctx.lineWidth=8; ctx.beginPath(); ctx.moveTo(sx-a.x*160, sy-a.y*160); ctx.lineTo(ex,ey); ctx.stroke();
+  }
+  ctx.setTransform(1,0,0,1,0,0);
+}
+function blRound(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function blDrawBall(ctx, b){
+  const R=BL.R;
+  ctx.fillStyle='rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(b.x+2.5, b.y+3.5, R, R*0.9, 0, 0, 7); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.arc(b.x,b.y,R,0,7); ctx.clip();
+  if (b.n===0){ ctx.fillStyle='#f7f4ea'; ctx.fillRect(b.x-R,b.y-R,2*R,2*R); }
+  else if (b.n>8){ ctx.fillStyle='#f7f4ea'; ctx.fillRect(b.x-R,b.y-R,2*R,2*R); ctx.fillStyle=blColor(b.n); ctx.fillRect(b.x-R, b.y-R*0.55, 2*R, R*1.1); }
+  else { ctx.fillStyle=blColor(b.n); ctx.fillRect(b.x-R,b.y-R,2*R,2*R); }
+  const hl=ctx.createRadialGradient(b.x-R*.35,b.y-R*.4,1,b.x,b.y,R*1.05); hl.addColorStop(0,'rgba(255,255,255,.75)'); hl.addColorStop(.25,'rgba(255,255,255,.08)'); hl.addColorStop(1,'rgba(0,0,0,.35)');
+  ctx.fillStyle=hl; ctx.fillRect(b.x-R,b.y-R,2*R,2*R);
+  ctx.restore();
+  if (b.n>0){
+    ctx.fillStyle='#fbf8ee'; ctx.beginPath(); ctx.arc(b.x,b.y,R*0.5,0,7); ctx.fill();
+    ctx.fillStyle='#151515'; ctx.font=`700 ${b.n>9?R*0.58:R*0.7}px Rubik, system-ui, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(String(b.n), b.x, b.y+0.5);
+  }
+}
+function blBallChip(n){ return n>8 ? `<i class="bb s" style="--c:${blColor(n)}"></i>` : `<i class="bb" style="--c:${blColor(n)}"></i>`; }
+function blName(i){ if (BLS.mode==='online'){ return i===BLS.me ? 'Ti' : nameOf(BLS.doc.p[i]); } return i===0 ? 'Ti' : 'CPU'; }
+function blHud(){
+  const G=BLS.G; if (!G) return;
+  const solo = G.mode==='time' || G.mode==='practice';
+  $('blModeLbl').innerHTML = (BLS.mode==='online' ? '<span class="live"></span>' : '') + BL_MODES[G.mode];
+  $('blAct').textContent = BLS.mode==='online' ? 'Lëre lojën' : (G.mode==='practice' ? 'Rirendit' : 'Lojë e re');
+  $('blPracticeBar').hidden = G.mode!=='practice';
+  $('blMoveBalls').classList.toggle('on', BLS.moveBalls);
+  const me = BLS.me, op = 1-me;
+  if (solo){
+    $('blP0').classList.toggle('on', G.phase==='play');
+    $('blN0').textContent = G.mode==='time' ? 'Pikët' : 'Stërvitje';
+    $('blS0').innerHTML = G.mode==='time' ? `<b class="big">${G.score||0}</b>` : `<span class="muted">${G.balls.filter(b=>!b.in&&b.n).length} topa në tavolinë</span>`;
+    $('blP1').hidden = G.mode==='practice';
+    $('blN1').textContent = 'Rekordi'; $('blS1').innerHTML = `<b class="big">${BLS.best||0}</b>`;
+    $('blMid').innerHTML = G.mode==='time' ? `<b class="clock" id="blClock">${Math.max(0,Math.ceil((BLS.endAt-Date.now())/1000))}</b><small>sekonda</small>` : '';
+    $('scrBill').dataset.turn = G.phase==='play' ? 'me' : '';
+    return;
+  }
+  $('blP1').hidden = false;
+  [[me,'0'],[op,'1']].forEach(([i,k])=>{
+    $('blP'+k).classList.toggle('on', G.phase==='play' && G.turn===i);
+    $('blN'+k).textContent = blName(i);
+    let h = '';
+    if (G.mode==='8ball'){
+      const g = G.groups[i];
+      if (!g) h = '<span class="muted">Tavolinë e hapur</span>';
+      else { const list = G.balls.filter(b=>b.n && blGroup(b.n)===g && !b.in).map(b=>b.n).sort((a,b)=>a-b); h = list.length ? list.map(blBallChip).join('') : blBallChip(8); }
+    } else {
+      h = G.turn===i && G.phase==='play' ? `<span class="muted">Synon</span> ${blBallChip(blLowest(G))}` : '';
+    }
+    const need = Math.floor(G.rounds/2)+1;
+    h += `<span class="pips">${Array.from({length:need},(_,j)=>`<i class="${j<G.wins[i]?'on':''}"></i>`).join('')}</span>`;
+    $('blS'+k).innerHTML = h;
+  });
+  $('blMid').innerHTML = `<small>Loja</small><b>${Math.min(G.round,G.rounds)}/${G.rounds}</b>`;
+  $('scrBill').dataset.turn = (G.phase==='play' && (BLS.mode==='cpu' || (BLS.doc && BLS.doc.status==='play'))) ? (G.turn===me ? 'me' : 'opp') : '';
+  const bih = G.ballInHand && G.turn===me && G.phase==='play' && !BLS.anim;
+  $('blHint').hidden = !bih;
+  $('blHint').textContent = G.bihKitchen ? 'Topi në dorë: vendose të bardhin poshtë vijës' : 'Topi në dorë: tërhiqe të bardhin ku të duash';
+}
+function blRender(){ blHud(); blDraw(); $('blShoot').disabled = !blMyTurn(); }
+
+/* ---------- shooting & animation ---------- */
+function blShot(vx, vy, cuePlace, byMe){
+  const G = BLS.G;
+  const pre = {lowest: blLowest(G), remain:{solid:blRemaining(G,'solid'), stripe:blRemaining(G,'stripe')}};
+  if (cuePlace){ const c=G.balls.find(b=>b.n===0); c.x=cuePlace.x; c.y=cuePlace.y; c.in=false; }
+  const shot = {by: G.turn, vx, vy, cue: cuePlace ? {x:cuePlace.x, y:cuePlace.y} : null};
+  const cue = G.balls.find(b=>b.n===0); cue.vx = vx; cue.vy = vy;
+  BLS.anim = true; BLS.cpuAim = null;
+  const ev = blNewEv();
+  sfx.blCue(Math.hypot(vx,vy)/BL_MAXV);
+  let last = performance.now(), acc = 0, steps = 0, hi = 0, ri = 0, pi = 0;
+  return new Promise(resolve=>{
+    const frame = now => {
+      acc += Math.min(0.05, (now-last)/1000); last = now;
+      while (acc >= BL_DT && blMoving(G.balls) && steps < 240*25){ blStep(G.balls, ev); acc -= BL_DT; steps++; }
+      for (; hi<ev.hits.length; hi++) sfx.blHit(ev.hits[hi]/BL_MAXV);
+      for (; ri<ev.rails.length; ri++) sfx.blRail(ev.rails[ri]/BL_MAXV);
+      for (; pi<ev.pots.length; pi++) sfx.blPot();
+      blDraw();
+      if (blMoving(G.balls) && steps < 240*25) requestAnimationFrame(frame);
+      else { BLS.anim = false; resolve({ev, pre, shot}); }
+    };
+    requestAnimationFrame(frame);
+  });
+}
+async function blTakeShot(vx, vy, cuePlace){
+  if (BLS.anim) return;
+  const startSeq = BLS.G.seq;
+  const {ev, pre, shot} = await blShot(vx, vy, cuePlace);
+  const G = BLS.G;
+  blResolve(G, ev, pre);
+  G.lastShot = {...shot, seq:G.seq};
+  if (G.lastEv && G.lastEv.foul && G.phase==='play' && G.mode!=='time' && G.mode!=='practice') toast(`Faull: ${G.lastEv.note}`);
+  if (G.mode==='time' && G.rackBonus && G.rackBonus!==BLS.rackSeen){ BLS.rackSeen = G.rackBonus; BLS.endAt += 15000; toast('Tavolina u pastrua! +15 sekonda'); }
+  if (BLS.mode==='online'){
+    BLS.busy = true;
+    try{ await NET.db.doc('games/'+BLS.gid).update({status: (G.phase==='summary' && G.summary.over) ? 'over' : 'play', G}); }
+    catch(e){ toast(writeErr(e)); if (BLS.doc && BLS.doc.G){ BLS.G = BLS.doc.G; } }
+    BLS.busy = false;
+    if (BLS.pending){ const d=BLS.pending; BLS.pending=null; blApplyDoc(d); return; }
+  }
+  blRender(); blAfter();
+}
+function blAfter(){
+  const G = BLS.G; if (!G) return;
+  if (G.phase==='summary'){ blShowSummary(); return; }
+  $('blSumOv').hidden = true;
+  clearTimeout(BLS.timer);
+  if (BLS.mode==='cpu' && (G.mode==='8ball'||G.mode==='9ball') && G.turn===1) BLS.timer = setTimeout(blCpuTurn, 750);
+}
+async function blCpuTurn(){
+  const G = BLS.G; if (!G || G.phase!=='play' || G.turn!==1 || BLS.anim || APP.screen!=='bill') return;
+  const plan = blCpuPlan(G);
+  if (plan.cue){ const c=G.balls.find(b=>b.n===0); c.x=plan.cue.x; c.y=plan.cue.y; c.in=false; }
+  const v = Math.hypot(plan.vx, plan.vy) || 1;
+  const target = {x:plan.vx/v, y:plan.vy/v};
+  const from = {x:BLS.aim.x, y:BLS.aim.y};
+  const t0 = performance.now();
+  await new Promise(res=>{ const f=now=>{ const k=Math.min(1,(now-t0)/600); const x=from.x+(target.x-from.x)*k, y=from.y+(target.y-from.y)*k, d=Math.hypot(x,y)||1; BLS.cpuAim={x:x/d, y:y/d}; blDraw(); if (k<1) requestAnimationFrame(f); else res(); }; requestAnimationFrame(f); });
+  await sleep(250);
+  if (APP.screen!=='bill' || BLS.G!==G) return;
+  BLS.cpuAim = null;
+  if (Math.random()<.12) setTimeout(()=>cpuSay([['e',4],['e',6],['t',0]][Math.floor(Math.random()*3)]), 400);
+  blTakeShot(plan.vx, plan.vy, plan.cue);
+}
+function blHumanShoot(){
+  if (!blMyTurn()) return;
+  const G = BLS.G, cue = G.balls.find(b=>b.n===0); if (cue.in) return;
+  const v = 120 + BLS.power*(BL_MAXV-120);
+  const place = G.ballInHand ? {x:cue.x, y:cue.y} : null;
+  blTakeShot(BLS.aim.x*v, BLS.aim.y*v, place);
+}
+
+/* ---------- pointer: aim / place cue ball / move balls (practice) ---------- */
+function blValidSpot(G, n, x, y){
+  const {W,H,R}=BL;
+  if (x<R || x>W-R || y<R || y>H-R) return false;
+  if (n===0 && G.bihKitchen && y<BL_HEAD_Y) return false;
+  return !G.balls.some(b=>!b.in && b.n!==n && (b.x-x)*(b.x-x)+(b.y-y)*(b.y-y) < (2*BL.R)*(2*BL.R));
+}
+function blDown(e){
+  if (!blMyTurn()) return;
+  const G=BLS.G, p=blToTable(e), cue=G.balls.find(b=>b.n===0);
+  try{ blCanvas().setPointerCapture(e.pointerId); }catch(_){}
+  const near = b => (b.x-p.x)*(b.x-p.x)+(b.y-p.y)*(b.y-p.y) < (BL.R*2.6)*(BL.R*2.6);
+  if (G.mode==='practice' && BLS.moveBalls){ const b=G.balls.filter(b=>!b.in).find(near); if (b){ BLS.drag={kind:'ball', n:b.n}; return; } }
+  if (G.ballInHand && !cue.in && near(cue)){ BLS.drag={kind:'ball', n:0}; return; }
+  BLS.drag={kind:'aim'}; blAimAt(p);
+}
+function blMove(e){
+  if (!BLS.drag) return;
+  const G=BLS.G, p=blToTable(e);
+  if (BLS.drag.kind==='ball'){
+    const b=G.balls.find(x=>x.n===BLS.drag.n);
+    if (blValidSpot(G, b.n, p.x, p.y)){ b.x=p.x; b.y=p.y; }
+    blDraw();
+  } else blAimAt(p);
+}
+function blUp(){ BLS.drag=null; blDraw(); }
+function blAimAt(p){
+  const cue=BLS.G.balls.find(b=>b.n===0);
+  const dx=p.x-cue.x, dy=p.y-cue.y, d=Math.hypot(dx,dy); if (d<3) return;
+  BLS.aim={x:dx/d, y:dy/d}; blDraw();
+}
+function blRotate(deg){
+  const a=deg*Math.PI/180, c=Math.cos(a), s=Math.sin(a), {x,y}=BLS.aim;
+  BLS.aim={x:x*c-y*s, y:x*s+y*c}; blDraw();
 }
 
 /* ---------- summary ---------- */
-let okSumKey='';
-function okShowSummary(){
-  const G=OK.G, S2=G.summary, me=OK.me; if (!S2) return;
-  const key=G.round+':'+G.seq;
-  const W = G.wins;
-  if (key!==okSumKey){
-    okSumKey=key;
-    setTimeout(()=>{ if (S2.over){ const mx=Math.max(...W); (W[me]===mx && W.filter(x=>x===mx).length===1) ? sfx.win() : sfx.lose(); } else if (S2.winner===me) sfx.win(); else sfx.round(); }, 250);
+let blSumKey='';
+function blShowSummary(){
+  const G=BLS.G, S2=G.summary; if (!S2) return;
+  const me=BLS.me, op=1-me, key=G.round+':'+G.seq;
+  if (G.mode==='time'){
+    const sc=G.score||0, rec = sc > (BLS.bestBefore||0);
+    $('blSumH').textContent = rec ? 'Rekord i ri! 🏆' : 'Koha mbaroi';
+    $('blSumSub').textContent = `Fute ${sc} top${sc===1?'':'a'}.` + (rec ? '' : ` Rekordi yt: ${BLS.best}.`);
+    $('blSumTable').innerHTML = '';
+    $('blNext').textContent='Provo prapë'; $('blNext').disabled=false;
+    if (key!==blSumKey){ blSumKey=key; rec ? sfx.win() : sfx.round(); }
+    $('blSumOv').hidden=false; return;
   }
+  if (key!==blSumKey){ blSumKey=key; setTimeout(()=>{ if (S2.winner===me) sfx.win(); else sfx.lose(); }, 200); }
   const wn = S2.winner;
-  let h, sub;
-  if (wn<0){ h='Barazim'; sub='U mbaruan gurët pa e mbyllur askush.'; }
-  else if (wn===me){ h='E mbylle! 🎉'; sub = S2.how==='pairs' ? 'Me 7 çifte.' : 'Me seri dhe grupe.'; }
-  else { h=`E mbylli ${okName(wn)}`; sub = S2.how==='pairs' ? 'Me 7 çifte.' : 'Me seri dhe grupe.'; }
-  if (S2.okey) sub += ' Dhe e hodhi okey-n në fund!';
-  if (S2.over){
-    const mx=Math.max(...W), top=[0,1,2,3].filter(a=>W[a]===mx);
-    h = top.length>1 ? 'Loja doli barazim' : (top[0]===me ? 'Fitove lojën! 🏆' : `Fitoi ${okName(top[0])}`);
-  }
-  $('okSumH').textContent = h; $('okSumSub').textContent = sub + ` Raundi ${G.round} nga ${G.rounds}.`;
-  // winner hand
-  const hw = $('okSumHand'); hw.innerHTML='';
-  if (wn>=0){
-    const ids=G.hands[wn], O=G.okey;
-    let groups=[];
-    if (S2.how==='pairs'){ const m={}; ids.forEach(id=>{const v=okVal(id,O); const k=v.w?'J':v.c+v.n; (m[k]=m[k]||[]).push(id);}); groups=Object.values(m); }
-    else { const {cnt,J}=okCounts(ids,O); const r=okSolve(cnt,J,true)||okSolve(cnt,J,false); const pool={}; ids.forEach(id=>{const v=okVal(id,O); const k=v.w?'J':(OK_CI[v.c]+':'+v.n); (pool[k]=pool[k]||[]).push(id);}); groups=r.sets.map(s=>s.map(m=>m==='J'?pool.J.pop():pool[m[0]+':'+m[1]].pop())); const rest=Object.values(pool).flat(); if (rest.length) groups.push(rest); }
-    hw.innerHTML = groups.map(g=>`<span class="grp">${g.filter(Boolean).map(id=>okTileHTML(id,O,false)).join('')}</span>`).join('');
-  }
-  $('okSumTable').innerHTML = [0,1,2,3].map(a=>`<tr${a===wn?' class="sum"':''}><td>${esc(okName(a))}</td><td>${W[a]}</td></tr>`).join('');
-  const nb = $('okNext');
-  if (okDriver()){ nb.disabled=false; nb.textContent = S2.over ? (OK.mode==='cpu' ? 'Lojë e re' : 'Luaj përsëri') : 'Raundi tjetër'; }
-  else { nb.disabled=true; nb.textContent='Në pritje…'; }
-  $('okSumOv').hidden = false;
+  if (S2.over){ $('blSumH').textContent = G.wins[me]>G.wins[op] ? 'Fitove lojën! 🏆' : (G.wins[me]<G.wins[op] ? `Fitoi ${blName(op)}` : 'Barazim'); }
+  else $('blSumH').textContent = wn===me ? 'E fitove lojën e radhës!' : `E fitoi ${blName(op)}`;
+  const how = wn===me ? (G.mode==='9ball' ? 'E fute 9-shin.' : 'E fute të zezën.') : (S2.note ? S2.note+'.' : (G.mode==='9ball' ? 'Futi 9-shin.' : 'Futi të zezën.'));
+  $('blSumSub').textContent = `${how} Loja ${G.round} nga ${G.rounds}.`;
+  $('blSumTable').innerHTML = `<thead><tr><th></th><th>Ti</th><th>${esc(blName(op))}</th></tr></thead><tbody><tr class="tot"><td>Lojëra të fituara</td><td>${G.wins[me]}</td><td>${G.wins[op]}</td></tr></tbody>`;
+  const nb=$('blNext');
+  if (BLS.mode==='online' && me!==0){ nb.disabled=true; nb.textContent=`Në pritje të ${blName(op)}…`; }
+  else { nb.disabled=false; nb.textContent = S2.over ? (BLS.mode==='cpu' ? 'Lojë e re' : 'Luaj përsëri') : 'Loja tjetër'; }
+  $('blSumOv').hidden=false;
 }
-function okNext(){
-  if (!OK.G || OK.G.phase!=='summary' || !okDriver()) return;
-  $('okSumOv').hidden = true;
-  if (OK.mode==='cpu' && OK.G.summary.over){ okStartCpu(); return; }
-  const G = OK.G.summary.over ? okNewMatch(OK.G.seats, OK.G.rounds) : (()=>{ const g=clone(OK.G); okNewRound(g); return g; })();
-  OK.rack = Array(26).fill(null); OK.round = G.round;
-  sfx.shuffle();
-  okCommit(G);
-  setTimeout(()=>okArrange('runs'), 50);
+async function blNext(){
+  const G0=BLS.G; if (!G0) return;
+  $('blSumOv').hidden=true;
+  if (G0.mode==='time'){ blStartSolo('time'); return; }
+  if (G0.phase!=='summary') return;
+  if (BLS.mode==='cpu' && G0.summary.over){ blStartCpu(G0.mode); return; }
+  const G = G0.summary.over ? blNewMatch(G0.mode, G0.rounds) : (()=>{ const g=clone(G0); blNewFrame(g); return g; })();
+  BLS.G=G; BLS.aim={x:0,y:-1}; sfx.blRack(); blRender(); blAfter();
+  if (BLS.mode==='online'){ try{ await NET.db.doc('games/'+BLS.gid).update({status:'play', G}); }catch(e){ toast(writeErr(e)); } }
 }
 
 /* ---------- start / open ---------- */
-function okStartCpu(){ pickRounds('Sa raunde me gurë?', 'Fillo', r=>okStartCpuWith(r)); }
-function okStartCpuWith(rounds){
-  closeGameSub();
-  APP.mode='cpu'; APP.game='okey';
-  OK.mode='cpu'; OK.me=0; OK.gid=null; OK.doc=null; OK.busy=false; OK.pending=null;
-  OK.G = okNewMatch([{k:'h'},{k:'c'},{k:'c'},{k:'c'}], rounds);
-  OK.rack = Array(26).fill(null); OK.round = OK.G.round; okSumKey='';
-  show('okey'); okRender(); okArrange('runs'); sfx.shuffle();
-  okAfter();
+function blLoadBest(){ let b=0; try{ b=parseInt(localStorage.getItem('bl-best')||'0',10)||0; }catch(e){} if (loggedIn() && NET.player.blBest>b) b=NET.player.blBest; BLS.best=b; }
+function blSaveBest(sc){
+  if (sc<=BLS.best) return;
+  BLS.best=sc; try{ localStorage.setItem('bl-best', String(sc)); }catch(e){}
+  if (loggedIn()){ NET.player.blBest=sc; NET.db.doc('players/'+NET.uid).update({blBest:sc}).catch(()=>{}); }
 }
-function openOkey(gid){
-  closeGameSub();
-  APP.mode='online'; APP.game='okey';
-  OK.mode='online'; OK.gid=gid; OK.doc=null; OK.G=null; OK.busy=false; OK.pending=null; OK.rack=Array(26).fill(null); OK.round=0; okSumKey='';
-  NET.gameId = gid; NET.chatTs = null;
-  $('okRack').innerHTML=''; $('okMsg').textContent='Duke hapur lojën…';
-  show('okey');
+function blEnter(mode, match){
+  closeGameSub(); clearTimeout(BLS.timer); clearInterval(BLS.tick);
+  APP.mode = BLS.mode = mode; APP.game='bill';
+  BLS.G = match; BLS.me = 0; BLS.doc=null; BLS.gid=null; BLS.anim=false; BLS.busy=false; BLS.pending=null; BLS.moveBalls=false; BLS.aim={x:0,y:-1}; BLS.power=+$('blPow').value/100; blSumKey='';
+  show('bill'); requestAnimationFrame(()=>{ blFit(); blRender(); });
+  sfx.blRack();
+}
+function blStartCpu(mode){ pickRounds(`Sa lojëra ${BL_MODES[mode]}?`, 'Fillo', r=>{ blEnter('cpu', blNewMatch(mode, r)); blAfter(); }); }
+function blStartSolo(mode){
+  blLoadBest();
+  blEnter('cpu', blNewMatch(mode, 1));
+  if (mode==='time'){
+    BLS.bestBefore = BLS.best; BLS.rackSeen = 0;
+    BLS.endAt = Date.now()+60000;
+    BLS.tick = setInterval(()=>{
+      const left = Math.ceil((BLS.endAt-Date.now())/1000);
+      const c=$('blClock'); if (c){ c.textContent=Math.max(0,left); c.classList.toggle('hot', left<=10); }
+      if (left<=0 && !BLS.anim && BLS.G && BLS.G.phase==='play'){
+        clearInterval(BLS.tick); BLS.G.phase='summary'; BLS.G.summary={winner:0, over:true}; blSaveBest(BLS.G.score||0); blRender(); blShowSummary();
+      }
+    }, 250);
+  }
+}
+function blPickMode(){ $('blModeOv').hidden=false; }
+function openBill(gid){
+  closeGameSub(); clearTimeout(BLS.timer); clearInterval(BLS.tick);
+  APP.mode = BLS.mode = 'online'; APP.game='bill';
+  BLS.gid=gid; BLS.doc=null; BLS.G=null; BLS.anim=false; BLS.busy=false; BLS.pending=null; blSumKey='';
+  NET.gameId=gid; NET.chatTs=null;
+  show('bill'); requestAnimationFrame(blFit);
   NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(snap=>{
-    if (APP.screen!=='okey' || OK.gid!==gid) return;
+    if (APP.screen!=='bill' || BLS.gid!==gid) return;
     if (!snap.exists){ toast('Kjo lojë nuk ekziston më.'); closeGameSub(); show('lobby'); return; }
-    okApplyDoc(clone(snap.data()));
+    blApplyDoc(clone(snap.data()));
   }, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
 }
-function okApplyDoc(d){
-  if (OK.busy){ OK.pending = d; return; }
-  OK.doc = d; NET.gameDoc = d;
-  OK.me = Math.max(0, d.p.indexOf(NET.uid));
-  const ch = d.chat;
-  if (ch && ch.ts){
-    if (NET.chatTs!==null && ch.ts>NET.chatTs && ch.by!==NET.uid){ const a=d.p.indexOf(ch.by); showChat(a>=0 ? ((a-OK.me+4)%4)||1 : 'opp', ch.k, ch.v); }
-    NET.chatTs = Math.max(NET.chatTs||0, ch.ts);
-  } else if (NET.chatTs===null) NET.chatTs = 0;
-  if (!d.G){ $('okMsg').textContent = 'Në pritje që të niset loja…'; return; }
+async function blApplyDoc(d){
+  if (BLS.busy || BLS.anim){ BLS.pending=d; return; }
+  BLS.doc=d; NET.gameDoc=d;
+  BLS.me = Math.max(0, d.p.indexOf(NET.uid));
+  const ch=d.chat;
+  if (ch && ch.ts){ if (NET.chatTs!==null && ch.ts>NET.chatTs && ch.by!==NET.uid) showChat('opp', ch.k, ch.v); NET.chatTs=Math.max(NET.chatTs||0, ch.ts); }
+  else if (NET.chatTs===null) NET.chatTs=0;
+  if (!d.G){ return; }
   recordResult(d);
-  const G = d.G;
-  if (!OK.G || G.seq!==OK.G.seq){
-    const newRound = !OK.G || G.round!==OK.round;
-    const lm = G.lastMove;
-    if (OK.G && lm && lm.by!==OK.me) sfx.tile();
-    OK.G = G;
-    if (newRound){ OK.rack=Array(26).fill(null); OK.round=G.round; okRender(); okArrange('runs'); if (OK.G.round>1 || G.seq>1) sfx.shuffle(); }
-    else okRender();
-    if (G.phase==='play' && G.turn===OK.me && lm && lm.by!==OK.me) setTimeout(()=>sfx.turn(), 150);
-  } else okRender();
-  okAfter();
+  const G=d.G;
+  if (BLS.G && G.seq===BLS.G.seq+1 && G.lastShot && G.lastShot.by!==BLS.me && G.lastShot.seq===G.seq && G.round===BLS.G.round){
+    // replay the opponent's shot from our copy of the table, then take the authoritative result
+    const ls=G.lastShot;
+    await blShot(ls.vx, ls.vy, ls.cue);
+    BLS.G = G;
+    if (G.lastEv && G.lastEv.foul && G.phase==='play') toast(`Faull i ${blName(1-BLS.me)}: ${G.lastEv.note}`);
+    if (G.phase==='play' && G.turn===BLS.me) setTimeout(()=>sfx.turn(), 150);
+  } else if (!BLS.G || G.seq!==BLS.G.seq){
+    const newFrame = !BLS.G || G.round!==BLS.G.round;
+    BLS.G = G; if (newFrame){ BLS.aim={x:0,y:-1}; sfx.blRack(); }
+  }
+  blRender(); blAfter();
+  if (BLS.pending){ const p=BLS.pending; BLS.pending=null; blApplyDoc(p); }
 }
-async function okLeave(){
-  if (OK.mode==='cpu'){ okStartCpu(); return; }
-  if (!OK.G || !OK.doc) return;
-  const G = clone(OK.G); G.seats[OK.me] = {k:'c'};
-  const humans = G.seats.filter(s=>s.k==='h').length;
-  try{ await NET.db.doc('games/'+OK.gid).update({status: humans ? (OK.doc.status) : 'left', G}); }catch(e){ toast(writeErr(e)); }
+async function blLeave(){
+  if (BLS.mode!=='online'){
+    const G=BLS.G;
+    if (G.mode==='practice'){ BLS.G=blNewMatch('practice',1); blRender(); sfx.blRack(); return; }
+    if (G.mode==='time') return blStartSolo('time');
+    return blStartCpu(G.mode);
+  }
+  try{ await NET.db.doc('games/'+BLS.gid).update({status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
   closeGameSub(); show(loggedIn() ? 'lobby' : 'entry');
 }
 
-/* ---------- online invites ---------- */
-let okInvSel = new Set(), okInvRounds = 5;
-function okInvite(fid){
-  okInvSel = new Set(fid ? [fid] : []); okInvRounds = SET.rounds || 5;
-  okDrawInvite(); $('okInvOv').hidden = false;
-}
-function okDrawInvite(){
-  const me=NET.uid, friends=(NET.player.friends||[]).filter(id=>(NET.players[id]?.friends||[]).includes(me));
-  const box=$('okInvList'); box.replaceChildren();
-  if (!friends.length) box.innerHTML='<div class="empty">S’ke shokë të ndërsjellë ende.</div>';
-  friends.forEach(id=>{
-    const l=document.createElement('label'); l.className='chk inv-row';
-    const c=document.createElement('input'); c.type='checkbox'; c.checked=okInvSel.has(id);
-    c.onchange=()=>{ if (c.checked){ if (okInvSel.size>=3){ c.checked=false; return toast('Në tavolinë ka vend për 3 shokë.'); } okInvSel.add(id); } else okInvSel.delete(id); okDrawInviteHint(); };
-    const s=document.createElement('span'); s.textContent=nameOf(id)+(NET.online.has(id)?' · online':'');
-    l.append(c,s); box.append(l);
-  });
-  $('okInvR').replaceChildren(...Array.from({length:10},(_,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=i+1; b.className=i+1===okInvRounds?'on':''; b.onclick=()=>{ okInvRounds=i+1; okDrawInvite(); }; return b; }));
-  okDrawInviteHint();
-}
-function okDrawInviteHint(){ const n=okInvSel.size; $('okInvHint').textContent = n ? `${n} shok${n>1?'ë':''} + ${3-n} CPU në tavolinë.` : 'Zgjidh të paktën një shok.'; $('okInvGo').disabled = !n; }
-async function okSendInvite(){
-  if (!okInvSel.size) return;
-  SET.rounds = okInvRounds; saveSet();
-  const p = [NET.uid, ...okInvSel];
-  try{ await NET.db.collection('games').add({type:'okey', p, acc:{[NET.uid]:true}, status:'invite', rounds:okInvRounds, created:Date.now(), G:null}); $('okInvOv').hidden=true; toast('Ftesat u dërguan.'); }
-  catch(e){ toast(writeErr(e)); }
-}
-async function okAccept(g, yes){
-  try{ await NET.db.doc('games/'+g.id).update({acc:{[NET.uid]:!!yes}}); if (yes) toast(`Prit që ${nameOf(g.p[0])} ta nisë lojën.`); }
-  catch(e){ toast(writeErr(e)); }
-}
-async function okHostStart(g){
-  const acc = g.acc||{};
-  const seats = [0,1,2,3].map(i => (i<g.p.length && (i===0 || acc[g.p[i]]===true)) ? {k:'h', uid:g.p[i]} : {k:'c'});
-  try{ await NET.db.doc('games/'+g.id).update({status:'play', G: okNewMatch(seats, g.rounds||5)}); openOkey(g.id); }
-  catch(e){ toast(writeErr(e)); }
-}
-function chooseGameFor(fid){ $('gtOv').hidden=false; $('gtOv').dataset.fid=fid; }
-
 /* ---------- wiring ---------- */
-$('okRack').addEventListener('pointerdown', okRackDown);
-$('okRack').addEventListener('pointermove', okRackMove);
-$('okRack').addEventListener('pointerup', okRackUp);
-$('okRack').addEventListener('pointercancel', ()=>{ if (okDrag){ okDrag.ghost?.remove(); okDrag.el.style.opacity=''; okDrag=null; } });
-$('okDeck').onclick = () => okHumanDraw('deck');
-$('okDisc3').onclick = () => okHumanDraw('left');
-$('okDisc0').onclick = () => { if (OK.sel) okHumanThrow(); };
-$('okIndWrap').onclick = () => { if (OK.sel && OK.G && OK.G.drawn && OK.G.turn===OK.me) okHumanFinish(); };
-$('okThrow').onclick = () => okHumanThrow();
-$('okClose').onclick = () => okHumanFinish();
-$('okSortRun').onclick = () => okArrange('runs');
-$('okSortPair').onclick = () => okArrange('pairs');
-$('okNext').onclick = okNext;
-$('okSumMenu').onclick = () => { $('okSumOv').hidden=true; $('okBack').onclick(); };
-$('okBack').onclick = () => { clearTimeout(OK.timer); if (OK.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); } else show('entry'); };
-$('okAct').onclick = () => okLeave();
-$('bChat2').onclick = () => { $('chatOv').hidden = false; };
-$('okInvGo').onclick = okSendInvite;
-$('gtPish').onclick = () => { $('gtOv').hidden=true; invitePishpirik($('gtOv').dataset.fid); };
-$('gtOkey').onclick = () => { $('gtOv').hidden=true; okInvite($('gtOv').dataset.fid); };
-window.addEventListener('resize', ()=>{ if (APP.screen==='okey') okRender(); });
-if (location.hostname==='localhost') window.__ok = {OK, okIsWin, okHumanFinish};
+$('blCanvas').addEventListener('pointerdown', blDown);
+$('blCanvas').addEventListener('pointermove', blMove);
+$('blCanvas').addEventListener('pointerup', blUp);
+$('blCanvas').addEventListener('pointercancel', blUp);
+$('blPow').oninput = e => { BLS.power = +e.target.value/100; blDraw(); };
+$('blShoot').onclick = blHumanShoot;
+$('blL').onclick = () => blRotate(-0.4);
+$('blR').onclick = () => blRotate(0.4);
+$('blNext').onclick = blNext;
+$('blSumMenu').onclick = () => { $('blSumOv').hidden=true; $('blBack').onclick(); };
+$('blBack').onclick = () => { clearTimeout(BLS.timer); clearInterval(BLS.tick); if (BLS.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); } else show('entry'); };
+$('blAct').onclick = () => blLeave();
+$('bChat3').onclick = () => { $('chatOv').hidden = false; };
+$('blMoveBalls').onclick = () => { BLS.moveBalls = !BLS.moveBalls; blHud(); };
+$('blRack8').onclick = () => { BLS.G = blNewMatch('practice',1); BLS.G.balls = blRack('8ball'); blRender(); sfx.blRack(); };
+$('blRack9').onclick = () => { BLS.G = blNewMatch('practice',1); BLS.G.balls = blRack('9ball'); blRender(); sfx.blRack(); };
+$('blCueHand').onclick = () => { const G=BLS.G; const c=G.balls.find(b=>b.n===0); if (c.in){ c.in=false; const p=blFreeSpot(G.balls,BL.W/2,BL_HEAD_Y,0); c.x=p.x; c.y=p.y; } G.ballInHand=true; G.bihKitchen=false; blRender(); };
+document.querySelectorAll('#blModeOv [data-mode]').forEach(b=>b.onclick=()=>{ $('blModeOv').hidden=true; const m=b.dataset.mode; (m==='time'||m==='practice') ? blStartSolo(m) : blStartCpu(m); });
+window.addEventListener('resize', ()=>{ if (APP.screen==='bill'){ blFit(); blRender(); } });
+if (location.hostname==='localhost') window.__bl = {BLS, BL, blRack, blSimulate, blResolve, blNewMatch, blCpuPlan, blLowest, blRemaining, blLegalTargets, blHumanShoot};
 
 /* ================= game hub ================= */
 function setGame(g){
   APP.game = g; try{ localStorage.setItem('pishpirik-game', g); }catch(e){}
   document.querySelectorAll('#gameSel button').forEach(b=>{ const on=b.dataset.g===g; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  $('heroH').textContent = g==='okey' ? 'Lojë me gurë' : 'Pishpirik';
-  const fan = $('fan'); fan.replaceChildren();
-  if (g==='okey'){
-    fan.innerHTML = ['r7a','b8a','y9a','Xa'].map(id=>okTileHTML(id,null,false)).join('');
-    fan.querySelectorAll('.tile').forEach(t=>t.style.setProperty('--tw','44px'));
-  } else fan.append(backEl(), cardEl({r:'J',s:'♦',red:1}), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'10',s:'♦',red:1}));
-  $('rulesOkey').hidden = g!=='okey'; $('rulesPish').hidden = g==='okey';
-  $('rulesH').textContent = g==='okey' ? 'Si luhet Loja me gurë' : 'Si luhet Pishpiriku';
-  $('rulesSub').textContent = g==='okey' ? 'Okey klasik: 106 gurë, 4 lojtarë.' : 'Pako me 52 karta, dy lojtarë.';
+  $('heroH').textContent = g==='bill' ? 'Bilardo' : 'Pishpirik';
+  $('fan').hidden = g==='bill'; $('heroBalls').hidden = g!=='bill';
+  $('rulesBill').hidden = g!=='bill'; $('rulesPish').hidden = g==='bill';
+  $('rulesH').textContent = g==='bill' ? 'Si luhet bilardoja' : 'Si luhet Pishpiriku';
+  $('rulesSub').textContent = g==='bill' ? '8-Ball, 9-Ball, Kundër orës dhe Stërvitje.' : 'Pako me 52 karta, dy lojtarë.';
 }
 document.querySelectorAll('#gameSel button').forEach(b=>b.onclick=()=>{ setGame(b.dataset.g); sfx.click(); });
+$('gtPish').onclick = () => { $('gtOv').hidden=true; invitePishpirik($('gtOv').dataset.fid); };
+$('gtB8').onclick = () => { $('gtOv').hidden=true; inviteBill($('gtOv').dataset.fid, '8ball'); };
+$('gtB9').onclick = () => { $('gtOv').hidden=true; inviteBill($('gtOv').dataset.fid, '9ball'); };
 
 /* ================= network: Firebase ================= */
 let FDB=null, AUTH=null;
@@ -2193,9 +2278,8 @@ function startNet(uid){
     const hadAny = Object.keys(NET.prevStatus).length>0;
     list.forEach(g=>{
       const prev = NET.prevStatus[g.id];
-      if (g.type!=='okey' && prev==='invite' && g.status==='play' && g.p[0]===uid && APP.screen!=='game') toast(`${nameOf(g.p[1])} pranoi ftesën. Shtyp Vazhdo.`);
-      if (prev===undefined && hadAny && g.status==='invite' && g.p[0]!==uid){ toast(`${nameOf(g.p[0])} të fton në ${g.type==='okey' ? 'Lojë me gurë' : 'Pishpirik'}.`); sfx.turn(); }
-      if (g.type==='okey' && prev==='invite' && g.status==='play' && g.p[0]!==uid && (g.acc||{})[uid] && APP.screen!=='okey') toast(`${nameOf(g.p[0])} e nisi lojën me gurë. Shtyp Vazhdo.`);
+      if (prev==='invite' && g.status==='play' && g.p[0]===uid && APP.screen!=='game') toast(`${nameOf(g.p[1])} pranoi ftesën. Shtyp Vazhdo.`);
+      if (prev===undefined && hadAny && g.status==='invite' && g.p[1]===uid){ toast(`${nameOf(g.p[0])} të fton në ${g.type==='billiard' ? 'bilardo ('+BL_MODES[g.mode]+')' : 'Pishpirik'}.`); sfx.turn(); }
     });
     NET.prevStatus = Object.fromEntries(list.map(g=>[g.id, g.status])); NET.prevStatus.__='x';
     NET.games = list;
