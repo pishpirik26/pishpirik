@@ -19,7 +19,7 @@ service cloud.firestore {
     // Lojërat: vetëm lojtarët e lojës mund ta lexojnë dhe ta ndryshojnë.
     match /games/{gameId} {
       allow read: if signedIn() && (resource == null || request.auth.uid in resource.data.p);
-      // Pishpirik: 2 lojtarë; Lojë me gurë: deri në 4 (vendet e lira i zë CPU-ja)
+      // 2 deri 4 lojtarë (Pishpirik dhe Poker janë 2 shokë; CPU-të e pokerit nuk janë në listë)
       allow create: if signedIn()
         && request.resource.data.p.size() >= 2
         && request.resource.data.p.size() <= 4

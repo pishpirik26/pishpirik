@@ -1,6 +1,6 @@
 # Kafeneja
 
-Lojëra kafeneje në web: **Pishpirik** (letra) dhe **Bilardo** (8-Ball, 9-Ball, Kundër orës, Stërvitje). Luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online.
+Lojëra kafeneje në web: **Pishpirik** (letra, 1 kundër 1) dhe **Poker** (Texas Hold'em, 2 deri 6 lojtarë). Luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online. Te poker-i online mund të shtoni edhe CPU në tavolinë.
 Faqja rri në **GitHub Pages** (falas), llogaritë dhe lojërat në **Firebase** (falas për shumicën e rasteve).
 
 ## Skedarët
@@ -81,3 +81,5 @@ Authorized domains në Firebase.
 - **Kostoja:** plani falas *Spark* i Firebase mban rreth 50.000 lexime dhe 20.000 shkrime në ditë, mjaft për shumë lojëra mes shokësh.
 - **Mashtrimi:** gjendja e lojës (edhe kartat në dorë) ruhet në dokumentin e lojës, që e lexojnë të dy lojtarët. Dikush që di programim mund t'i shohë kartat e kundërshtarit. Për lojë me të panjohur duhet kalimi i logjikës në server (Cloud Functions).
 - **Online:** pika e gjelbër te shokët tregon kush e ka hapur faqen në 2 minutat e fundit.
+- **Chat:** emoji, fjali të gatshme ose mesazh i shkruar (deri 100 shkronja). Secili lojtar shkruan në fushën e vet, kështu mesazhet nuk humbin.
+- **Vonesa:** çdo lëvizje online shkon telefon → Firebase → telefoni i shokut. Sa më afër të jetë databaza (lokacioni i Firestore), aq më e shpejtë. Lokacioni shihet te Firebase → Firestore Database; nuk mund të ndryshohet pasi krijohet.
