@@ -28,7 +28,7 @@
   --paper:#f5eedd; --paper-ink:#221d14; --paper-line:#d9ccb0; --paper-muted:#6f644d; --danger:#a3141e;
   --ui:'Rubik', system-ui, -apple-system, sans-serif;
   --display:'Fraunces', Georgia, serif;
-  --cw: clamp(54px, 15.5vw, 92px);
+  --cw: clamp(62px, 18vw, 106px);
   --ch: calc(var(--cw) * 1.42);
   color-scheme: dark;
   /* card theme tokens (overwritten by the chosen deck) */
@@ -128,6 +128,7 @@ label.srow{cursor:pointer}
 .sw:checked::after{transform:translateX(18px)}
 .sw:focus-visible{outline:2px solid var(--paper-ink); outline-offset:2px}
 .seg{display:flex; background:#e8dec6; border-radius:999px; padding:3px; gap:2px; flex:none}
+.seg.wrap{flex-wrap:wrap; border-radius:14px; width:100%}
 .seg button{font:600 12.5px var(--ui); border:0; border-radius:999px; padding:7px 11px; background:transparent; color:var(--paper-muted); cursor:pointer}
 .seg button.on{background:var(--paper); color:var(--paper-ink); box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .acc-head{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
@@ -512,8 +513,10 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 
     <div class="sgroup">
       <h3>Zëri</h3>
-      <label class="srow" for="sSound"><span><b>Tingujt</b><small>Kartat, çipat, radha jote</small></span><input type="checkbox" class="sw" id="sSound"></label>
+      <label class="srow" for="sSound"><span><b>Tingujt</b><small>Kartat, radha jote</small></span><input type="checkbox" class="sw" id="sSound"></label>
       <div class="srow"><label for="sVol"><b>Volumi</b></label><input type="range" id="sVol" min="0" max="100" step="5"></div>
+      <div class="srow"><span><b>Stili i tingujve</b><small>Si tingëllojnë kartat</small></span></div>
+      <div class="seg wrap" id="sSoundStyle" role="radiogroup" aria-label="Stili i tingujve"></div>
     </div>
 
     <div class="sgroup">
@@ -644,20 +647,38 @@ window.addEventListener('offline', () => { NET.net = false; if (APP.screen==='ga
 window.addEventListener('online', () => { NET.net = true; if (APP.screen==='game') render(); toast('Lidhja me internetin u rikthye.'); });
 
 /* ================= settings ================= */
-const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal', rounds:5};
+const SET = {sound:true, vol:70, soundStyle:'classic', hints:true, anim:true, level:'normal', rounds:5};
 try{ Object.assign(SET, JSON.parse(localStorage.getItem('pishpirik-settings')||'{}')); }catch(e){}
 function saveSet(){ try{ localStorage.setItem('pishpirik-settings', JSON.stringify(SET)); }catch(e){} }
+function buildSoundStyles(){
+  $('sSoundStyle').replaceChildren(...SND_STYLES.map(s=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent=s.nm; b.dataset.v=s.id; b.setAttribute('role','radio');
+    b.onclick=()=>{ SET.soundStyle=s.id; saveSet(); syncSetUI(); sfx.deal(); };
+    return b;
+  }));
+}
 function syncSetUI(){
   $('sSound').checked = SET.sound; $('sVol').value = SET.vol; $('sVol').disabled = !SET.sound;
   $('sHints').checked = SET.hints; $('sAnim').checked = SET.anim;
   document.querySelectorAll('#sLevel button').forEach(b=>{ const on=b.dataset.v===SET.level; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+  document.querySelectorAll('#sSoundStyle button').forEach(b=>{ const on=b.dataset.v===SET.soundStyle; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
 }
 function openSettings(){ syncSetUI(); renderAccount(); $('setOv').hidden=false; }
 
 /* ================= sounds: real card physics, synthesised (no files) =================
    Every sound is built from filtered noise the way paper cards actually sound:
-   a sharp paper "snap" on top, a muffled thud of the felt underneath, a soft slide before it. */
-const SND = {ctx:null, out:null, bus:null, noise:null};
+   a sharp paper "snap" on top, a muffled thud of the felt underneath, a soft slide before it.
+   SND_STYLES reshapes the same physics into 5 different characters, so there's no separate
+   sound design to keep in sync — each style is just the master filter, room and pitch changed. */
+const SND_STYLES = [
+  {id:'classic', nm:'Klasike',  pitch:1,    bright:7000,  room:.14, gain:1},
+  {id:'soft',    nm:'Të buta',  pitch:.86,  bright:3400,  room:.24, gain:.85},
+  {id:'crisp',   nm:'Kristal',  pitch:1.18, bright:12000, room:.07, gain:1.05},
+  {id:'arcade',  nm:'Arkade',   pitch:1.34, bright:9500,  room:.025, gain:1.15},
+  {id:'quiet',   nm:'Minimale', pitch:.97,  bright:5200,  room:.05, gain:.55},
+];
+const sndStyle = () => SND_STYLES.find(s=>s.id===SET.soundStyle) || SND_STYLES[0];
+const SND = {ctx:null, out:null, bus:null, noise:null, felt:null, wet:null, pitch:1, gain:1};
 function ac(){
   if (!SET.sound || !SET.vol) return null;
   try{
@@ -671,17 +692,22 @@ function ac(){
       SND.out = c.createGain();
       const comp = c.createDynamicsCompressor(); comp.threshold.value=-14; comp.ratio.value=4;
       const felt = c.createBiquadFilter(); felt.type='lowpass'; felt.frequency.value=7000; felt.Q.value=.5;
+      SND.felt = felt;
       SND.bus = c.createGain();
       const room = c.createConvolver(), irLen = Math.floor(c.sampleRate*.28);
       const ir = c.createBuffer(2, irLen, c.sampleRate);
       for (let ch=0; ch<2; ch++){ const x=ir.getChannelData(ch); for (let i=0;i<irLen;i++) x[i]=(Math.random()*2-1)*Math.pow(1-i/irLen, 3.2); }
       room.buffer = ir;
       const wet = c.createGain(); wet.gain.value = .14;
+      SND.wet = wet;
       SND.bus.connect(felt); felt.connect(comp);
       SND.bus.connect(room); room.connect(wet); wet.connect(comp);
       comp.connect(SND.out); SND.out.connect(c.destination);
     }
     if (SND.ctx.state==='suspended') SND.ctx.resume();
+    const st = sndStyle();
+    SND.felt.frequency.value = st.bright; SND.wet.gain.value = st.room;
+    SND.pitch = st.pitch; SND.gain = st.gain;
     SND.out.gain.value = Math.pow(SET.vol/100, 1.4) * 1.1;
     return SND.ctx;
   }catch(e){ return null; }
@@ -690,13 +716,13 @@ const rnd = (a,b) => a + Math.random()*(b-a);
 // one burst of filtered noise with attack/decay envelope
 function grain(c, t, {type='bandpass', f=2000, f2=null, q=.8, att=.002, dec=.04, g=.5, pan=0}){
   const src = c.createBufferSource(); src.buffer = SND.noise;
-  src.playbackRate.value = rnd(.85, 1.15);
+  src.playbackRate.value = rnd(.85, 1.15) * SND.pitch;
   const flt = c.createBiquadFilter(); flt.type = type; flt.Q.value = q;
-  flt.frequency.setValueAtTime(f, t);
-  if (f2) flt.frequency.exponentialRampToValueAtTime(f2, t+att+dec);
+  flt.frequency.setValueAtTime(f * SND.pitch, t);
+  if (f2) flt.frequency.exponentialRampToValueAtTime(f2 * SND.pitch, t+att+dec);
   const env = c.createGain();
   env.gain.setValueAtTime(0.0001, t);
-  env.gain.exponentialRampToValueAtTime(g, t+att);
+  env.gain.exponentialRampToValueAtTime(g * SND.gain, t+att);
   env.gain.exponentialRampToValueAtTime(0.0001, t+att+dec);
   let node = env;
   if (c.createStereoPanner && pan){ const p=c.createStereoPanner(); p.pan.value=pan; env.connect(p); node=p; }
@@ -706,8 +732,9 @@ function grain(c, t, {type='bandpass', f=2000, f2=null, q=.8, att=.002, dec=.04,
 // a low "knock" of a card or knuckle meeting the table
 function thud(c, t, g=.4, f=110){
   const o=c.createOscillator(), e=c.createGain();
+  f *= SND.pitch;
   o.type='sine'; o.frequency.setValueAtTime(f*1.6, t); o.frequency.exponentialRampToValueAtTime(f, t+.04);
-  e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(g, t+.003); e.gain.exponentialRampToValueAtTime(0.0001, t+.09);
+  e.gain.setValueAtTime(0.0001,t); e.gain.exponentialRampToValueAtTime(g * SND.gain, t+.003); e.gain.exponentialRampToValueAtTime(0.0001, t+.09);
   o.connect(e); e.connect(SND.bus); o.start(t); o.stop(t+.12);
 }
 // a card landing on the felt: short slide, paper snap, soft body
@@ -1650,6 +1677,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').
 
 buildTiles();
 buildChat();
+buildSoundStyles();
 initFan();
 loadRemembered();
 syncSetUI();
