@@ -1,6 +1,6 @@
-# Kafeneja
+# Pishpirik
 
-Lojëra kafeneje në web: **Pishpirik** (letra, 1 kundër 1) dhe **Poker** (Texas Hold'em, 2 deri 6 lojtarë). Luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online. Te poker-i online mund të shtoni edhe CPU në tavolinë.
+Loja e letrave **Pishpirik**, 1 kundër 1, në web. Luaj me CPU pa llogari, ose krijo llogari, shto shokë me username dhe luaj me ta online.
 Faqja rri në **GitHub Pages** (falas), llogaritë dhe lojërat në **Firebase** (falas për shumicën e rasteve).
 
 ## Skedarët

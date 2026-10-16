@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="description" content="Kafeneja: Pishpirik dhe Poker. Luaj me shokët online ose me CPU.">
+<meta name="description" content="Pishpirik: lojë kartash shqiptare. Luaj me shokët online ose me CPU.">
 <meta name="theme-color" content="#102b1d">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Kafeneja">
+<meta name="apple-mobile-web-app-title" content="Pishpirik">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}input,textarea{-webkit-user-select:text;user-select:text}img,canvas{-webkit-user-drag:none;user-drag:none}</style>
-<title>Kafeneja</title>
+<title>Pishpirik</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Rubik:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@700&family=Alegreya+SC:wght@700&family=Orbitron:wght@600&family=Poiret+One&family=Bitter:wght@700&family=IBM+Plex+Mono:wght@600&family=Righteous&family=Nunito:wght@800&display=swap">
@@ -87,120 +87,6 @@ header{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-b
 .choice.solid:hover{background:#e6bd66}
 
 
-/* ---------- game switch ---------- */
-.gsel{display:grid; grid-template-columns:1fr 1fr; gap:8px; width:min(440px,100%); margin:0 auto; background:rgba(0,0,0,.22); padding:5px; border-radius:16px}
-.gsel button{display:flex; align-items:center; justify-content:center; gap:10px; font:700 15px var(--ui); color:var(--cream); background:transparent; border:0; border-radius:12px; padding:11px 8px; cursor:pointer}
-.gsel button.on{background:var(--brass); color:#1d1608}
-.gsel button:focus-visible{outline:2px solid var(--cream); outline-offset:2px}
-.mini-card{width:16px; height:22px; border-radius:3px; background:var(--face); color:var(--red); font:700 11px var(--font); display:grid; place-items:center; box-shadow:0 1px 3px rgba(0,0,0,.35)}
-.gt-choices{display:grid; gap:10px}
-.gt-choices button{display:flex; flex-direction:column; gap:3px; text-align:left; font:inherit; color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:14px; padding:14px 16px; cursor:pointer}
-.gt-choices button b{font-family:var(--display); font-size:19px}
-.gt-choices button span{font-size:13px; color:var(--paper-muted)}
-.gt-choices button:hover{border-color:var(--paper-ink)}
-
-/* ---------- poker ---------- */
-.mini-chip{width:20px; height:20px; border-radius:50%; flex:none; background:repeating-conic-gradient(#fbf8ee 0 30deg, #b3212b 30deg 60deg); box-shadow:0 1px 3px rgba(0,0,0,.4); position:relative}
-.mini-chip::after{content:""; position:absolute; inset:4px; border-radius:50%; background:#b3212b; box-shadow:inset 0 0 0 1.5px #fbf8ee}
-.hero-chips{display:flex; gap:4px; align-items:flex-end; margin:-4px 0 4px}
-.hero-chips i{width:30px; height:30px; border-radius:50%; position:relative; box-shadow:0 5px 10px rgba(0,0,0,.4); background:repeating-conic-gradient(#fbf8ee 0 22.5deg, var(--c) 22.5deg 45deg)}
-.hero-chips i::after{content:""; position:absolute; inset:6px; border-radius:50%; background:var(--c); box-shadow:inset 0 0 0 2px rgba(251,248,238,.85)}
-.pk-info{display:flex; justify-content:center; flex-wrap:wrap; gap:4px 12px; font-size:12.5px; color:var(--muted); font-variant-numeric:tabular-nums; min-height:18px}
-.pk-info b{color:var(--cream); font-weight:600}
-body.pk-on .app{height:100vh; height:calc(100svh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height:0}
-#scrPoker{flex:1; min-height:0; gap:10px}
-.pk-stage{flex:1; min-height:0; container-type:size; display:grid; place-items:center}
-.pk-table{position:relative; container-type:inline-size; width:min(100cqw, 175cqh); height:min(100cqh, 175cqw); --sw:84px; --scw:25px}
-.pk-felt{position:absolute; inset:8% 9% 9%; border-radius:999px; background:radial-gradient(ellipse at 50% 38%, #348a60 0%, #23664a 50%, #17462f 100%);
-  box-shadow:0 0 0 8px #6a4521, 0 0 0 11px #3b2410, inset 0 0 0 2px rgba(255,255,255,.06), inset 0 0 44px rgba(0,0,0,.45), 0 18px 40px rgba(0,0,0,.5)}
-.pk-felt::after{content:""; position:absolute; inset:10px; border-radius:999px; border:1.5px solid rgba(216,173,85,.22)}
-.pk-mid{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:84%; display:flex; flex-direction:column; align-items:center; gap:7px; z-index:1}
-.pk-pot{font:600 13.5px var(--ui); background:rgba(0,0,0,.38); border-radius:999px; padding:4px 12px; color:var(--cream); font-variant-numeric:tabular-nums; white-space:nowrap; display:flex; align-items:center; gap:6px}
-.pk-pot:empty{visibility:hidden}
-.pk-board{display:flex; gap:4px; --cw:min(56px, 13.4cqw); --ch:calc(var(--cw) * 1.42)}
-.pk-board .card .cr{font-size:calc(var(--cw) * .27)}
-.pk-board .slot{width:var(--cw); height:var(--ch); border-radius:var(--rad); border:1.5px dashed rgba(239,230,210,.16); box-sizing:border-box}
-.pk-board .card.dim{filter:brightness(.55) saturate(.6)}
-.pk-board .card.hl{box-shadow:0 0 0 2px #ffd36b, 0 0 14px rgba(255,211,107,.7)}
-.pk-board .card.new{animation:pkIn .38s cubic-bezier(.2,1.2,.4,1) both}
-.pk-board .card.new:nth-child(2){animation-delay:.08s} .pk-board .card.new:nth-child(3){animation-delay:.16s}
-@keyframes pkIn{0%{transform:translateY(-14px) rotateY(80deg) scale(.8); opacity:0} 100%{transform:none; opacity:1}}
-.pk-note{font-size:13px; color:var(--cream); text-align:center; min-height:18px; text-shadow:0 1px 3px rgba(0,0,0,.7); font-weight:500; max-width:100%}
-.pk-note .btn{margin-top:4px; padding:7px 12px}
-.pk-seat{position:absolute; transform:translate(-50%,-50%); width:var(--sw); display:flex; flex-direction:column; align-items:center; z-index:2}
-.pk-sc{display:flex; justify-content:center; height:calc(var(--scw) * 1.42); margin-bottom:-8px; position:relative; z-index:0}
-.pk-sc:empty{height:0; margin:0}
-.pkc{width:var(--scw); height:calc(var(--scw) * 1.42); border-radius:4px; box-sizing:border-box; background:var(--face); color:var(--ink); border:1px solid var(--bd); box-shadow:0 2px 5px rgba(0,0,0,.35);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:.95; font:var(--fw) calc(var(--scw) * .5)/1 var(--font); text-shadow:var(--glow)}
-.pkc.r{color:var(--red)}
-.pkc i{font-style:normal; font-size:.82em; font-family:"Segoe UI Symbol","DejaVu Sans","Apple Symbols",sans-serif}
-.pkc + .pkc{margin-left:-6px; transform:rotate(7deg) translateY(1px)}
-.pkc:first-child:not(:last-child){transform:rotate(-6deg)}
-.pkc.back{background:var(--back-edge); padding:2px}
-.pkc.back::before{content:""; width:100%; height:100%; border-radius:2.5px; background:var(--back); box-shadow:inset 0 0 0 1px var(--back-frame)}
-.pkc.hl{box-shadow:0 0 0 2px #ffd36b, 0 0 10px rgba(255,211,107,.8)}
-.pk-box{position:relative; z-index:1; width:100%; box-sizing:border-box; background:rgba(9,22,15,.86); border:1.5px solid rgba(216,173,85,.32); border-radius:11px; padding:5px 6px 4px; text-align:center; display:flex; flex-direction:column; gap:1px; transition:box-shadow .2s, border-color .2s}
-.pk-nm{font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.pk-ch{font-size:12.5px; color:var(--brass); font-variant-numeric:tabular-nums; font-weight:600}
-.pk-seat.turn .pk-box{border-color:var(--brass); box-shadow:0 0 0 2px rgba(216,173,85,.55), 0 0 18px rgba(216,173,85,.55)}
-.pk-seat.turn .pk-box::after{content:""; position:absolute; left:8px; right:8px; bottom:-1.5px; height:2px; border-radius:2px; background:var(--brass); animation:pkThink 1.1s ease-in-out infinite}
-@keyframes pkThink{0%,100%{opacity:.25} 50%{opacity:1}}
-.pk-seat.fold{opacity:.5}
-.pk-seat.out{opacity:.32}
-.pk-seat.win .pk-box{border-color:#ffd36b; box-shadow:0 0 0 2px rgba(255,211,107,.6), 0 0 22px rgba(255,211,107,.6)}
-.pk-seat.me .pk-box{background:rgba(40,28,8,.88)}
-.pk-tag{margin-top:3px; font:700 10.5px/1.25 var(--ui); padding:2px 7px; border-radius:999px; background:#efe6d2; color:#1d1608; max-width:calc(var(--sw) + 24px); text-align:center; box-shadow:0 2px 5px rgba(0,0,0,.3)}
-.pk-tag:empty{display:none}
-.pk-tag.t-fold{background:#6b6b62; color:#efe6d2}
-.pk-tag.t-raise,.pk-tag.t-bet{background:var(--brass)}
-.pk-tag.t-all-in{background:#c0262d; color:#fff}
-.pk-tag.t-hand{background:#ffd36b}
-.pk-d{position:absolute; top:calc(var(--scw) * 1.42 - 14px); right:-9px; width:19px; height:19px; border-radius:50%; background:#fbf8ee; color:#1d1608; font:800 10.5px/19px var(--ui); text-align:center; box-shadow:0 2px 5px rgba(0,0,0,.45); z-index:3}
-.pk-sc:empty ~ .pk-d{top:-8px}
-.pk-won{position:absolute; left:50%; top:-6px; transform:translateX(-50%); font:800 15px var(--ui); color:#ffd36b; text-shadow:0 2px 6px rgba(0,0,0,.8); white-space:nowrap; animation:pkWon 2.6s ease-out both; z-index:4; pointer-events:none}
-@keyframes pkWon{0%{opacity:0; transform:translate(-50%,8px)} 15%{opacity:1; transform:translate(-50%,-6px)} 80%{opacity:1} 100%{opacity:0; transform:translate(-50%,-22px)}}
-.pk-bet{position:absolute; transform:translate(-50%,-50%); display:flex; align-items:center; gap:5px; font:700 12.5px var(--ui); color:var(--cream); background:rgba(0,0,0,.42); border-radius:999px; padding:3px 9px 3px 4px; font-variant-numeric:tabular-nums; z-index:1; white-space:nowrap; animation:pkPop .25s ease-out both}
-.pk-bet .mini-chip{width:15px; height:15px}
-.pk-bet .mini-chip::after{inset:3px}
-@keyframes pkPop{0%{transform:translate(-50%,-50%) scale(.6); opacity:0} 100%{transform:translate(-50%,-50%) scale(1); opacity:1}}
-#pkBubbles{position:absolute; inset:0; pointer-events:none; z-index:6}
-.pk-bhost{position:absolute; width:0; height:0}
-.pk-bhost .bubble{bottom:44px; top:auto; max-width:min(64vw, 240px)}
-.pk-bhost.top .bubble{top:46px; bottom:auto}
-.pk-bhost.me .bubble{bottom:calc(min(62px, 17.5cqw) * 1.42 + 52px)}
-.pk-seat.me{transform:translate(-50%,-100%)}
-.pk-seat.me .pk-sc{height:auto; gap:5px; margin-bottom:-12px; --cw:min(62px, 17.5cqw); --ch:calc(var(--cw) * 1.42)}
-.pk-seat.me .pk-sc .card:first-child{transform:rotate(-5deg)} .pk-seat.me .pk-sc .card:nth-child(2){transform:rotate(5deg) translateY(2px)}
-.pk-seat.me .pk-sc .card.hl{box-shadow:0 0 0 2px #ffd36b, 0 0 14px rgba(255,211,107,.7)}
-.pk-seat.me .pk-sc .card.dim{filter:brightness(.55) saturate(.6)}
-.pk-seat.me .pk-d{top:auto; bottom:26px; right:-12px}
-.pk-seat.me .pk-tag{max-width:none; white-space:nowrap}
-.pk-seat.me.turn .pk-sc .card{box-shadow:0 0 0 2px rgba(216,173,85,.85), 0 6px 16px rgba(0,0,0,.45)}
-.pk-actions{display:grid; grid-template-columns:1fr 1.25fr 1.25fr auto; gap:8px; align-items:center}
-.pk-actions .btn{padding:13px 8px; font-size:15px; min-height:48px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.pk-actions .btn[disabled]{opacity:.38}
-.pk-actions #pkFold:not([disabled]){border-color:rgba(239,230,210,.5)}
-.pk-actions #pkRaiseX,.pk-actions #pkAmt{display:none}
-.pk-actions.raising{grid-template-columns:auto 1fr 1.3fr auto}
-.pk-actions.raising #pkFold,.pk-actions.raising #pkCall{display:none}
-.pk-actions.raising #pkRaiseX{display:block; width:48px; padding:0}
-.pk-actions.raising #pkAmt{display:block; width:100%; min-width:0; accent-color:var(--brass); height:32px; margin:0}
-.chat-fab.inline{position:static; width:48px; height:48px; box-shadow:0 0 0 2px var(--back-frame), 0 4px 10px rgba(0,0,0,.35)}
-.pk-quick{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:6px}
-.pk-quick .btn{padding:9px 4px; font-size:13.5px}
-.pk-n{grid-template-columns:repeat(5, minmax(0,1fr))}
-.pk-lbl{font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--paper-muted); margin:14px 0 8px; font-weight:600}
-.pk-lbl:first-of-type{margin-top:4px}
-.pk-seg{display:flex; width:fit-content}
-.pk-place{font-family:var(--display); font-weight:700}
-.tally tr.me td{font-weight:700}
-@media (min-width:700px){
-  .pk-table{--sw:112px; --scw:32px}
-  .pk-seat.me .pk-sc{--cw:min(70px, 9cqw)}
-  .pk-board{--cw:min(64px, 8.2cqw)}
-  .pk-nm{font-size:13px} .pk-ch{font-size:13.5px}
-}
-@media (max-height:700px){ #scrPoker .gbar .btn{padding:7px 12px} .pk-actions .btn{min-height:44px; padding:10px 6px} .chat-fab.inline{width:44px; height:44px} }
 /* chat: write your own */
 .chat-form{display:flex; flex-direction:row; gap:8px; margin-bottom:6px}
 .chat-form input{flex:1; min-width:0; font:16px var(--ui); color:var(--paper-ink); background:#fffaf0; border:1.5px solid var(--paper-line); border-radius:999px; padding:10px 14px}
@@ -211,7 +97,6 @@ body.pk-on .app{height:100vh; height:calc(100svh - env(safe-area-inset-top, 0px)
 .chat-log p.me{align-self:flex-end; background:var(--paper-ink); color:var(--paper); border-radius:14px 14px 4px 14px}
 .chat-log p small{display:block; font-size:11px; font-weight:600; opacity:.7; margin-bottom:1px}
 .bubble.txt{font-size:14px; font-weight:500; text-align:left; overflow-wrap:anywhere; animation-duration:4.3s}
-#pkSumTable th:nth-child(2),#pkSumTable td:nth-child(2){text-align:left}
 
 /* ---------- paper panels (auth, lobby) ---------- */
 .panel{background:var(--paper); color:var(--paper-ink); border-radius:16px; padding:20px; box-sizing:border-box; min-width:0}
@@ -322,6 +207,13 @@ input:focus{border-color:var(--paper-ink); outline:none}
 .chip b{color:var(--cream); font-weight:600}
 .chip.pis{background:rgba(216,173,85,.18); color:var(--brass)}
 .chip.pis b{color:var(--brass)}
+button.cap-chip{font:inherit; border:1px solid rgba(239,230,210,.22); color:inherit; cursor:pointer}
+button.cap-chip:not([disabled]):hover{background:rgba(0,0,0,.4); border-color:rgba(239,230,210,.4)}
+button.cap-chip[disabled]{cursor:default; opacity:.6}
+.cap-grid{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; --cw:46px; --ch:calc(var(--cw) * 1.42)}
+.cap-grid .card{width:var(--cw); height:var(--ch)}
+.cap-grid .card .cr{font-size:calc(var(--cw) * .27)}
+.cap-grid:empty::after{content:"Ende s'ka marrë asnjë kartë."; color:var(--paper-muted); font-size:13.5px}
 .hand{display:flex; justify-content:center; gap:8px; min-height:var(--ch)}
 .opp .hand{gap:0}
 .opp .hand .card + .card{margin-left:calc(var(--cw) * -0.55)}
@@ -505,7 +397,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 <div class="upd-bar" id="updBar" hidden>Ka një version të ri të Kafenejës. <button type="button" id="updBtn">Rifresko tani</button></div>
 <div class="app">
   <header>
-    <button class="brand" id="bHome" type="button" aria-label="Kafeneja, kthehu në hyrje">Kafeneja</button>
+    <button class="brand" id="bHome" type="button" aria-label="Pishpirik, kthehu në hyrje">Pishpirik</button>
     <button class="gear" id="bSet" type="button" aria-label="Cilësimet" title="Cilësimet">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 2.8l1.6 2.3 2.7-.6.6 2.7 2.4 1.4-1.1 2.5 1.1 2.5-2.4 1.4-.6 2.7-2.7-.6L12 21.2l-1.6-2.3-2.7.6-.6-2.7-2.4-1.4 1.1-2.5-1.1-2.5 2.4-1.4.6-2.7 2.7.6z"/>
@@ -516,13 +408,8 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 
   <!-- ENTRY -->
   <section class="screen" id="scrEntry">
-    <div class="gsel" id="gameSel" role="tablist" aria-label="Zgjidh lojën">
-      <button type="button" data-g="pishpirik" role="tab"><span class="mini-card">J</span>Pishpirik</button>
-      <button type="button" data-g="poker" role="tab"><span class="mini-chip"></span>Poker</button>
-    </div>
     <div class="hero">
       <div class="fan" id="fan"></div>
-      <div class="hero-chips" id="heroChips" hidden aria-hidden="true"><i style="--c:#b3212b"></i><i style="--c:#1f4fbf"></i><i style="--c:#14804a"></i><i style="--c:#141414"></i></div>
       <h1 id="heroH">Pishpirik</h1>
       <p>Kyçu për të luajtur me shokët, ose luaj me CPU pa llogari.</p>
     </div>
@@ -616,39 +503,6 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     </button>
   </section>
 
-  <!-- POKER -->
-  <section class="screen" id="scrPoker" hidden>
-    <div class="gbar">
-      <button class="btn" type="button" id="pkBack">← Menyja</button>
-      <span class="mode" id="pkMode"></span>
-      <button class="btn" type="button" id="pkAct"></button>
-    </div>
-    <div class="pk-info" id="pkInfo"></div>
-    <div class="pk-stage">
-      <div class="pk-table" id="pkTable">
-        <div class="pk-felt"></div>
-        <div class="pk-mid"><div class="pk-pot" id="pkPot"></div><div class="pk-board" id="pkBoard"></div><div class="pk-note" id="pkNote" role="status"></div></div>
-        <div id="pkSeats"></div>
-        <div id="pkBubbles" aria-live="polite"></div>
-      </div>
-    </div>
-    <div class="pk-quick" id="pkQuick" hidden>
-      <button class="btn" type="button" data-q="min">Min</button><button class="btn" type="button" data-q="half">½ Pot</button><button class="btn" type="button" data-q="pot">Pot</button><button class="btn" type="button" data-q="all">All-in</button>
-    </div>
-    <div class="pk-actions" id="pkActs">
-      <button class="btn" type="button" id="pkFold">Fold</button>
-      <button class="btn" type="button" id="pkCall">Check</button>
-      <button class="btn" type="button" id="pkRaiseX" aria-label="Anulo ngritjen">✕</button>
-      <input type="range" id="pkAmt" aria-label="Sa çipa">
-      <button class="btn primary" type="button" id="pkRaise">Raise</button>
-      <button class="chat-fab inline" id="pkChat" type="button" aria-label="Chat" title="Chat">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 5.5h16v10H9.5L5 19.5v-4H4z"/><circle cx="9" cy="10.5" r=".6" fill="currentColor"/><circle cx="12" cy="10.5" r=".6" fill="currentColor"/><circle cx="15" cy="10.5" r=".6" fill="currentColor"/>
-        </svg>
-      </button>
-    </div>
-  </section>
-
 </div>
 
 <div class="overlay" id="setOv" hidden>
@@ -664,7 +518,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 
     <div class="sgroup">
       <h3>Loja</h3>
-      <label class="srow" for="sHints"><span><b>Ndihma</b><small>Te Pishpiriku ndriço kartat që marrin, te Pokeri trego çfarë dore ke</small></span><input type="checkbox" class="sw" id="sHints"></label>
+      <label class="srow" for="sHints"><span><b>Ndihma</b><small>Ndriço kartat që marrin</small></span><input type="checkbox" class="sw" id="sHints"></label>
       <label class="srow" for="sAnim"><span><b>Animacionet</b><small>Kartat fluturojnë dhe hapen me lëvizje</small></span><input type="checkbox" class="sw" id="sAnim"></label>
       <div class="srow"><span><b>Niveli i CPU</b><small>Sa mirë luan kompjuteri</small></span>
         <div class="seg" id="sLevel" role="radiogroup" aria-label="Niveli i CPU">
@@ -691,15 +545,6 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   <div class="sheet" role="dialog" aria-labelledby="rulesH">
     <h2 id="rulesH">Si luhet Pishpiriku</h2>
     <p class="sub" id="rulesSub">Pako me 52 karta, dy lojtarë.</p>
-    <ol class="rules" id="rulesPoker" hidden>
-      <li>Secili merr 2 karta që i sheh vetëm vetë. Në mes hapen 5 karta të përbashkëta: 3 njëherësh (flop), pastaj 1 (turn), pastaj 1 (river).</li>
-      <li>Dora jote është 5 kartat më të mira nga 7: dy tuat dhe pesë në mes.</li>
-      <li>Dy lojtarët pas dealerit (<b>D</b>) vënë blinds, të voglin dhe të madhin. Blinds rriten pas disa duarsh, kështu loja nuk zgjat pafund.</li>
-      <li>Në radhën tënde: <b>Fold</b> heq dorë, <b>Check</b> kalon pa vënë asgjë, <b>Call</b> barazon bastin, <b>Bet/Raise</b> ngre bastin, <b>All-in</b> i vë të gjitha çipat.</li>
-      <li>Nga më e forta: Royal flush, Kentë ngjyrë (5 me radhë të një shenje), Poker (4 të njëjta), Ful (3 + 2), Ngjyrë (5 të një shenje), Kentë (5 me radhë), Treshe, Dy çifte, Çift, Letër e lartë.</li>
-      <li>Kush ka dorën më të mirë në fund e merr potin. Kur dikush shkon all-in, ai mund të fitojë vetëm aq sa ka vënë vetë nga secili.</li>
-      <li>Kush mbetet pa çipa del nga loja. Fiton kush mbetet i fundit me çipa.</li>
-    </ol>
     <ol class="rules" id="rulesPish">
       <li>Secili merr 4 karta. Në mes vendosen 4 karta, por duket vetëm e sipërmja.</li>
       <li>Me radhë hidhni nga një kartë mbi grumbull. Nëse karta jote ka të njëjtin numër me kartën e sipërme, e merr gjithë grumbullin.</li>
@@ -735,40 +580,11 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   </div>
 </div>
 
-
-<div class="overlay" id="gtOv" hidden>
-  <div class="sheet" role="dialog" aria-labelledby="gtH" style="width:min(420px,100%)">
-    <h2 id="gtH">Në cilën lojë?</h2>
-    <p class="sub" id="gtSub">Zgjidh lojën për ftesën.</p>
-    <div class="gt-choices">
-      <button type="button" id="gtPish"><b>Pishpirik</b><span>Lojë me letra, 1 kundër 1</span></button>
-      <button type="button" id="gtPoker"><b>Poker</b><span>Texas Hold'em, mund të shtosh edhe CPU në tavolinë</span></button>
-    </div>
-    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="pkSetOv" hidden>
-  <div class="sheet" role="dialog" aria-labelledby="pkSetH" style="width:min(440px,100%)">
-    <h2 id="pkSetH">Poker me CPU</h2>
-    <p class="sub" id="pkSetSub">Texas Hold'em. Secili fillon me 1000 çipa.</p>
-    <h3 class="pk-lbl" id="pkOppLbl">Sa kundërshtarë?</h3>
-    <div class="rgrid pk-n" id="pkOpp"></div>
-    <h3 class="pk-lbl">Blinds rriten</h3>
-    <div class="seg pk-seg" id="pkSpeed" role="radiogroup" aria-label="Sa shpejt rriten blinds">
-      <button type="button" data-v="slow" role="radio">Ngadalë</button><button type="button" data-v="normal" role="radio">Normal</button><button type="button" data-v="fast" role="radio">Shpejt</button>
-    </div>
-    <p class="rhint" id="pkSetHint"></p>
-    <div class="row-end"><button class="btn" type="button" data-close>Anulo</button><button class="btn primary" type="button" id="pkSetGo">Fillo</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="pkSumOv" hidden>
-  <div class="sheet" role="dialog" aria-labelledby="pkSumH" style="width:min(460px,100%)">
-    <h2 id="pkSumH"></h2>
-    <p class="sub" id="pkSumSub"></p>
-    <table class="tally" id="pkSumTable"></table>
-    <div class="row-end"><button class="btn" type="button" id="pkSumMenu">Menyja</button><button class="btn primary" type="button" id="pkAgain">Lojë e re</button></div>
+<div class="overlay" id="capOv" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="capH">
+    <h2 id="capH">Kartat e marra</h2>
+    <div class="cap-grid" id="capGrid"></div>
+    <div class="row-end"><span></span><button class="btn primary" type="button" data-close>Mbyll</button></div>
   </div>
 </div>
 
@@ -821,14 +637,14 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let S = null;                       // the game state on screen
-const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, game:(()=>{ try{ return localStorage.getItem('pishpirik-game')==='poker' ? 'poker' : 'pishpirik'; }catch(e){ return 'pishpirik'; } })()};
+const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false};
 const NET = {chatSeen:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
              gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}, net:navigator.onLine};
-window.addEventListener('offline', () => { NET.net = false; if (APP.screen==='game') render(); if (APP.screen==='poker') pkRender(); });
-window.addEventListener('online', () => { NET.net = true; if (APP.screen==='game') render(); if (APP.screen==='poker') pkRender(); toast('Lidhja me internetin u rikthye.'); });
+window.addEventListener('offline', () => { NET.net = false; if (APP.screen==='game') render(); });
+window.addEventListener('online', () => { NET.net = true; if (APP.screen==='game') render(); toast('Lidhja me internetin u rikthye.'); });
 
 /* ================= settings ================= */
-const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal', rounds:5, pkOpp:3, pkCpus:1, pkSpeed:'normal'};
+const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal', rounds:5};
 try{ Object.assign(SET, JSON.parse(localStorage.getItem('pishpirik-settings')||'{}')); }catch(e){}
 function saveSet(){ try{ localStorage.setItem('pishpirik-settings', JSON.stringify(SET)); }catch(e){} }
 function syncSetUI(){
@@ -948,25 +764,6 @@ const sfx = {
     grain(c, t+.42, {type:'lowpass', f:420, q:.9, att:.002, dec:.08, g:.3}); thud(c, t+.42, .14, 80);
   },
   click(){ const c=ac(); if(!c) return; flick(c, c.currentTime+.005, 0, .22); },
-  flip(n=1){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                             // board cards turned over
-    for (let i=0;i<n;i++){ flick(c, t+i*.11, rnd(-.2,.2), .28); grain(c, t+i*.11+.03, {type:'lowpass', f:480, q:.8, att:.002, dec:.04, g:.2}); }
-  },
-  chips(n=4){ const c=ac(); if(!c) return; const t=c.currentTime+.005;                           // clay chips clicking onto each other
-    for (let i=0;i<n;i++){ const tt=t+i*rnd(.035,.06), g=.3*(1-i*.08);
-      grain(c, tt, {f:rnd(3600,5200), q:7, att:.0006, dec:rnd(.02,.035), g, pan:rnd(-.2,.2)});
-      grain(c, tt, {type:'highpass', f:6200, q:.7, att:.0005, dec:.008, g:g*.45}); }
-    thud(c, t+.01, .07, 170);
-  },
-  pkCheck(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                             // knuckles on the felt
-    [0,.11].forEach(d=>{ grain(c, t+d, {type:'lowpass', f:360, q:1, att:.002, dec:.05, g:.3}); thud(c, t+d, .22, 82); });
-  },
-  pkFold(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                              // cards pushed away
-    grain(c, t, {f:2600, f2:900, q:.6, att:.03, dec:.14, g:.15}); grain(c, t+.13, {type:'lowpass', f:500, q:.8, att:.002, dec:.05, g:.18});
-  },
-  pkPot(){ const c=ac(); if(!c) return; const t=c.currentTime+.01;                               // the pot pulled in
-    grain(c, t, {f:1700, f2:600, q:.5, att:.06, dec:.28, g:.12});
-    for (let i=0;i<10;i++) grain(c, t+.1+i*rnd(.03,.05), {f:rnd(3400,5200), q:6, att:.0006, dec:.03, g:.22*(1-i*.05), pan:rnd(-.3,.3)});
-  },
 };
 
 
@@ -1156,9 +953,13 @@ function render(){
   renderPile(S.pile);
   $('roundLbl').textContent = '';
   [[me,'stats0'],[op,'stats1']].forEach(([k,id])=>{
-    const parts = [`<span class="chip">Mori <b>${S.cap[k].length}</b> karta</span>`];
-    if (S.pisN[k]) parts.push(`<span class="chip pis">Pishpirik ×<b>${S.pisN[k]}</b> · +${S.pis[k]}</span>`);
-    $(id).innerHTML = parts.join('');
+    const box = $(id); box.replaceChildren();
+    const cap = document.createElement('button');
+    cap.type = 'button'; cap.className = 'chip cap-chip'; cap.disabled = !S.cap[k].length;
+    cap.innerHTML = `Mori <b>${S.cap[k].length}</b> karta`;
+    cap.onclick = () => showCaptured(k);
+    box.append(cap);
+    if (S.pisN[k]){ const p=document.createElement('span'); p.className='chip pis'; p.innerHTML=`Pishpirik ×<b>${S.pisN[k]}</b> · +${S.pis[k]}`; box.append(p); }
   });
   setMsg(msgFor(S), false);
   if (APP.mode==='cpu'){
@@ -1171,6 +972,12 @@ function render(){
   }
 }
 function setMsg(t, wait){ const m=$('msg'); m.textContent=t; m.classList.toggle('wait', !!wait); }
+function showCaptured(k){
+  if (!S || !S.cap[k].length) return;
+  $('capH').textContent = k===APP.me ? 'Kartat e tua' : `Kartat e ${APP.mode==='cpu' ? 'kompjuterit' : APP.oppName}`;
+  $('capGrid').replaceChildren(...S.cap[k].map(c=>cardEl(c)));
+  $('capOv').hidden = false;
+}
 
 async function fly(fromEl, card){
   if (!fromEl || !SET.anim || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1271,10 +1078,10 @@ async function nextRound(){
 }
 
 /* ================= local (CPU) play ================= */
-function startCpu(){ if (APP.game==='poker') return pkPickSetup('cpu'); pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
+function startCpu(){ pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
 function startCpuWith(rounds){
-  closeGameSub(); pkStop();
-  APP.mode='cpu'; setGame('pishpirik'); APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false; CHATLOG.length=0; lastSumKey='';
+  closeGameSub();
+  APP.mode='cpu'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false; CHATLOG.length=0; lastSumKey='';
   S = newMatch(rounds);
   show('game'); render(); afterState(); sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); maybeAi();
 }
@@ -1311,9 +1118,7 @@ async function humanPlay(i){
 /* ================= screens ================= */
 function show(name){
   APP.screen = name;
-  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame'],['poker','scrPoker']]) $(id).hidden = k!==name;
-  document.body.classList.toggle('pk-on', name==='poker');
-  if (name!=='poker'){ pkStop(); $('pkSumOv').hidden = true; $('pkQuick').hidden = true; $('pkActs').classList.remove('raising'); }
+  for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame']]) $(id).hidden = k!==name;
   $('chatOv').hidden = true;
   if (name!=='game') $('sumOv').hidden = true;
   if (name==='entry') renderEntry();
@@ -1493,7 +1298,7 @@ async function setFriends(list){
   await NET.db.doc('players/'+NET.uid).update({friends:list});
   renderLobby();
 }
-function invite(fid){ chooseGame('invite', fid); }
+function invite(fid){ invitePishpirik(fid); }
 function invitePishpirik(fid){
   const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play') && !g.type);
   if (live){ if (live.status==='play') return openGame(live.id); return toast(live.p[1]===NET.uid ? `${nameOf(fid)} të ka ftuar tashmë në Pishpirik. Prano ftesën lart.` : 'Ke tashmë një ftesë për Pishpirik me '+nameOf(fid)+'.'); }
@@ -1507,14 +1312,9 @@ async function acceptInvite(g){
   if (accepting.has(g.id)) return;          // a double tap must not deal two different games
   accepting.add(g.id);
   try{
-    if (g.type==='poker'){
-      await NET.db.doc('games/'+g.id).set({type:'poker', p:g.p, status:'play', cpus:g.cpus||0, speed:g.speed||'normal', created:g.created, G:pkMatchFor(g)});
-      pkOpen(g.id);
-    } else {
-      const G = newMatch(g.rounds||5); G.nonce = rid();
-      await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G});
-      openGame(g.id);
-    }
+    const G = newMatch(g.rounds||5); G.nonce = rid();
+    await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G});
+    openGame(g.id);
   }catch(e){ toast(writeErr(e)); }
   setTimeout(()=>accepting.delete(g.id), 4000);
 }
@@ -1552,11 +1352,12 @@ function renderLobby(){
     acts.push(btn('Hiq', ()=>setFriends(friends.filter(x=>x!==id)).catch(e=>toast(writeErr(e)))));
     fl.append(rowEl(nameOf(id), mutual ? (on ? 'Online tani' : 'Shok') : 'Në pritje që të të shtojë', acts, on));
   });
+  const retired = t => t==='billiard' || t==='poker';
   const inv = NET.games.filter(g=>g.status==='invite' && g.p[1]===me);
   $('invSec').hidden = !inv.length;
-  $('invList').replaceChildren(...inv.map(g=>g.type==='billiard'
-    ? rowEl(nameOf(g.p[0]), 'Bilardo, kjo lojë nuk ekziston më', [btn('Fshi', ()=>dropGame(g))], NET.online.has(g.p[0]))
-    : rowEl(nameOf(g.p[0]), g.type==='poker' ? `Poker · ${g.cpus ? 'me '+g.cpus+' CPU' : '1 kundër 1'}` : `Pishpirik · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
+  $('invList').replaceChildren(...inv.map(g=>retired(g.type)
+    ? rowEl(nameOf(g.p[0]), 'Kjo lojë nuk ekziston më', [btn('Fshi', ()=>dropGame(g))], NET.online.has(g.p[0]))
+    : rowEl(nameOf(g.p[0]), `Pishpirik · ${g.rounds||5} raunde`, [btn('Prano', ()=>acceptInvite(g), true), btn('Refuzo', ()=>dropGame(g))], NET.online.has(g.p[0]))));
   const gl = $('gmList'); gl.replaceChildren();
   const mine = NET.games.filter(g=>!(g.status==='invite' && g.p[1]===me)).sort((a,b)=>(b.created||0)-(a.created||0));
   if (!mine.length) gl.innerHTML = '<div class="empty">Asnjë lojë ende. Fto një shok nga lista.</div>';
@@ -1564,32 +1365,27 @@ function renderLobby(){
     const opp = g.p[0]===me ? g.p[1] : g.p[0];
     const i = g.p.indexOf(me), G = g.G;
     let st='', acts=[];
-    const pk = g.type==='poker';
-    if (g.type==='billiard'){ st='Bilardoja u hoq nga Kafeneja'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-    else if (g.status==='invite'){ st = pk ? 'Ftesa për poker u dërgua, në pritje' : `Ftesa u dërgua (${g.rounds||5} raunde), në pritje`; acts=[btn('Anulo', ()=>dropGame(g))]; }
+    if (retired(g.type)){ st='Kjo lojë nuk ekziston më'; acts=[btn('Fshi', ()=>dropGame(g))]; }
+    else if (g.status==='invite'){ st = `Ftesa u dërgua (${g.rounds||5} raunde), në pritje`; acts=[btn('Anulo', ()=>dropGame(g))]; }
     else if (g.status==='play'){
-      if (pk){ const k = G ? G.pl.findIndex(p=>p.h===i) : -1;
-        st = G && k>=0 ? `Dora ${G.hand} · ${G.pl[k].chips>0 ? fmt(G.pl[k].chips)+' çipa' : 'je jashtë'}` + (G.phase==='play' && G.toAct===k ? ' · Radha jote' : '') : 'Në lojë'; }
-      else st = G ? `${winsOf(G)[i]} – ${winsOf(G)[1-i]} · raundi ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë';
+      st = G ? `${winsOf(G)[i]} – ${winsOf(G)[1-i]} · raundi ${Math.min(G.round,roundsOf(G))}/${roundsOf(G)}` + (G.phase==='play' && G.turn===i ? ' · Radha jote' : '') : 'Në lojë';
       acts=[btn('Vazhdo', ()=>openGameOf(g), true)];
     }
     else if (g.status==='over' && G){
-      if (pk){ const k = G.pl.findIndex(p=>p.h===i), pl = pkStandings(G).indexOf(k)+1; st = pl===1 ? 'Fitove' : `Përfundove ${PK_ORD[pl-1] || pl+'-i'} nga ${G.pl.length}`; }
-      else { const Wg=winsOf(G); st=`${Wg[i]>Wg[1-i]?'Fitove':Wg[i]<Wg[1-i]?'Humbe':'Barazim'} ${Wg[i]} – ${Wg[1-i]} në raunde`; }
+      const Wg=winsOf(G); st=`${Wg[i]>Wg[1-i]?'Fitove':Wg[i]<Wg[1-i]?'Humbe':'Barazim'} ${Wg[i]} – ${Wg[1-i]} në raunde`;
       acts=[btn('Shiko', ()=>openGameOf(g)), btn('Fshi', ()=>dropGame(g))];
     }
     else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-    gl.append(rowEl((pk ? '♠️ ' : g.type==='billiard' ? '🎱 ' : '🃏 ') + nameOf(opp), st, acts, NET.online.has(opp)));
+    gl.append(rowEl('🃏 ' + nameOf(opp), st, acts, NET.online.has(opp)));
   });
 }
 
 /* ================= online game ================= */
 function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null; } NET.gameId=null; NET.gameDoc=null; NET.pending=null; }
-function openGameOf(g){ if (g.type==='poker') pkOpen(g.id); else if (g.type!=='billiard') openGame(g.id); }
+function openGameOf(g){ if (g.type!=='billiard' && g.type!=='poker') openGame(g.id); }
 function openGame(gid){
-  const gg = NET.games.find(x=>x.id===gid); if (gg && gg.type==='poker') return pkOpen(gid);
-  closeGameSub(); pkStop();
-  APP.mode='online'; setGame('pishpirik'); APP.busy=false; S=null; NET.gameId=gid; NET.chatSeen=null; CHATLOG.length=0; lastSumKey='';
+  closeGameSub();
+  APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid; NET.chatSeen=null; CHATLOG.length=0; lastSumKey='';
   $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
   show('game');
   NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(onGameSnap, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
@@ -1625,9 +1421,7 @@ async function recordResult(d){
   const i = d.p.indexOf(NET.uid); if (i<0) return;
   const res = NET.player.results || {};
   if (res[NET.gameId]) return;
-  let r;
-  if (d.type==='poker') r = pkResultFor(d.G, i);
-  else { const Wd = winsOf(d.G); r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd'; }
+  const Wd = winsOf(d.G); const r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd';
   NET.player.results = {...res, [NET.gameId]:r};
   try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
 }
@@ -1708,24 +1502,12 @@ function handleChats(d){
     showChat('opp', m.k, m.v, m.by);
   });
 }
-function cpuSay([k,v], seat){ if (APP.mode==='cpu' && (APP.screen==='game' || APP.screen==='poker')) showChat('opp', k, v, seat); }
+function cpuSay([k,v], seat){ if (APP.mode==='cpu' && APP.screen==='game') showChat('opp', k, v, seat); }
 function showChat(who, k, v, from){
   const text = chatText(k, v); if (!text) return;
-  let seat = null, name = 'Ti';
-  if (APP.screen==='poker'){
-    const G = PKS.G;
-    let i = PKS.me;
-    if (who!=='me' && G){
-      if (typeof from==='number') i = from;
-      else if (typeof from==='string' && PKS.doc){ const h = PKS.doc.p.indexOf(from); i = G.pl.findIndex(p=>p.h===h); }
-      else { const cpus = G.pl.map((p,j)=>j).filter(j=>G.pl[j].cpu && !G.pl[j].out); i = cpus.length ? cpus[Math.floor(Math.random()*cpus.length)] : -1; }
-      name = i>=0 ? pkName(i) : 'CPU';
-    }
-    seat = i>=0 ? pkBubbleHost(i) : null;
-  } else {
-    if (who!=='me') name = typeof from==='string' && NET.players[from] ? nameOf(from) : APP.oppName;
-    seat = document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
-  }
+  let name = 'Ti';
+  if (who!=='me') name = typeof from==='string' && NET.players[from] ? nameOf(from) : APP.oppName;
+  const seat = document.querySelector(who==='me' ? '#scrGame .mine' : '#scrGame .opp');
   CHATLOG.push({me:who==='me', name, text}); if (CHATLOG.length>60) CHATLOG.shift();
   if (!$('chatOv').hidden) renderChatLog();
   if (who!=='me') sfx.click();
@@ -1736,781 +1518,10 @@ function showChat(who, k, v, from){
   seat.append(b); setTimeout(()=>b.remove(), k==='m' ? 4300 : 3100);
 }
 
-/* =====================================================================
-   POKER — Texas Hold'em No-Limit, 2–6 lojtarë (CPU + online me shokë)
-   ===================================================================== */
-/* ================= POKER — Texas Hold'em No-Limit (engine, pure state) =================
-   G.pl[i] = {nm, cpu, h (index in doc.p for humans, -1 for CPU), chips, hole, bet, tot, fold, allin, acted, out, act, show}
-   bet = chips put in on this street, tot = chips put in during the whole hand. */
-const PK_RV = {'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};
-const PK_RL = {2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'10',11:'J',12:'Q',13:'K',14:'A'};
-const PK_BLINDS = [[10,20],[15,30],[25,50],[50,100],[75,150],[100,200],[150,300],[200,400],[300,600],[500,1000],[750,1500],[1000,2000],[1500,3000],[2500,5000]];
-const PK_SPEED = {slow:12, normal:8, fast:5};
-const PK_CPU_NAMES = ['Agimi','Besa','Drini','Era','Fisniku','Gentiana','Ilir','Jeta','Luani','Mira','Rina','Shpendi','Teuta','Valoni'];
-
-function pkNewMatch(seats, opt={}){
-  const start = opt.chips || 1000;
-  const G = {type:'poker', v:1, seq:0, hand:0, dealer:-1, lvl:0, sb:10, bb:20, hpl:PK_SPEED[opt.speed]||8, speed:opt.speed||'normal',
-    cpuLevel:opt.cpuLevel||'normal', start, pl:seats.map(s=>({nm:s.nm, cpu:!!s.cpu, h:s.h==null?-1:s.h, chips:start, hole:null, bet:0, tot:0,
-    fold:false, allin:false, acted:false, out:false, act:'', show:false})),
-    deck:[], board:[], street:0, toAct:-1, cur:0, minR:20, phase:'play', res:null, last:null, busted:[], winner:-1};
-  G.dealer = Math.floor(Math.random()*seats.length) - 1;
-  if (G.dealer<0) G.dealer = seats.length-1;
-  pkStartHand(G);
-  return G;
-}
-function pkNext(G, i, ok){
-  const n = G.pl.length;
-  for (let k=1;k<=n;k++){ const j=(i+k)%n; if (ok(G.pl[j], j)) return j; }
-  return -1;
-}
-const pkCanAct = p => !p.out && !p.fold && !p.allin;
-const pkLive = p => !p.out && !p.fold;
-function pkPot(G){ return G.pl.reduce((a,p)=>a+p.tot, 0); }
-function pkHumansLeft(G){ return G.pl.some(p=>!p.cpu && p.chips>0); }
-function pkStartHand(G){
-  // players who lost all their chips leave the table, in order
-  G.pl.forEach((p,i)=>{ if (!p.out && p.chips<=0){ p.out = true; G.busted.push(i); } });
-  const alive = G.pl.map((p,i)=>i).filter(i=>!G.pl[i].out);
-  G.seq = (G.seq||0)+1;
-  if (alive.length<=1 || !pkHumansLeft(G)){
-    G.phase = 'over'; G.toAct = -1;
-    G.winner = alive.length===1 ? alive[0] : -1;
-    G.res = null; G.last = null;
-    return G;
-  }
-  G.hand++;
-  G.lvl = Math.min(Math.floor((G.hand-1)/G.hpl), PK_BLINDS.length-1);
-  [G.sb, G.bb] = PK_BLINDS[G.lvl];
-  G.dealer = pkNext(G, G.dealer, p=>!p.out);
-  G.pl.forEach(p=>{ p.hole=null; p.bet=0; p.tot=0; p.fold=p.out; p.allin=false; p.acted=false; p.act=''; p.show=false; });
-  G.deck = pkDeck(); G.board = []; G.street = 0; G.res = null; G.last = null; G.phase = 'play';
-  const heads = alive.length===2;
-  const sbSeat = heads ? G.dealer : pkNext(G, G.dealer, p=>!p.out);
-  const bbSeat = pkNext(G, sbSeat, p=>!p.out);
-  G.sbSeat = sbSeat; G.bbSeat = bbSeat;
-  pkPost(G, sbSeat, G.sb); pkPost(G, bbSeat, G.bb);
-  G.pl[sbSeat].act = 'SB'; G.pl[bbSeat].act = 'BB';
-  for (let r=0;r<2;r++) for (const i of alive){ const p=G.pl[i]; (p.hole = p.hole || []).push(G.deck.pop()); }
-  G.cur = G.bb; G.minR = G.bb;
-  // first to act preflop: heads-up the dealer (small blind), otherwise the seat after the big blind
-  const first = heads ? sbSeat : pkNext(G, bbSeat, p=>!p.out);
-  G.toAct = pkCanAct(G.pl[first]) ? first : pkNext(G, first, pkCanAct);
-  if (pkRoundDone(G)) pkEndStreet(G);
-  return G;
-}
-function pkDeck(){ return newDeck(); }
-function pkPost(G, i, amt){
-  const p=G.pl[i], x=Math.min(amt, p.chips);
-  p.chips-=x; p.bet+=x; p.tot+=x; if (p.chips===0) p.allin=true;
-}
-/* what seat i may do right now */
-function pkLegal(G, i){
-  const p = G.pl[i];
-  const toCall = Math.max(0, Math.min(G.cur - p.bet, p.chips));
-  const maxTo = p.bet + p.chips;
-  const others = G.pl.filter((q,j)=>j!==i && pkCanAct(q)).length;
-  const canRaise = maxTo > G.cur && others>0;
-  const minTo = Math.min(G.cur + G.minR, maxTo);
-  return {toCall, canCheck: p.bet>=G.cur, maxTo, minTo, canRaise, allinCall: toCall>=p.chips};
-}
-/* a: 'fold' | 'check' | 'call' | 'raise' (to amt) | 'allin' */
-function pkAct(G, i, a, amt){
-  if (G.phase!=='play' || G.toAct!==i) return false;
-  const p = G.pl[i], L = pkLegal(G, i);
-  if (a==='check' && !L.canCheck) a = 'call';
-  if (a==='allin') { if (L.canRaise) { a='raise'; amt=L.maxTo; } else a='call'; }
-  if (a==='raise' && !L.canRaise) a = L.canCheck ? 'check' : 'call';
-  if (a==='call' && L.canCheck) a = 'check';
-  if (a==='fold'){ p.fold = true; p.act = 'Fold'; }
-  else if (a==='check'){ p.act = 'Check'; }
-  else if (a==='call'){
-    const x = L.toCall; p.chips-=x; p.bet+=x; p.tot+=x;
-    if (p.chips===0){ p.allin=true; p.act='All-in'; } else p.act='Call';
-  } else if (a==='raise'){
-    let to = Math.round(+amt||0);
-    if (!(to>=L.minTo)) to = L.minTo;
-    if (to>L.maxTo) to = L.maxTo;
-    const was = G.cur, inc = to - G.cur;
-    const x = to - p.bet; p.chips-=x; p.bet=to; p.tot+=x;
-    if (inc >= G.minR){ G.minR = inc; G.pl.forEach((q,j)=>{ if (j!==i && pkCanAct(q)) q.acted=false; }); }
-    G.cur = to;
-    if (p.chips===0){ p.allin=true; p.act='All-in'; } else p.act = was===0 ? 'Bet' : 'Raise';
-  } else return false;
-  p.acted = true;
-  G.seq++;
-  G.last = {by:i, a:p.act, amt:p.bet, seq:G.seq, street:G.street};
-  pkAdvance(G, i);
-  return true;
-}
-function pkRoundDone(G){
-  const live = G.pl.filter(pkLive);
-  if (live.length<=1) return true;
-  const can = G.pl.filter(pkCanAct);
-  if (!can.length) return true;
-  if (can.length===1 && can[0].bet>=G.cur && live.length>1) {
-    // everyone else is all-in: the last one only has to match
-    return can[0].acted || can[0].bet>=Math.max(...G.pl.filter(pkLive).map(p=>p.bet));
-  }
-  return can.every(p=>p.acted && p.bet===G.cur);
-}
-function pkAdvance(G, from){
-  if (G.pl.filter(pkLive).length===1){ pkFinish(G, false); return; }
-  if (!pkRoundDone(G)){
-    G.toAct = pkNext(G, from, p=>pkCanAct(p) && (!p.acted || p.bet<G.cur));
-    if (G.toAct<0) pkEndStreet(G);
-    return;
-  }
-  pkEndStreet(G);
-}
-function pkEndStreet(G){
-  if (G.pl.filter(pkLive).length===1){ pkFinish(G, false); return; }
-  G.pl.forEach(p=>{ p.bet=0; p.acted=false; });
-  G.cur = 0; G.minR = G.bb;
-  const can = G.pl.filter(pkCanAct).length;
-  if (G.street>=3){ pkFinish(G, true); return; }
-  if (can<=1){
-    // nobody left to bet: run the board out and show the hands
-    while (G.street<3) pkDealStreet(G);
-    G.runout = true;
-    pkFinish(G, true); return;
-  }
-  pkDealStreet(G);
-  G.pl.forEach(p=>{ if (pkLive(p) && !p.allin) p.act=''; });
-  G.toAct = pkNext(G, G.dealer, pkCanAct);
-}
-function pkDealStreet(G){
-  G.deck.pop(); // burn
-  if (G.street===0) G.board.push(G.deck.pop(), G.deck.pop(), G.deck.pop());
-  else G.board.push(G.deck.pop());
-  G.street++;
-}
-function pkFinish(G, showdown){
-  G.toAct = -1; G.phase = 'show';
-  const n = G.pl.length;
-  const live = G.pl.map((p,i)=>i).filter(i=>pkLive(G.pl[i]));
-  const best = {};
-  if (showdown) for (const i of live){ best[i] = pkBest(G.pl[i].hole.concat(G.board)); G.pl[i].show = true; }
-  const levels = [...new Set(G.pl.filter(p=>p.tot>0).map(p=>p.tot))].sort((a,b)=>a-b);
-  const pots = []; let prev = 0, carry = 0;
-  for (const L of levels){
-    let amt = carry; carry = 0;
-    G.pl.forEach(p=>{ amt += Math.max(0, Math.min(p.tot, L) - prev); });
-    const elig = live.filter(i=>G.pl[i].tot>=L);
-    prev = L;
-    if (!elig.length){ carry = amt; continue; }
-    const last = pots[pots.length-1];
-    if (last && last.elig.join()===elig.join()) last.amt += amt; else pots.push({amt, elig});
-  }
-  if (carry && pots.length) pots[pots.length-1].amt += carry;
-  const won = new Array(n).fill(0);
-  for (const pot of pots){
-    let win = pot.elig;
-    if (showdown && win.length>1){
-      const top = Math.max(...win.map(i=>best[i].score));
-      win = win.filter(i=>best[i].score===top);
-    }
-    const share = Math.floor(pot.amt / win.length);
-    let rest = pot.amt - share*win.length;
-    win.forEach(i=>won[i]+=share);
-    // odd chips go to the first winner left of the dealer
-    for (let k=1; rest>0 && k<=n; k++){ const j=(G.dealer+k)%n; if (win.includes(j)){ won[j]++; rest--; } }
-    pot.win = win;
-    pot.name = showdown && pot.elig.length>1 ? best[win[0]].name : '';
-    pot.cards = showdown && pot.elig.length>1 ? win.map(i=>best[i].cards) : [];
-    delete pot.elig;
-  }
-  G.pl.forEach((p,i)=>{ p.chips += won[i]; p.bet = 0; });
-  G.res = {pots, won, net:G.pl.map((p,i)=>won[i]-p.tot), showdown, best:Object.fromEntries(Object.entries(best).map(([i,b])=>[i,{name:b.name, cards:b.cards}]))};
-  G.seq++;
-}
-
-/* ---------- hand evaluation ---------- */
-const PK_NAMES = ['Letër e lartë','Çift','Dy çifte','Treshe','Kentë','Ngjyrë','Ful','Poker','Kentë ngjyrë','Royal flush'];
-function pkStraightHigh(vals){ // vals: unique, sorted desc
-  const v = vals.includes(14) ? vals.concat([1]) : vals;
-  let run = 1;
-  for (let k=1;k<v.length;k++){
-    if (v[k]===v[k-1]-1){ run++; if (run>=5) return v[k]+4; } else run = 1;
-  }
-  return 0;
-}
-/* best five of 5–7 cards: {score, cat, name, cards:[ids]} */
-function pkBest(cards){
-  const vals = cards.map(c=>PK_RV[c.r]);
-  const cnt = {}; vals.forEach(v=>cnt[v]=(cnt[v]||0)+1);
-  const bySuit = {}; cards.forEach(c=>(bySuit[c.n]=bySuit[c.n]||[]).push(PK_RV[c.r]));
-  const fs = Object.keys(bySuit).find(s=>bySuit[s].length>=5);
-  const uniq = [...new Set(vals)].sort((a,b)=>b-a);
-  const groups = Object.entries(cnt).map(([v,c])=>[+v,c]).sort((a,b)=>b[1]-a[1] || b[0]-a[0]);
-  let cat, use, suit = null;
-  const sfHigh = fs ? pkStraightHigh([...new Set(bySuit[fs])].sort((a,b)=>b-a)) : 0;
-  const stHigh = pkStraightHigh(uniq);
-  const run = h => [h,h-1,h-2,h-3,h-4].map(v=>v===1?14:v);
-  if (sfHigh){ cat = sfHigh===14 ? 9 : 8; use = run(sfHigh); suit = fs; }
-  else if (groups[0][1]===4){ cat=7; const q=groups[0][0]; use=[q,q,q,q, uniq.find(v=>v!==q)]; }
-  else if (groups[0][1]===3 && groups.length>1 && groups[1][1]>=2){ cat=6; const t=groups[0][0], pr=groups[1][0]; use=[t,t,t,pr,pr]; }
-  else if (fs){ cat=5; suit=fs; use=bySuit[fs].slice().sort((a,b)=>b-a).slice(0,5); }
-  else if (stHigh){ cat=4; use=run(stHigh); }
-  else if (groups[0][1]===3){ cat=3; const t=groups[0][0]; use=[t,t,t, ...uniq.filter(v=>v!==t).slice(0,2)]; }
-  else if (groups[0][1]===2 && groups[1] && groups[1][1]===2){ cat=2; const a=groups[0][0], b=groups[1][0]; use=[a,a,b,b, uniq.find(v=>v!==a && v!==b)]; }
-  else if (groups[0][1]===2){ cat=1; const a=groups[0][0]; use=[a,a, ...uniq.filter(v=>v!==a).slice(0,3)]; }
-  else { cat=0; use=uniq.slice(0,5); }
-  // score: category then the five ranks in order (straights rank by their top card)
-  const key = (cat===4||cat===8||cat===9) ? [use[0]===14 && use[1]===5 ? 5 : use[0],0,0,0,0] : use;
-  let score = cat;
-  for (let k=0;k<5;k++) score = score*15 + (key[k]||0);
-  // the actual cards, for highlighting
-  const left = cards.slice(), picked = [];
-  for (const v of use){
-    const k = left.findIndex(c=>PK_RV[c.r]===v && (!suit || c.n===suit));
-    if (k>=0) picked.push(left.splice(k,1)[0].id);
-  }
-  return {score, cat, name:pkHandName(cat, use, suit), cards:picked};
-}
-function pkHandName(cat, use, suit){
-  const R = v => PK_RL[v];
-  const S = {S:'♠',H:'♥',D:'♦',C:'♣'};
-  switch(cat){
-    case 0: return `Letër e lartë ${R(use[0])}`;
-    case 1: return `Çift ${R(use[0])}`;
-    case 2: return `Dy çifte ${R(use[0])} dhe ${R(use[2])}`;
-    case 3: return `Treshe ${R(use[0])}`;
-    case 4: return `Kentë ${R(use[4])}–${R(use[0])}`;
-    case 5: return `Ngjyrë ${S[suit]}`;
-    case 6: return `Ful ${R(use[0])} me ${R(use[3])}`;
-    case 7: return `Poker ${R(use[0])}`;
-    case 8: return `Kentë ngjyrë ${R(use[4])}–${R(use[0])}`;
-    default: return 'Royal flush';
-  }
-}
-/* fast numeric 7-card score for the CPU's simulations (cards as 0..51: rank = c>>2 (0..12 → 2..A), suit = c&3) */
-function pkFastScore(cs){
-  const cnt = new Array(15).fill(0), sc = [0,0,0,0], sm = [0,0,0,0];
-  let mask = 0;
-  for (const c of cs){ const v=(c>>2)+2, s=c&3; cnt[v]++; sc[s]++; sm[s] |= 1<<v; mask |= 1<<v; }
-  const straight = m => { if (m & (1<<14)) m |= 2; for (let h=14; h>=5; h--){ const need = 0b11111 << (h-4); if ((m & need)===need) return h; } return 0; };
-  for (let s=0;s<4;s++) if (sc[s]>=5){ const h=straight(sm[s]); if (h) return 8*759375 + h; }
-  let quad=0, trips=[], pairs=[], singles=[];
-  for (let v=14; v>=2; v--){ const c=cnt[v]; if (c===4) quad=v; else if (c===3) trips.push(v); else if (c===2) pairs.push(v); else if (c===1) singles.push(v); }
-  const enc = (cat, a) => { let s=cat; for (let k=0;k<5;k++) s=s*15+(a[k]||0); return s; };
-  if (quad){ const k = Math.max(trips[0]||0, pairs[0]||0, singles[0]||0); return enc(7,[quad,quad,quad,quad,k]); }
-  if (trips.length && (trips.length>1 || pairs.length)){ const t=trips[0], p=Math.max(trips[1]||0, pairs[0]||0); return enc(6,[t,t,t,p,p]); }
-  for (let s=0;s<4;s++) if (sc[s]>=5){ const a=[]; for (let v=14; v>=2 && a.length<5; v--) if (sm[s] & (1<<v)) a.push(v); return enc(5,a); }
-  const st = straight(mask); if (st) return enc(4,[st]);
-  if (trips.length){ const t=trips[0]; return enc(3,[t,t,t, ...singles.slice(0,2)]); }
-  if (pairs.length>=2){ const a=pairs[0], b=pairs[1]; const k=Math.max(pairs[2]||0, singles[0]||0); return enc(2,[a,a,b,b,k]); }
-  if (pairs.length){ const a=pairs[0]; return enc(1,[a,a, ...singles.slice(0,3)]); }
-  return enc(0, singles.slice(0,5));
-}
-const pkNum = c => ((PK_RV[c.r]-2)<<2) | ({S:0,H:1,D:2,C:3}[c.n]);
-/* chance to win (ties count half) against `opp` random hands */
-function pkEquity(hole, board, opp, sims){
-  const known = new Set(hole.concat(board).map(pkNum));
-  const rest = []; for (let c=0;c<52;c++) if (!known.has(c)) rest.push(c);
-  const mine = hole.map(pkNum), bd = board.map(pkNum);
-  const needB = 5 - bd.length;
-  let score = 0;
-  for (let s=0;s<sims;s++){
-    // partial shuffle of what we need
-    const need = needB + opp*2;
-    for (let k=0;k<need;k++){ const j=k+Math.floor(Math.random()*(rest.length-k)); const t=rest[k]; rest[k]=rest[j]; rest[j]=t; }
-    const fullB = bd.concat(rest.slice(0, needB));
-    const me = pkFastScore(mine.concat(fullB));
-    let best = 0, ties = 0, lost = false;
-    for (let o=0;o<opp;o++){
-      const v = pkFastScore([rest[needB+o*2], rest[needB+o*2+1]].concat(fullB));
-      if (v>me){ lost=true; break; }
-      if (v===me) ties++;
-    }
-    if (!lost) score += ties ? 1/(ties+1) : 1;
-  }
-  return score/sims;
-}
-/* the CPU's decision: [action, amount] */
-function pkCpuDecide(G, i){
-  const p = G.pl[i], L = pkLegal(G, i);
-  const level = G.cpuLevel || 'normal';
-  const opp = G.pl.filter((q,j)=>j!==i && pkLive(q)).length;
-  const sims = level==='hard' ? 700 : level==='easy' ? 160 : 380;
-  let e = pkEquity(p.hole, G.board, Math.max(1,opp), sims);
-  const pot = pkPot(G);
-  const R = Math.random;
-  const noise = level==='easy' ? (R()-.5)*.26 : level==='normal' ? (R()-.5)*.1 : (R()-.5)*.04;
-  // a big bet against us usually means a strong hand
-  if (L.toCall>0 && level!=='easy') e -= .1 * Math.min(1, L.toCall/Math.max(pot,1));
-  const ee = e + noise;
-  const fair = 1/(opp+1);
-  const strong = ee > Math.min(.86, fair + (1-fair)*.46);
-  const good = ee > Math.min(.7, fair + (1-fair)*.2);
-  const potOdds = L.toCall / (pot + L.toCall);
-  const bb = G.bb;
-  const roundTo = x => Math.max(bb, Math.round(x / (bb/2)) * (bb/2));
-  const raiseTo = frac => {
-    let to = G.cur + roundTo(Math.max(G.minR, pot*frac));
-    if (to < L.minTo) to = L.minTo;
-    if (to >= L.maxTo || L.maxTo - to < bb) to = L.maxTo;
-    return ['raise', to];
-  };
-  const bluff = (level==='hard' ? .11 : level==='normal' ? .07 : .03);
-  if (L.canCheck){
-    if (strong && L.canRaise){ if (level==='hard' && R()<.18 && G.street<3) return ['check']; return raiseTo(.5 + R()*.45); }
-    if (good && L.canRaise && R()<.42) return raiseTo(.35 + R()*.3);
-    if (L.canRaise && G.street>=1 && opp<=2 && R()<bluff) return raiseTo(.45 + R()*.25);
-    return ['check'];
-  }
-  if (strong){
-    if (L.canRaise && R() < (level==='hard' ? .7 : level==='normal' ? .55 : .35)) return raiseTo(.65 + R()*.45);
-    return ['call'];
-  }
-  const big = L.toCall > p.chips*.45;
-  const need = big ? Math.max(potOdds+.06, fair+.12) : potOdds*1.04;
-  if (ee >= need) return ['call'];
-  if (G.street===0 && L.toCall<=bb && ee > fair*.78) return ['call'];
-  if (level==='easy' && !big && R()<.18) return ['call'];
-  return ['fold'];
-}
-
-/* ---------- table ---------- */
-// seat slots by table size: my seat first, then clockwise (to my left)
-const PK_LAYOUT = {2:['b','t'], 3:['b','lt','rt'], 4:['b','lt','t','rt'], 5:['b','lb','lt','rt','rb'], 6:['b','lb','lt','t','rt','rb']};
-// [seat x, seat y, bet x, bet y] in % of the table, plus a nudge in px for the bet
-// (on phones the two lower side seats keep their bet under them, my own cards take the middle)
-const PK_POS   = {b:[50,99,50,67,0], lb:[13,69,13,69,58], lt:[13,31,34,31,0], t:[50,10,50,25,0], rt:[87,31,66,31,0], rb:[87,69,87,69,58]};
-const PK_POS_W = {b:[50,98,50,66,0], lb:[11,68,28,68,0], lt:[11,31,28,31,0], t:[50,12,50,28,0], rt:[89,31,72,31,0], rb:[89,68,72,68,0]};
-const PK_ORD = ['i pari','i dyti','i treti','i katërti','i pesti','i gjashti'];
-const PKS = {G:null, mode:'cpu', me:0, gid:null, doc:null, timer:null, seenAt:0, raise:false, amt:0, setup:'cpu', fid:null, sumKey:'', seatEl:[], rb:{hand:-1, len:0}};
-const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-const rid = () => Math.random().toString(36).slice(2, 10);
-
-function pkMeSeat(G){
-  if (PKS.mode!=='online') return 0;
-  const h = PKS.doc ? PKS.doc.p.indexOf(NET.uid) : -1;
-  return G.pl.findIndex(p=>p.h===h);
-}
-function pkName(i){
-  const G = PKS.G, p = G && G.pl[i]; if (!p) return '';
-  if (i===PKS.me) return 'Ti';
-  if (p.h>=0 && PKS.doc && NET.players[PKS.doc.p[p.h]]) return nameOf(PKS.doc.p[p.h]);
-  return p.nm;
-}
-function pkMini(c, hl){ const el=document.createElement('div'); el.className='pkc'+(c.red?' r':'')+(hl?' hl':''); el.innerHTML=`${c.r}<i>${c.s}${VS}</i>`; return el; }
-function pkMiniBack(){ const el=document.createElement('div'); el.className='pkc back'; return el; }
-function pkStop(){ clearTimeout(PKS.timer); PKS.timer = null; }
-function pkBubbleHost(i){
-  const el = PKS.seatEl && PKS.seatEl[i]; if (!el) return null;
-  const layer = $('pkBubbles');
-  let host = layer.querySelector(`[data-seat="${i}"]`);
-  if (!host){ host = document.createElement('div'); host.dataset.seat = i; layer.append(host); }
-  host.className = 'pk-bhost' + (el.classList.contains('me') ? ' me' : el.classList.contains('top') ? ' top' : '');
-  host.style.left = el.style.left; host.style.top = el.style.top;
-  return host;
-}
-function pkRenderEmpty(msg){
-  ['pkSeats','pkBoard'].forEach(id=>$(id).replaceChildren());
-  $('pkPot').textContent = ''; $('pkInfo').textContent = ''; $('pkNote').textContent = msg;
-  ['pkFold','pkCall','pkRaise'].forEach(id=>$(id).disabled = true);
-  $('pkQuick').hidden = true; $('pkActs').classList.remove('raising'); $('pkAct').hidden = true;
-  $('pkMode').innerHTML = '<span class="live"></span>Online';
-}
-function pkRender(){
-  const G = PKS.G; if (!G) return;
-  const me = PKS.me = pkMeSeat(G), n = G.pl.length, base = me>=0 ? me : 0;
-  const POS = matchMedia('(min-width:700px)').matches ? PK_POS_W : PK_POS, layout = PK_LAYOUT[n] || PK_LAYOUT[6];
-  const st = PKS.mode==='online' ? (PKS.doc && PKS.doc.status) : 'play', live = st==='play';
-  const res = G.phase==='show' ? G.res : null;
-  const hl = new Set(res && res.showdown ? res.pots.flatMap(p=>(p.cards||[]).flat()) : []);
-  // seats
-  const box = $('pkSeats'); box.replaceChildren(); PKS.seatEl = [];
-  let myBet = null;
-  G.pl.forEach((p,i)=>{
-    const [x,y,bx,by,bdy] = POS[layout[(i - base + n) % n]];
-    const win = !!(res && res.net && res.net[i]>0);
-    const el = document.createElement('div');
-    el.className = 'pk-seat' + (i===me?' me':'') + (y<50?' top':'') + (live && G.phase==='play' && G.toAct===i ? ' turn':'') + (p.out?' out':(p.fold?' fold':'')) + (win?' win':'');
-    el.style.left = x+'%'; el.style.top = y+'%';
-    const sc = document.createElement('div'); sc.className = 'pk-sc';
-    if (i===me){
-      if (!p.out && p.hole && G.phase!=='over') p.hole.forEach(c=>{ const ce=cardEl(c); if (hl.size && pkLive(p)) ce.classList.add(hl.has(c.id) ? 'hl' : 'dim'); sc.append(ce); });
-    } else if (!p.out && !p.fold && p.hole && G.phase!=='over') p.hole.forEach(c=>sc.append(p.show ? pkMini(c, hl.has(c.id)) : pkMiniBack()));
-    const b = document.createElement('div'); b.className = 'pk-box';
-    const nm = document.createElement('span'); nm.className = 'pk-nm'; nm.textContent = pkName(i);
-    const ch = document.createElement('span'); ch.className = 'pk-ch'; ch.textContent = p.out ? 'Jashtë' : fmt(p.chips);
-    b.append(nm, ch); el.append(sc, b);
-    let handName = res && res.showdown && res.best[i] && pkLive(p) ? res.best[i].name : '';
-    // my own hand, as a hint while the hand is on
-    if (i===me && !handName && SET.hints && G.phase==='play' && p.hole && pkLive(p) && !p.allin) handName = pkBest(p.hole.concat(G.board)).name;
-    const tagTxt = handName || p.act;
-    const tag = document.createElement('span'); tag.className = 'pk-tag' + (tagTxt ? ' t-' + (handName ? 'hand' : tagTxt.toLowerCase()) : ''); tag.textContent = tagTxt || '';
-    el.append(tag);
-    if (i===G.dealer && !p.out && G.phase!=='over'){ const d=document.createElement('span'); d.className='pk-d'; d.textContent='D'; d.title='Dealer'; el.append(d); }
-    if (win){ const w=document.createElement('span'); w.className='pk-won'; w.textContent='+'+fmt(res.won[i]); el.append(w); }
-    box.append(el); PKS.seatEl[i] = el;
-    if (p.bet>0 && G.phase==='play'){
-      const bt = document.createElement('div'); bt.className = 'pk-bet'; bt.style.left = bx+'%'; bt.style.top = bdy ? `calc(${by}% + ${bdy}px)` : by+'%';
-      bt.innerHTML = '<span class="mini-chip"></span>'; bt.append(fmt(p.bet)); box.append(bt);
-      if (i===me) myBet = bt;
-    }
-  });
-  if (myBet && PKS.seatEl[me]){
-    const t = $('pkTable').getBoundingClientRect(), r = PKS.seatEl[me].getBoundingClientRect();
-    if (t.height) myBet.style.top = Math.max(t.height*.55, r.top - t.top - 16) + 'px';
-  }
-  // board
-  const bd = $('pkBoard'); bd.replaceChildren();
-  const shown = PKS.rb.hand===G.hand ? PKS.rb.len : 0;
-  for (let k=0;k<5;k++){
-    const c = G.board[k];
-    if (c && G.phase!=='over'){ const el = cardEl(c); if (k>=shown && SET.anim) el.classList.add('new'); if (hl.size) el.classList.add(hl.has(c.id) ? 'hl' : 'dim'); bd.append(el); }
-    else { const s=document.createElement('div'); s.className='slot'; bd.append(s); }
-  }
-  PKS.rb = {hand:G.hand, len:G.board.length};
-  // pot and the line under the board
-  const pot = $('pkPot'), note = $('pkNote');
-  note.replaceChildren();
-  if (G.phase==='play'){
-    const amt = pkPot(G);
-    pot.innerHTML = amt ? `<span class="mini-chip"></span>Pot ${fmt(amt)}` : '';
-    if (!live) note.textContent = st==='left' ? (PKS.doc.leftBy===NET.uid ? 'E le këtë lojë.' : `${PKS.doc.leftBy ? nameOf(PKS.doc.leftBy) : 'Shoku'} e la lojën.`) : '';
-    else if (PKS.mode==='online' && G.toAct>=0 && !G.pl[G.toAct].cpu){
-      note.textContent = `Po pret ${pkName(G.toAct)}…`;
-      if (Date.now() - (PKS.seenAt||Date.now()) > 60000){
-        const sk = btn('Kaloje radhën e tij', ()=>pkSkip(), true);
-        note.append(document.createElement('br'), sk);
-      }
-    }
-  } else if (G.phase==='show' && res){
-    const parts = G.pl.map((p,i)=>i).filter(i=>res.net[i]>0).map(i=>i===me ? `Fitove ${fmt(res.won[i])}` : `${pkName(i)} fiton ${fmt(res.won[i])}`);
-    pot.textContent = parts.join(' · ');
-    note.textContent = res.showdown ? (res.pots[0] && res.pots[0].name || '') : 'Të tjerët hoqën dorë';
-  } else { pot.textContent = ''; note.textContent = 'Loja mbaroi'; }
-  // info strip
-  if (G.phase==='over') $('pkInfo').innerHTML = G.hand===1 ? '<span>U luajt <b>1</b> dorë</span>' : `<span>U luajtën <b>${G.hand}</b> duar</span>`;
-  else {
-    const left = G.hpl - ((G.hand-1) % G.hpl);
-    const next = G.lvl < PK_BLINDS.length-1 ? ` · rriten pas ${left} ${left===1 ? 'dore' : 'duarsh'}` : '';
-    $('pkInfo').innerHTML = `<span>Blinds <b>${fmt(G.sb)}/${fmt(G.bb)}</b>${next}</span><span>Dora <b>${G.hand}</b></span>`;
-  }
-  const my = me>=0 ? G.pl[me] : null;
-  // actions
-  const myTurn = !!my && live && G.phase==='play' && G.toAct===me;
-  const L = myTurn ? pkLegal(G, me) : null;
-  $('pkFold').disabled = !myTurn || L.canCheck;
-  $('pkCall').disabled = !myTurn;
-  $('pkCall').textContent = !L || L.canCheck ? 'Check' : (L.allinCall ? `All-in ${fmt(L.toCall)}` : `Call ${fmt(L.toCall)}`);
-  $('pkRaise').disabled = !myTurn || !L.canRaise;
-  const verb = G.cur===0 ? 'Bet' : 'Raise';
-  if (myTurn && PKS.raise && L.canRaise){
-    PKS.amt = Math.min(L.maxTo, Math.max(L.minTo, PKS.amt));
-    $('pkRaise').textContent = PKS.amt>=L.maxTo ? `All-in ${fmt(PKS.amt)}` : `${verb} ${fmt(PKS.amt)}`;
-    const r = $('pkAmt'); r.min = L.minTo; r.max = L.maxTo; r.step = 1; r.value = PKS.amt;
-  } else { PKS.raise = false; $('pkRaise').textContent = verb; }
-  $('pkQuick').hidden = !PKS.raise;
-  $('pkActs').classList.toggle('raising', PKS.raise);
-  $('pkMode').innerHTML = PKS.mode==='online' ? (NET.net===false ? '<span class="live off"></span>Jo lidhje' : '<span class="live"></span>Online') : 'Kundër CPU';
-  $('pkAct').textContent = PKS.mode==='online' ? 'Lëre lojën' : 'Lojë e re';
-  $('pkAct').hidden = PKS.mode==='online' && st!=='play';
-  $('scrPoker').dataset.turn = myTurn ? 'me' : '';
-}
-/* ---------- sounds for what just happened ---------- */
-function pkSounds(prev, G){
-  if (!prev || prev.hand!==G.hand || (prev.phase==='over' && G.phase!=='over')){
-    if (G.phase==='play'){ sfx.shuffle(); setTimeout(()=>sfx.deal(), 650); if (G.toAct===PKS.me) setTimeout(()=>sfx.turn(), 1500); }
-    return;
-  }
-  if (G.last && (!prev.last || G.last.seq!==prev.last.seq)){
-    const a = G.last.a;
-    if (a==='Fold') sfx.pkFold(); else if (a==='Check') sfx.pkCheck(); else sfx.chips(a==='All-in' ? 7 : a==='Call' ? 3 : 5);
-  }
-  const nb = G.board.length - prev.board.length;
-  if (nb>0) setTimeout(()=>sfx.flip(nb), 280);
-  if (G.phase==='show' && prev.phase!=='show') setTimeout(()=>sfx.pkPot(), nb>0 ? 750 : 380);
-  else if (G.phase==='play' && PKS.me>=0 && G.toAct===PKS.me && (prev.toAct!==PKS.me || prev.phase!=='play')) setTimeout(()=>sfx.turn(), nb>0 ? 650 : 300);
-}
-/* ---------- moves ---------- */
-function pkCommit(G2){
-  const prev = PKS.G;
-  G2.ts = Date.now(); G2.nonce = rid(); PKS.seenAt = Date.now();
-  if (PKS.mode==='online') G2.wby = NET.uid;
-  PKS.G = G2;
-  pkSounds(prev, G2); pkRender(); pkSchedule(); pkCpuTalk(prev, G2);
-  if (PKS.mode==='online'){
-    const gid = PKS.gid;
-    NET.db.doc('games/'+gid).update({status: G2.phase==='over' ? 'over' : 'play', G:G2}).catch(e=>{
-      toast(writeErr(e));
-      if (PKS.gid===gid && PKS.doc && PKS.doc.G){ PKS.G = PKS.doc.G; pkRender(); pkSchedule(); }
-    });
-  }
-}
-function pkDo(a, amt){
-  const G = PKS.G;
-  if (!G || G.phase!=='play' || PKS.me<0 || G.toAct!==PKS.me) return;
-  if (PKS.mode==='online' && (!PKS.doc || PKS.doc.status!=='play')) return;
-  const G2 = clone(G);
-  if (!pkAct(G2, PKS.me, a, amt)) return;
-  PKS.raise = false;
-  pkCommit(G2);
-}
-function pkSkip(){
-  // a friend went quiet for a minute: check for him if he can, otherwise fold
-  const G = PKS.G; if (!G || G.phase!=='play' || G.toAct===PKS.me || G.pl[G.toAct].cpu) return;
-  if (Date.now() - (PKS.seenAt||0) < 60000) return;
-  const G2 = clone(G), i = G.toAct;
-  pkAct(G2, i, pkLegal(G2, i).canCheck ? 'check' : 'fold');
-  pkCommit(G2);
-}
-function pkCpuMove(i, seq){
-  const G = PKS.G;
-  if (!G || G.seq!==seq || G.phase!=='play' || G.toAct!==i || !G.pl[i].cpu) return;
-  const G2 = clone(G);
-  if (PKS.mode==='cpu') G2.cpuLevel = SET.level;
-  const [a, amt] = pkCpuDecide(G2, i);
-  pkAct(G2, i, a, amt);
-  pkCommit(G2);
-}
-function pkNextHand(){
-  const G = PKS.G; if (!G || G.phase!=='show') return;
-  const G2 = clone(G); pkStartHand(G2); pkCommit(G2);
-}
-// who moves the CPUs and deals the next hand online: whoever wrote last; if he went away, the host, then anyone
-function pkIsDriver(G){
-  if (PKS.mode!=='online') return true;
-  const age = Date.now() - (PKS.seenAt||0);
-  if (G.wby===NET.uid) return true;
-  if (PKS.doc && PKS.doc.p[0]===NET.uid && age>9000) return true;
-  return age>25000;
-}
-function pkSchedule(){
-  pkStop();
-  const G = PKS.G;
-  if (!G || APP.screen!=='poker') return;
-  if (G.phase==='over'){ pkShowSummary(); return; }
-  $('pkSumOv').hidden = true;
-  if (PKS.mode==='online' && (!PKS.doc || PKS.doc.status!=='play')) return;
-  let step = null, delay = 0;
-  if (G.phase==='show'){ step = pkNextHand; delay = G.res && G.res.showdown ? 4600 : 2300; }
-  else if (G.phase==='play' && G.toAct>=0 && G.pl[G.toAct].cpu){
-    const i = G.toAct, seq = G.seq, meIn = PKS.me>=0 && pkLive(G.pl[PKS.me]);
-    step = () => pkCpuMove(i, seq);
-    delay = meIn ? 650 + Math.random()*700 : 330;
-  } else if (G.phase==='play' && PKS.mode==='online' && G.toAct!==PKS.me){
-    // waiting for a friend: after a minute offer to skip him
-    PKS.timer = setTimeout(pkRender, Math.max(1500, 60200 - (Date.now() - (PKS.seenAt||Date.now()))));
-    return;
-  }
-  if (!step) return;
-  PKS.timer = pkIsDriver(G) ? setTimeout(step, delay) : setTimeout(pkSchedule, 3000);
-}
-/* the CPUs say something now and then */
-function pkCpuTalk(prev, G){
-  if (PKS.mode!=='cpu' || !prev || G.phase!=='show' || prev.phase==='show' || !G.res || !G.res.showdown) return;
-  const big = G.res.won.some(w=>w>=G.bb*10);
-  if (!big || Math.random()>.4) return;
-  const winners = G.pl.map((p,i)=>i).filter(i=>G.res.net[i]>0);
-  const losers = G.pl.map((p,i)=>i).filter(i=>G.pl[i].cpu && G.pl[i].show && G.res.net[i]<0);
-  const cpuWin = winners.find(i=>G.pl[i].cpu);
-  if (cpuWin!==undefined) setTimeout(()=>cpuSay(Math.random()<.5 ? ['e',1] : ['t',4], cpuWin), 900);
-  else if (losers.length) setTimeout(()=>cpuSay(Math.random()<.5 ? ['e',2] : ['e',3], losers[0]), 900);
-}
-/* ---------- raise box ---------- */
-function pkQuickAmt(q){
-  const G = PKS.G, L = pkLegal(G, PKS.me), pot = pkPot(G);
-  let to = q==='min' ? L.minTo : q==='all' ? L.maxTo : G.cur + Math.round((q==='pot' ? 1 : .5) * (pot + L.toCall));
-  const step = Math.max(1, G.sb);
-  if (to < L.maxTo) to = Math.round(to/step)*step;
-  return Math.min(L.maxTo, Math.max(L.minTo, to));
-}
-function pkRaiseClick(){
-  const G = PKS.G; if (!G || G.toAct!==PKS.me) return;
-  const L = pkLegal(G, PKS.me); if (!L.canRaise) return;
-  if (!PKS.raise){ PKS.raise = true; PKS.amt = pkQuickAmt('half'); sfx.click(); pkRender(); return; }
-  pkDo('raise', PKS.amt);
-}
-function pkSetAmt(v){
-  const G = PKS.G; if (!G || !PKS.raise) return;
-  const L = pkLegal(G, PKS.me), step = Math.max(1, G.sb);
-  v = Math.round(+v || 0);
-  if (v < L.maxTo) v = Math.round(v/step)*step;
-  PKS.amt = Math.min(L.maxTo, Math.max(L.minTo, v));
-  pkRender();
-}
-/* ---------- start, open, leave ---------- */
-function pkPickSetup(kind, fid){
-  PKS.setup = kind || 'cpu'; PKS.fid = fid || null;
-  const inv = PKS.setup==='invite';
-  $('pkSetH').textContent = inv ? `Poker me ${nameOf(fid)}` : 'Poker me CPU';
-  $('pkSetSub').textContent = inv ? 'Ju të dy, plus sa CPU të doni në tavolinë. Secili fillon me 1000 çipa.' : "Texas Hold'em. Secili fillon me 1000 çipa.";
-  $('pkOppLbl').textContent = inv ? 'Sa CPU në tavolinë?' : 'Sa kundërshtarë?';
-  $('pkSetGo').textContent = inv ? 'Dërgo ftesën' : 'Fillo';
-  pkDrawSetup(); $('pkSetOv').hidden = false;
-}
-function pkDrawSetup(){
-  const inv = PKS.setup==='invite';
-  const vals = inv ? [0,1,2,3] : [1,2,3,4,5];
-  const sel = inv ? (SET.pkCpus ?? 1) : (SET.pkOpp || 3);
-  const g = $('pkOpp'); g.style.gridTemplateColumns = `repeat(${vals.length}, minmax(0,1fr))`;
-  g.replaceChildren(...vals.map(v=>{
-    const b = document.createElement('button'); b.type='button'; b.textContent = v; b.className = v===sel ? 'on' : ''; b.setAttribute('aria-pressed', v===sel);
-    b.onclick = () => { if (inv) SET.pkCpus = v; else SET.pkOpp = v; saveSet(); pkDrawSetup(); sfx.click(); };
-    return b;
-  }));
-  const sp = SET.pkSpeed || 'normal';
-  document.querySelectorAll('#pkSpeed button').forEach(b=>{ const on = b.dataset.v===sp; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
-  const n = inv ? 2 + sel : 1 + sel;
-  $('pkSetHint').textContent = `${n} lojtarë në tavolinë. Blinds rriten çdo ${PK_SPEED[sp]} duar.`;
-}
-function pkSetupGo(){
-  $('pkSetOv').hidden = true;
-  const sp = SET.pkSpeed || 'normal';
-  if (PKS.setup==='invite') pkSendInvite(PKS.fid, SET.pkCpus ?? 1, sp);
-  else pkStartCpu(SET.pkOpp || 3, sp);
-}
-function pkStartCpu(opp, speed){
-  const names = shuffle(PK_CPU_NAMES.slice()).slice(0, opp);
-  const seats = [{nm:'Ti', h:0}, ...names.map(nm=>({nm, cpu:true}))];
-  pkEnter(pkNewMatch(seats, {speed, cpuLevel:SET.level}));
-}
-function pkEnter(G){
-  closeGameSub(); pkStop();
-  APP.mode = PKS.mode = 'cpu'; setGame('poker');
-  Object.assign(PKS, {G:null, doc:null, gid:null, raise:false, sumKey:'', rb:{hand:-1, len:0}, seenAt:Date.now()});
-  CHATLOG.length = 0; $('pkBubbles').replaceChildren();
-  show('poker');
-  PKS.G = G; pkSounds(null, G); pkRender(); pkSchedule();
-}
-function pkOpen(gid){
-  closeGameSub(); pkStop();
-  APP.mode = PKS.mode = 'online'; setGame('poker');
-  Object.assign(PKS, {G:null, doc:null, gid, raise:false, sumKey:'', rb:{hand:-1, len:0}, seenAt:Date.now()});
-  NET.gameId = gid; NET.chatSeen = null; CHATLOG.length = 0; $('pkBubbles').replaceChildren();
-  show('poker'); pkRenderEmpty('Duke hapur lojën…');
-  NET.unsubGame = NET.db.doc('games/'+gid).onSnapshot(snap=>{
-    if (APP.screen!=='poker' || PKS.gid!==gid) return;
-    if (!snap.exists){ toast('Kjo lojë nuk ekziston më.'); closeGameSub(); show('lobby'); return; }
-    pkApplyDoc(clone(snap.data()));
-  }, ()=>{ toast('Lidhja me lojën u ndërpre.'); show('lobby'); });
-}
-function pkApplyDoc(d){
-  const prevStatus = PKS.doc && PKS.doc.status;
-  PKS.doc = d; NET.gameDoc = d;
-  handleChats(d);
-  if (d.status==='invite' || !d.G){ PKS.G = null; pkRenderEmpty('Në pritje që shoku të pranojë ftesën…'); return; }
-  recordResult(d);
-  const G = d.G, cur = PKS.G;
-  // newer move, or two writes raced and the server kept the other one: take the server's
-  const adopt = !cur || G.seq>cur.seq || (G.seq===cur.seq && G.nonce!==cur.nonce);
-  if (adopt){ PKS.G = G; PKS.seenAt = Date.now(); pkSounds(cur, G); }
-  if (adopt || prevStatus!==d.status){ pkRender(); pkSchedule(); }
-}
-function pkMatchFor(g){
-  const names = shuffle(PK_CPU_NAMES.slice());
-  const seats = [{nm:nameOf(g.p[0]), h:0}];
-  const cpus = Math.max(0, Math.min(3, g.cpus||0));
-  for (let k=0;k<cpus;k++) seats.push({nm:names[k], cpu:true});
-  // the two friends sit across the table from each other
-  seats.splice(1 + Math.floor(cpus/2), 0, {nm:nameOf(g.p[1]), h:1});
-  const G = pkNewMatch(seats, {speed:g.speed||'normal', cpuLevel:'normal'});
-  G.wby = NET.uid; G.ts = Date.now(); G.nonce = rid();
-  return G;
-}
-function invitePoker(fid){
-  const live = NET.games.find(g=>g.p.includes(fid) && (g.status==='invite'||g.status==='play') && g.type==='poker');
-  if (live){ if (live.status==='play') return pkOpen(live.id); return toast(live.p[1]===NET.uid ? `${nameOf(fid)} të ka ftuar tashmë në poker. Prano ftesën lart.` : 'Ke tashmë një ftesë për poker me '+nameOf(fid)+'.'); }
-  pkPickSetup('invite', fid);
-}
-async function pkSendInvite(fid, cpus, speed){
-  try{ await NET.db.collection('games').add({type:'poker', p:[NET.uid, fid], status:'invite', cpus, speed, created:Date.now(), G:null}); toast('Ftesa u dërgua te '+nameOf(fid)+'.'); }
-  catch(e){ toast(writeErr(e)); }
-}
-async function pkLeave(){
-  if (PKS.mode!=='online'){ pkPickSetup('cpu'); return; }
-  try{ await NET.db.doc('games/'+PKS.gid).update({status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
-}
-function pkBack(){
-  pkStop();
-  if (PKS.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); } else show('entry');
-}
-/* ---------- end of the game ---------- */
-function pkStandings(G){
-  const alive = G.pl.map((p,i)=>i).filter(i=>!G.pl[i].out && G.pl[i].chips>0).sort((a,b)=>G.pl[b].chips-G.pl[a].chips);
-  return alive.concat(G.busted.slice().reverse().filter(i=>!alive.includes(i)));
-}
-function pkResultFor(G, h){
-  const humans = pkStandings(G).filter(i=>G.pl[i].h>=0);
-  return G.pl[humans[0]] && G.pl[humans[0]].h===h ? 'w' : 'l';
-}
-function pkShowSummary(){
-  const G = PKS.G, me = PKS.me, order = pkStandings(G), place = order.indexOf(me)+1;
-  const key = (PKS.gid||'cpu')+':'+G.seq;
-  if (key!==PKS.sumKey){ PKS.sumKey = key; setTimeout(()=> place===1 ? sfx.win() : sfx.lose(), 250); }
-  const out = me>=0 && G.pl[me].chips<=0;
-  $('pkSumH').textContent = place===1 ? 'Fitove! 🏆' : out ? 'U eliminove' : 'Loja mbaroi';
-  const hands = G.hand===1 ? '1 dorë' : `${G.hand} duar`;
-  $('pkSumSub').textContent = place===1 ? `I more të gjitha çipat në ${hands}.`
-    : `Përfundove ${PK_ORD[place-1] || place+'-i'} nga ${G.pl.length}. U luajtën ${hands}.`;
-  $('pkSumTable').innerHTML = `<thead><tr><th>#</th><th>Lojtari</th><th>Çipat</th></tr></thead><tbody>${order.map((i,k)=>
-    `<tr class="${i===me?'me':''}"><td class="pk-place">${k+1}</td><td>${esc(pkName(i))}</td><td>${G.pl[i].chips>0 ? fmt(G.pl[i].chips) : '—'}</td></tr>`).join('')}</tbody>`;
-  const again = $('pkAgain');
-  if (PKS.mode==='online'){
-    const host = !!(PKS.doc && PKS.doc.p[0]===NET.uid);
-    again.disabled = !host; again.textContent = host ? 'Luaj përsëri' : `Pret ${nameOf(PKS.doc.p[0])}…`;
-  } else { again.disabled = false; again.textContent = 'Lojë e re'; }
-  $('pkSumOv').hidden = false;
-}
-function pkRematch(){
-  const G = PKS.G; if (!G) return;
-  $('pkSumOv').hidden = true;
-  if (PKS.mode!=='online'){ pkPickSetup('cpu'); return; }
-  if (!PKS.doc || PKS.doc.p[0]!==NET.uid) return;
-  const G2 = pkNewMatch(G.pl.map(p=>({nm:p.nm, cpu:p.cpu, h:p.h})), {speed:G.speed, cpuLevel:G.cpuLevel});
-  G2.seq += G.seq;
-  pkCommit(G2);
-}
-/* ---------- wiring ---------- */
-$('pkFold').onclick = () => pkDo('fold');
-$('pkCall').onclick = () => { const G=PKS.G; if (!G || G.toAct!==PKS.me) return; pkDo(pkLegal(G, PKS.me).canCheck ? 'check' : 'call'); };
-$('pkRaise').onclick = pkRaiseClick;
-$('pkRaiseX').onclick = () => { PKS.raise = false; pkRender(); };
-document.querySelectorAll('#pkQuick [data-q]').forEach(b=>b.onclick=()=>{ if (PKS.raise){ PKS.amt = pkQuickAmt(b.dataset.q); sfx.click(); pkRender(); } });
-$('pkAmt').oninput = e => pkSetAmt(e.target.value);
-$('pkBack').onclick = pkBack;
-$('pkAct').onclick = pkLeave;
-$('pkChat').onclick = openChat;
-$('pkAgain').onclick = pkRematch;
-$('pkSumMenu').onclick = () => { $('pkSumOv').hidden = true; pkBack(); };
-$('pkSetGo').onclick = pkSetupGo;
-document.querySelectorAll('#pkSpeed button').forEach(b=>b.onclick=()=>{ SET.pkSpeed = b.dataset.v; saveSet(); pkDrawSetup(); sfx.click(); });
-window.addEventListener('resize', ()=>{ if (APP.screen==='poker' && PKS.G) pkRender(); });
-
 /* ================= game hub ================= */
-function setGame(g){
-  if (g!=='poker') g = 'pishpirik';
-  const pk = g==='poker';
-  APP.game = g; try{ localStorage.setItem('pishpirik-game', g); }catch(e){}
-  document.querySelectorAll('#gameSel button').forEach(b=>{ const on=b.dataset.g===g; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-  $('heroH').textContent = pk ? 'Poker' : 'Pishpirik';
-  $('heroChips').hidden = !pk;
-  const fan = $('fan');
-  if (fan.dataset.g!==g){
-    fan.dataset.g = g;
-    fan.replaceChildren(...(pk ? [cardEl({r:'A',s:'♠',red:0}), cardEl({r:'A',s:'♥',red:1}), cardEl({r:'A',s:'♦',red:1}), cardEl({r:'A',s:'♣',red:0})]
-                               : [backEl(), cardEl({r:'J',s:'♦',red:1}), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'10',s:'♦',red:1})]));
-  }
-  $('rulesPoker').hidden = !pk; $('rulesPish').hidden = pk;
-  $('rulesH').textContent = pk ? 'Si luhet Pokeri' : 'Si luhet Pishpiriku';
-  $('rulesSub').textContent = pk ? "Texas Hold'em No-Limit, 2 deri 6 lojtarë." : 'Pako me 52 karta, dy lojtarë.';
+function initFan(){
+  $('fan').replaceChildren(backEl(), cardEl({r:'J',s:'♦',red:1}), cardEl({r:'A',s:'♠',red:0}), cardEl({r:'10',s:'♦',red:1}));
 }
-function chooseGame(kind, fid){
-  const ov = $('gtOv'); ov.dataset.kind = kind; ov.dataset.fid = fid || '';
-  $('gtH').textContent = kind==='cpu' ? 'Çfarë do të luash?' : 'Në cilën lojë?';
-  $('gtSub').textContent = kind==='cpu' ? 'Kundër kompjuterit, pa pritur askënd.' : `Zgjidh lojën për ftesën te ${nameOf(fid)}.`;
-  $('gtPoker').querySelector('span').textContent = kind==='cpu' ? "Texas Hold'em kundër 1 deri 5 CPU" : "Texas Hold'em, mund të shtosh edhe CPU në tavolinë";
-  ov.hidden = false;
-}
-document.querySelectorAll('#gameSel button').forEach(b=>b.onclick=()=>{ setGame(b.dataset.g); sfx.click(); });
-$('gtPish').onclick = () => { const ov=$('gtOv'); ov.hidden=true; if (ov.dataset.kind==='cpu'){ setGame('pishpirik'); startCpu(); } else invitePishpirik(ov.dataset.fid); };
-$('gtPoker').onclick = () => { const ov=$('gtOv'); ov.hidden=true; if (ov.dataset.kind==='cpu'){ setGame('poker'); startCpu(); } else invitePoker(ov.dataset.fid); };
-
 /* ================= network: Firebase ================= */
 let FDB=null, AUTH=null;
 // Firestore can't hold arrays inside arrays, so the game state travels as JSON text in field G
@@ -2560,7 +1571,7 @@ function startNet(uid){
         if (APP.screen==='lobby'){ toast(`${nameOf(g.p[1])} pranoi ftesën.`); setTimeout(()=>{ if (APP.screen==='lobby') openGameOf(g); }, 0); }
         else if (!(APP.mode==='online' && NET.gameId===g.id)) toast(`${nameOf(g.p[1])} pranoi ftesën. E gjen te shokët.`);
       }
-      if (prev===undefined && hadAny && g.status==='invite' && g.p[1]===uid && g.type!=='billiard'){ toast(`${nameOf(g.p[0])} të fton në ${g.type==='poker' ? 'poker' : 'Pishpirik'}.`); sfx.turn(); }
+      if (prev===undefined && hadAny && g.status==='invite' && g.p[1]===uid && g.type!=='billiard' && g.type!=='poker'){ toast(`${nameOf(g.p[0])} të fton në Pishpirik.`); sfx.turn(); }
     });
     NET.prevStatus = Object.fromEntries(list.map(g=>[g.id, g.status])); NET.prevStatus.__='x';
     NET.games = list;
@@ -2593,25 +1604,25 @@ async function initNet(){
       startNet(user.uid);                       // listeners and the profile read go out together
       try{ const p = await DB.doc('players/'+user.uid).get(); if (p.exists && NET.uid===user.uid && !NET.player) NET.player = p.data(); }catch(e){}
       if (NET.goLobby && NET.player){ NET.goLobby=false; show('lobby'); }
-    } else if (APP.screen==='lobby' || ((APP.screen==='game' || APP.screen==='poker') && APP.mode==='online')){ closeGameSub(); show('entry'); }
+    } else if (APP.screen==='lobby' || (APP.screen==='game' && APP.mode==='online')){ closeGameSub(); show('entry'); }
     if (APP.screen==='entry') renderEntry();
     if (!$('setOv').hidden) renderAccount();
   });
 }
 
 /* ================= wiring ================= */
-$('bHome').onclick = () => { if ((APP.screen==='game' || APP.screen==='poker') && APP.mode==='online') closeGameSub(); show('entry'); };
+$('bHome').onclick = () => { if (APP.screen==='game' && APP.mode==='online') closeGameSub(); show('entry'); };
 $('bSet').onclick = openSettings;
 $('bRules').onclick = () => { $('rulesOv').hidden=false; };
 $('sSound').onchange = e => { SET.sound = e.target.checked; saveSet(); syncSetUI(); if (SET.sound) sfx.click(); };
 $('sVol').oninput = e => { SET.vol = +e.target.value; saveSet(); };
 $('sVol').onchange = () => sfx.play();
-$('sHints').onchange = e => { SET.hints = e.target.checked; saveSet(); if (APP.screen==='game' && S) render(); if (APP.screen==='poker') pkRender(); };
+$('sHints').onchange = e => { SET.hints = e.target.checked; saveSet(); if (APP.screen==='game' && S) render(); };
 $('sAnim').onchange = e => { SET.anim = e.target.checked; saveSet(); };
 document.querySelectorAll('#sLevel button').forEach(b=>b.onclick=()=>{ SET.level=b.dataset.v; saveSet(); syncSetUI(); sfx.click(); });
 $('inRemember').onchange = e => { if (!e.target.checked) rememberUser(null); };
 $('chCpu').onclick = startCpu;
-$('bCpu2').onclick = () => chooseGame('cpu');
+$('bCpu2').onclick = startCpu;
 $('bToLobby').onclick = () => show('lobby');
 $('bOut2').onclick = logout;
 $('tabIn').onclick = () => authTab(false);
@@ -2634,12 +1645,12 @@ $('bChat').onclick = openChat;
 $('chForm').onsubmit = e => { e.preventDefault(); const t = $('chIn').value; if (sendChat('m', t)) $('chIn').value = ''; };
 $('bSumMenu').onclick = () => { $('sumOv').hidden=true; $('bBack').onclick(); };
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').hidden=true);
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv' && o.id!=='pkSumOv') o.hidden=true; }));
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else ['setOv','chatOv','rndOv','gtOv','pkSetOv'].forEach(id=>$(id).hidden=true); } });
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv') o.hidden=true; }));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else ['setOv','chatOv','rndOv'].forEach(id=>$(id).hidden=true); } });
 
 buildTiles();
 buildChat();
-setGame(APP.game);
+initFan();
 loadRemembered();
 syncSetUI();
 let saved = 0;
@@ -2665,7 +1676,7 @@ setTimeout(checkForUpdate, 15*1000);
 
 show('entry');
 initNet();
-if (['localhost','127.0.0.1'].includes(location.hostname)) window.__app = {APP, NET, PKS, SET, CHATLOG, show, setGame, renderLobby, pkRender, pkStartCpu, pkCommit, pkApplyDoc, pkNewMatch, pkStartHand, pkAct, pkLegal, pkDo, pkOpen, startCpuWith, showChat, handleChats, render, acceptInvite, openGame, sendChat, nextRound, humanPlay, canAct, get S(){ return S; }, set S(v){ S = v; }};
+if (['localhost','127.0.0.1'].includes(location.hostname)) window.__app = {APP, NET, SET, CHATLOG, show, renderLobby, startCpuWith, showChat, handleChats, render, acceptInvite, openGame, sendChat, nextRound, humanPlay, canAct, get S(){ return S; }, set S(v){ S = v; }};
 </script>
 </body>
 </html>
