@@ -302,6 +302,11 @@ input:focus{border-color:var(--paper-ink); outline:none}
 .gbar{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap}
 .mode{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
 .mode .live{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--live); margin-right:6px; vertical-align:1px}
+.mode .live.off{background:#e24444; animation:none}
+.upd-bar{display:none; position:fixed; top:0; left:0; right:0; z-index:999; background:#1b5e3a; color:#fff; font-size:13.5px; text-align:center; padding:8px 10px; gap:10px; align-items:center; justify-content:center}
+.upd-bar[hidden]{display:none}
+.upd-bar:not([hidden]){display:flex}
+.upd-bar button{background:#fff; color:#1b5e3a; border:0; border-radius:999px; padding:4px 12px; font-weight:700; font-size:13px; cursor:pointer}
 .board{display:flex; align-items:stretch; gap:10px; background:rgba(0,0,0,.2); border-radius:12px; padding:10px 14px; justify-content:space-between}
 .sc{display:flex; flex-direction:column; gap:3px; min-width:0}
 .sc .who{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:30vw}
@@ -497,6 +502,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 </style>
 </head>
 <body>
+<div class="upd-bar" id="updBar" hidden>Ka një version të ri të Kafenejës. <button type="button" id="updBtn">Rifresko tani</button></div>
 <div class="app">
   <header>
     <button class="brand" id="bHome" type="button" aria-label="Kafeneja, kthehu në hyrje">Kafeneja</button>
@@ -778,7 +784,10 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 <script type="module">
 import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
 // Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
-let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
+let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, initializeFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
+// Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
+// Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
+const APP_VERSION = 20261016.2;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -814,7 +823,9 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>'
 let S = null;                       // the game state on screen
 const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, game:(()=>{ try{ return localStorage.getItem('pishpirik-game')==='poker' ? 'poker' : 'pishpirik'; }catch(e){ return 'pishpirik'; } })()};
 const NET = {chatSeen:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
-             gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}};
+             gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}, net:navigator.onLine};
+window.addEventListener('offline', () => { NET.net = false; if (APP.screen==='game') render(); if (APP.screen==='poker') pkRender(); });
+window.addEventListener('online', () => { NET.net = true; if (APP.screen==='game') render(); if (APP.screen==='poker') pkRender(); toast('Lidhja me internetin u rikthye.'); });
 
 /* ================= settings ================= */
 const SET = {sound:true, vol:70, hints:true, anim:true, level:'normal', rounds:5, pkOpp:3, pkCpus:1, pkSpeed:'normal'};
@@ -1154,7 +1165,7 @@ function render(){
     $('modeLbl').textContent = 'Kundër kompjuterit';
     $('bGameAct').textContent = 'Lojë e re'; $('bGameAct').hidden = false;
   } else {
-    $('modeLbl').innerHTML = `<span class="live"></span>Online`;
+    $('modeLbl').innerHTML = NET.net===false ? `<span class="live off"></span>Jo lidhje` : `<span class="live"></span>Online`;
     const st = NET.gameDoc && NET.gameDoc.status;
     $('bGameAct').textContent = 'Lëre lojën'; $('bGameAct').hidden = st!=='play';
   }
@@ -2196,7 +2207,7 @@ function pkRender(){
   } else { PKS.raise = false; $('pkRaise').textContent = verb; }
   $('pkQuick').hidden = !PKS.raise;
   $('pkActs').classList.toggle('raising', PKS.raise);
-  $('pkMode').innerHTML = PKS.mode==='online' ? '<span class="live"></span>Online' : 'Kundër CPU';
+  $('pkMode').innerHTML = PKS.mode==='online' ? (NET.net===false ? '<span class="live off"></span>Jo lidhje' : '<span class="live"></span>Online') : 'Kundër CPU';
   $('pkAct').textContent = PKS.mode==='online' ? 'Lëre lojën' : 'Lojë e re';
   $('pkAct').hidden = PKS.mode==='online' && st!=='play';
   $('scrPoker').dataset.turn = myTurn ? 'me' : '';
@@ -2564,10 +2575,15 @@ async function initNet(){
     const [A, Au, Fs] = await Promise.all([import(V+'firebase-app.js'), import(V+'firebase-auth.js'), import(V+'firebase-firestore.js')]);
     ({initializeApp} = A);
     ({getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword} = Au);
-    ({getFirestore, getDoc, setDoc, deleteDoc, addDoc, query, where} = Fs);
+    ({getFirestore, initializeFirestore, getDoc, setDoc, deleteDoc, addDoc, query, where} = Fs);
     fdoc = Fs.doc; fcol = Fs.collection; fsnap = Fs.onSnapshot;
     const app = initializeApp(firebaseConfig);
-    AUTH = getAuth(app); FDB = getFirestore(app); NET.db = DB;
+    AUTH = getAuth(app);
+    // Rrjetet mobile në Kosovë/Shqipëri shpesh e bllokojnë WebSocket-in; pa këtë, Firestore
+    // humb disa sekonda duke provuar WebChannel para se të kthehet te long-polling — kjo shihet si "vonesë".
+    try{ FDB = initializeFirestore(app, {experimentalAutoDetectLongPolling:true, experimentalLongPollingOptions:{timeoutSeconds:8}}); }
+    catch(e){ FDB = getFirestore(app); }
+    NET.db = DB;
   }catch(e){ NET.state='offline'; renderEntry(); return; }
   onAuthStateChanged(AUTH, async user=>{
     stopNet();
@@ -2629,6 +2645,23 @@ syncSetUI();
 let saved = 0;
 try{ const v = parseInt(localStorage.getItem('pishpirik-deck'),10); if (v>=0 && v<THEMES.length) saved=v; }catch(e){}
 applyTheme(saved);
+
+/* ================= kontrollo nëse ka version të ri ================= */
+let updSeen = false;
+async function checkForUpdate(){
+  if (updSeen) return;
+  try{
+    const r = await fetch('./index.html?v=' + Date.now(), {cache:'no-store'});
+    const t = await r.text();
+    const m = t.match(/APP_VERSION\s*=\s*([\d.]+)/);
+    if (m && parseFloat(m[1]) > APP_VERSION){ updSeen = true; $('updBar').hidden = false; }
+  }catch(e){}
+}
+$('updBtn').onclick = () => location.reload();
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
+window.addEventListener('focus', checkForUpdate);
+setInterval(checkForUpdate, 3*60*1000);
+setTimeout(checkForUpdate, 15*1000);
 
 show('entry');
 initNet();
