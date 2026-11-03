@@ -609,7 +609,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261103.3;
+const APP_VERSION = 20261103.4;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -1667,7 +1667,7 @@ function startNet(uid){
     // only the name may have changed: don't redraw the table (it would cut a card animation in half)
     if (APP.screen==='game' && APP.mode==='online' && NET.gameDoc){ APP.oppName = nameOf(NET.gameDoc.p[1-APP.me]); $('name1').textContent = APP.oppName; }
   }, ()=>{ NET.state='offline'; renderEntry(); }));
-  netSubs.push(DB.collection('games').where('p','array-contains',uid).onSnapshot(snap=>{
+  netSubs.push(NET.db.collection('games').where('p','array-contains',uid).onSnapshot(snap=>{
     const list = snap.docs.map(d=>({id:d.id, ...d.data()}));
     const hadAny = Object.keys(NET.prevStatus).length>0;
     list.forEach(g=>{
