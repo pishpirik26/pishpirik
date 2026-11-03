@@ -609,7 +609,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261103.2;
+const APP_VERSION = 20261103.3;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -1628,8 +1628,11 @@ const RTGames = {
       add: async d=>{
         const id = rpush(rref(RDB,'games')).key;
         try{
+          // Shkruhet lojën e PASTAJ indeksin, jo në një update të vetëm: rregullat e gameIndex
+          // kontrollojnë te root.child('games')... dhe ajo nuk e sheh shkrimin e njëkohshëm të
+          // games/{id} brenda të njëjtit update shumë-shtegësh — duhet të jetë ruajtur më parë.
+          await rset(rref(RDB,'games/'+id), enc(d));
           await rupdate(rref(RDB), {
-            ['games/'+id]: enc(d),
             ['gameIndex/'+d.p[0]+'/'+id]: true,
             ['gameIndex/'+d.p[1]+'/'+id]: true,
           });
