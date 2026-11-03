@@ -609,7 +609,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261103.5;
+const APP_VERSION = 20261103.6;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -1617,11 +1617,12 @@ const RTGames = {
           const ids = snap.exists() ? Object.keys(snap.val()) : [];
           Object.keys(subs).forEach(id=>{ if (!ids.includes(id)){ subs[id](); delete subs[id]; delete cache[id]; } });
           ids.forEach(id=>{
-            if (!subs[id]) subs[id] = ronValue(rref(RDB,'games/'+id), s=>{
-              if (s.exists()) cache[id] = s.val();
-              else { delete cache[id]; rremove(rref(RDB,'gameIndex/'+uid+'/'+id)).catch(()=>{}); } // lojë e fshime: pastro indeksin tim
-              emit();
-            });
+            if (!subs[id]){
+              const gone = () => { delete cache[id]; rremove(rref(RDB,'gameIndex/'+uid+'/'+id)).catch(()=>{}); emit(); }; // lojë e fshime: pastro indeksin tim
+              subs[id] = ronValue(rref(RDB,'games/'+id), s=>{
+                if (s.exists()){ cache[id] = s.val(); emit(); } else gone();
+              }, ()=>{ delete subs[id]; gone(); }); // dëgjuesi u anulua (s'ka leje / loja s'ekziston ma)
+            }
           });
           emit();
         }, err=>e&&e(normRtErr(err)));
