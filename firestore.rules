@@ -16,19 +16,8 @@ service cloud.firestore {
       allow write: if signedIn() && request.auth.uid == uid;
     }
 
-    // Lojërat: vetëm lojtarët e lojës mund ta lexojnë dhe ta ndryshojnë.
-    match /games/{gameId} {
-      allow read: if signedIn() && (resource == null || request.auth.uid in resource.data.p);
-      // 2 deri 4 lojtarë (Pishpirik dhe Poker janë 2 shokë; CPU-të e pokerit nuk janë në listë)
-      allow create: if signedIn()
-        && request.resource.data.p.size() >= 2
-        && request.resource.data.p.size() <= 4
-        && request.resource.data.p[0] == request.auth.uid
-        && !(request.auth.uid in request.resource.data.p[1:]);
-      allow update: if signedIn()
-        && request.auth.uid in resource.data.p
-        && request.resource.data.p == resource.data.p;
-      allow delete: if signedIn() && request.auth.uid in resource.data.p;
-    }
+    // Shënim: 'games' (lëvizjet live të lojës) nuk jeton ma këtu — u kalue te Firebase
+    // Realtime Database (ma e shpejtë për sinkronizim të vogël mes 2 lojtarësh).
+    // Rregullat e tij jan te databaza konsola → Realtime Database → Rules.
   }
 }

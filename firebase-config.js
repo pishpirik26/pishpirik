@@ -6,7 +6,10 @@ export const firebaseConfig = {
   projectId: "pishpirik-7550f",
   storageBucket: "pishpirik-7550f.firebasestorage.app",
   messagingSenderId: "105744464734",
-  appId: "1:105744464734:web:5e3238b110dd0150a6adcf"
+  appId: "1:105744464734:web:5e3238b110dd0150a6adcf",
+  // Lëvizjet e lojës live shkojnë te Realtime Database (ma e shpejtë se Firestore
+  // për sinkronizim të vogël mes 2 lojtarësh); llogaritë/shokët mbesin në Firestore.
+  databaseURL: "https://pishpirik-7550f-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
 // Emri i përdoruesit kthehet në një email të brendshëm (p.sh. arben@pishpirik.game)

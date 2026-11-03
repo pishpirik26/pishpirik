@@ -15,6 +15,7 @@
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js">
 <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%}input,textarea{-webkit-user-select:text;user-select:text}img,canvas{-webkit-user-drag:none;user-drag:none}</style>
 <title>Pishpirik</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -604,9 +605,11 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
 // Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
 let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, initializeFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
+// Lëvizjet e lojës (rtGames) shkojnë te Realtime Database — ma e shpejtë se Firestore për sinkronizim të vogël, të shpeshtë mes 2 lojtarësh.
+let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261016.2;
+const APP_VERSION = 20261103.1;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -1575,6 +1578,72 @@ const DB = {
     return {...mk(base), add: d=>addDoc(base, enc(d))};
   },
 };
+/* ---- lëvizjet e lojës ('games') jetojnë në Realtime Database, jo Firestore ---- */
+let RDB=null;
+const normRtErr = e => { if (e && e.message && /PERMISSION_DENIED/i.test(e.message)) e.code='permission-denied'; return e; };
+// RTDB e kthen nj array bosh (p.sh. G.pile=[] pas nj kapjeje) në "s'ka vlerë" — prandaj G
+// udhëton si tekst JSON (njëlloj si te Firestore), kështu shmangim krejt çështjet e arrays/objects të RTDB-së.
+const decG = v => (v && typeof v.G==='string') ? {...v, G:JSON.parse(v.G)} : v;
+const wrapRt = (id, v) => ({ id, exists: v!=null, data:()=>decG(v) });
+// RTDB.update() bashkon vetëm nivelin e sipërm të shtegut; i shpërndajmë fushat e hyna (si "chats")
+// në shtigje relative me "/" që secili fushë e brendshme të bashkohet veç, pa fshi fushat e tjera.
+function flattenForUpdate(obj, prefix=''){
+  const out = {};
+  for (const k in obj){
+    const v = obj[k], path = prefix ? prefix+'/'+k : k;
+    if (v && typeof v==='object' && !Array.isArray(v)) Object.assign(out, flattenForUpdate(v, path));
+    else out[path] = v===undefined ? null : v;
+  }
+  return out;
+}
+const RTGames = {
+  doc(id){ const r=()=>rref(RDB, 'games/'+id); return {
+    get: async()=>{ try{ const s=await rget(r()); return wrapRt(id, s.exists()?s.val():null); }catch(e){ throw normRtErr(e); } },
+    set: async d=>{ try{ await rset(r(), enc(d)); }catch(e){ throw normRtErr(e); } },
+    update: async d=>{ try{ await rupdate(r(), flattenForUpdate(enc(d))); }catch(e){ throw normRtErr(e); } },
+    delete: async()=>{ try{ await rremove(r()); }catch(e){ throw normRtErr(e); } },
+    onSnapshot: (n,e)=>ronValue(r(), s=>n(wrapRt(id, s.exists()?s.val():null)), err=>e&&e(normRtErr(err))),
+  }; },
+  collection(){
+    return {
+      where(field, op, uid){ return { onSnapshot(n, e){
+        const idxRef = rref(RDB, 'gameIndex/'+uid);
+        const subs = {}, cache = {};
+        let active = true;
+        const emit = () => { if (active) n({ docs: Object.entries(cache).map(([id,d])=>wrapRt(id,d)), size:Object.keys(cache).length, empty:!Object.keys(cache).length }); };
+        const unsubIdx = ronValue(idxRef, snap=>{
+          const ids = snap.exists() ? Object.keys(snap.val()) : [];
+          Object.keys(subs).forEach(id=>{ if (!ids.includes(id)){ subs[id](); delete subs[id]; delete cache[id]; } });
+          ids.forEach(id=>{
+            if (!subs[id]) subs[id] = ronValue(rref(RDB,'games/'+id), s=>{
+              if (s.exists()) cache[id] = s.val();
+              else { delete cache[id]; rremove(rref(RDB,'gameIndex/'+uid+'/'+id)).catch(()=>{}); } // lojë e fshime: pastro indeksin tim
+              emit();
+            });
+          });
+          emit();
+        }, err=>e&&e(normRtErr(err)));
+        return ()=>{ active=false; unsubIdx(); Object.values(subs).forEach(f=>f()); };
+      }}; },
+      add: async d=>{
+        const id = rpush(rref(RDB,'games')).key;
+        try{
+          await rupdate(rref(RDB), {
+            ['games/'+id]: enc(d),
+            ['gameIndex/'+d.p[0]+'/'+id]: true,
+            ['gameIndex/'+d.p[1]+'/'+id]: true,
+          });
+        }catch(e){ throw normRtErr(e); }
+        return {id};
+      },
+    };
+  },
+};
+// NET.db ruan ndërfaqen e vjetër .doc()/.collection(); vetëm 'games' kalon te RTDB — gjithçka tjetër (llogari, shokë) mbetet te Firestore.
+const Router = {
+  doc: path => path.startsWith('games/') ? RTGames.doc(path.slice(6)) : DB.doc(path),
+  collection: path => path==='games' ? RTGames.collection() : DB.collection(path),
+};
 const ONLINE_MS = 2*60*1000;
 let netSubs = [], beat = null;
 function stopNet(){ netSubs.forEach(f=>f()); netSubs=[]; clearInterval(beat); beat=null; NET.players={}; NET.player=null; NET.games=[]; NET.prevStatus={}; }
@@ -1617,18 +1686,21 @@ async function initNet(){
   if (!firebaseConfig || !firebaseConfig.apiKey || /VENDOS/.test(firebaseConfig.apiKey)){ NET.state='none'; renderEntry(); return; }
   try{
     const V = 'https://www.gstatic.com/firebasejs/10.12.2/';
-    const [A, Au, Fs] = await Promise.all([import(V+'firebase-app.js'), import(V+'firebase-auth.js'), import(V+'firebase-firestore.js')]);
+    const [A, Au, Fs, Rt] = await Promise.all([import(V+'firebase-app.js'), import(V+'firebase-auth.js'), import(V+'firebase-firestore.js'), import(V+'firebase-database.js')]);
     ({initializeApp} = A);
     ({getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword} = Au);
     ({getFirestore, initializeFirestore, getDoc, setDoc, deleteDoc, addDoc, query, where} = Fs);
     fdoc = Fs.doc; fcol = Fs.collection; fsnap = Fs.onSnapshot;
+    ({getDatabase} = Rt);
+    rref = Rt.ref; rget = Rt.get; rset = Rt.set; rupdate = Rt.update; rremove = Rt.remove; ronValue = Rt.onValue; rpush = Rt.push;
     const app = initializeApp(firebaseConfig);
     AUTH = getAuth(app);
     // Rrjetet mobile në Kosovë/Shqipëri shpesh e bllokojnë WebSocket-in; pa këtë, Firestore
     // humb disa sekonda duke provuar WebChannel para se të kthehet te long-polling — kjo shihet si "vonesë".
     try{ FDB = initializeFirestore(app, {experimentalAutoDetectLongPolling:true, experimentalLongPollingOptions:{timeoutSeconds:8}}); }
     catch(e){ FDB = getFirestore(app); }
-    NET.db = DB;
+    RDB = getDatabase(app);
+    NET.db = Router;
   }catch(e){ NET.state='offline'; renderEntry(); return; }
   onAuthStateChanged(AUTH, async user=>{
     stopNet();
