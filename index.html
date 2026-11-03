@@ -609,7 +609,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261103.4;
+const APP_VERSION = 20261103.5;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -818,6 +818,8 @@ function newDeck(rand){
 function shuffle(a, rand=Math.random){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(rand()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function seeded(seed){ let a = seed>>>0; return ()=>{ a = (a + 0x6D2B79F5)>>>0; let t = Math.imul(a ^ (a>>>15), 1 | a); t = (t + Math.imul(t ^ (t>>>7), 61 | t)) ^ t; return ((t ^ (t>>>14))>>>0) / 4294967296; }; }
 const newSeed = () => (Math.random()*4294967296)>>>0;
+// id i shkurtër i rastësishëm (nonce) për çdo gjendje loje online — u fshi gabimisht bashkë me Pokerin
+const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 function inner(c){
   const s = c.s + VS;
   const isFace = c.r==='J'||c.r==='Q'||c.r==='K';
