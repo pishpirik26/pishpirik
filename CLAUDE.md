@@ -89,7 +89,7 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
   test accounts "not applicable" (testers create their own; explained in the UX scenario PDF, `tv/docs`).
   Self-check list: 33 Pass, 20 N/A. Store images: `tv/store` (flat-background icon 400×400, tile color #1d4a37).
 - History: 1.0.0 (2026-11-03, cancelled) → 1.0.1 (2026-11-03, built from web 20261103.4, lacked the rid fix) →
-  1.0.2 (2026-11-04, web 20261104.1: random cross-play, all fixes).
+  1.0.2 (2026-11-04, web 20261104.2: random cross-play, all fixes, not yet uploaded to LG).
 - Every LG upload needs a higher version (appinfo.json, file version in the upload row, Service Info).
 - **Current status (2026-11-04 01:10):** 1.0.1 is "QA Processing" at LG (can't be edited/cancelled by us any more;
   Edit redirects to 1:1 Q&A). We sent a 1:1 Q&A (Applications → App QA Schedule Check/Hold Request) asking LG to
@@ -114,3 +114,8 @@ accounts (test accounts used: rtdbtest1 / rtdbtest2, password in the owner's han
 - 2026-11-04 (20261104.1): "Luaj me dikë" anonymous cross-play; hard reload + auto-update; per-friend listeners
   (Firestore quota); race fixes (new game during CPU move, "Raundi tjetër" overwrite); rematch results;
   friendlier invite errors; privacy page updated; TV 1.0.2.
+- 2026-11-04 (20261104.2): the table now fits the screen without scrolling on every size (small phones, phones held
+  sideways, laptops 1024x600/1280x720): header hidden in game, settings button in the game bar (#bSetG), cards sized by
+  screen height, landscape = TV-like grid (scores left). That CSS sits between `web-only-start/end` comments and
+  make_base.py strips it for the TV (TV has its own layout in tv.css). Card-design tiles no longer overflow; update bar
+  text fixed. `body.dataset.screen` is now set by the web app itself. TV 1.0.2 rebuilt from this version.
