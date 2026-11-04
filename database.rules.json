@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "games": {
+      "$gameId": {
+        ".read": "auth != null && (!data.exists() || data.child('p').child('0').val() === auth.uid || data.child('p').child('1').val() === auth.uid)",
+        ".write": "auth != null && ((!data.exists() && newData.child('p').child('0').val() === auth.uid && newData.child('p').child('0').val() !== newData.child('p').child('1').val()) || (data.exists() && (data.child('p').child('0').val() === auth.uid || data.child('p').child('1').val() === auth.uid) && (!newData.exists() || (newData.child('p').child('0').val() === data.child('p').child('0').val() && newData.child('p').child('1').val() === data.child('p').child('1').val()))))"
+      }
+    },
+    "gameIndex": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$gameId": {
+          ".write": "auth != null && (auth.uid === $uid || (newData.exists() && newData.val() === true && root.child('games').child($gameId).child('p').child('0').val() === auth.uid && root.child('games').child($gameId).child('p').child('1').val() === $uid))"
+        }
+      }
+    },
+    "match": {
+      "waiting": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!newData.exists() || newData.child('uid').val() === auth.uid || (data.exists() && data.child('uid').val() === auth.uid))",
+        ".validate": "!newData.exists() || (newData.child('uid').isString() && newData.child('ts').isNumber() && newData.child('ts').val() <= now + 60000)"
+      },
+      "pairs": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && (auth.uid === $uid || (newData.isString() && root.child('games').child(newData.val()).child('p').child('0').val() === auth.uid && root.child('games').child(newData.val()).child('p').child('1').val() === $uid))"
+        }
+      }
+    }
+  }
+}

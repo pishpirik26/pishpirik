@@ -148,6 +148,19 @@ label.srow > span{flex:1; min-width:0}
 .cpu-btn:focus-visible{outline:2px solid var(--cream); outline-offset:3px}
 .cpu-btn b{display:block; font-family:var(--display); font-weight:900; font-size:21px; line-height:1.1}
 .cpu-btn small{display:block; font-size:13px; color:#4d3a12; margin-top:2px}
+.cpu-btn.rnd{background:rgba(0,0,0,.26); color:var(--cream); box-shadow:inset 0 0 0 1.5px var(--brass)}
+.cpu-btn.rnd:hover{background:rgba(0,0,0,.38)}
+.cpu-btn.rnd b{color:var(--brass)} .cpu-btn.rnd small{color:var(--muted)}
+/* kërkimi i lojtarit: tri karta që kthehen me radhë */
+.sheet.mm-sheet{width:min(400px,100%); text-align:center}
+.mm-cards{display:flex; justify-content:center; gap:8px; height:64px; margin:4px 0 12px; perspective:400px}
+.mm-cards span{width:40px; height:58px; border-radius:6px; background:var(--back); box-shadow:0 0 0 2px var(--back-edge), 0 0 0 3.5px var(--back-frame), 0 4px 10px rgba(0,0,0,.25);
+  animation:mmflip 1.8s ease-in-out infinite}
+.mm-cards span:nth-child(2){animation-delay:.25s} .mm-cards span:nth-child(3){animation-delay:.5s}
+@keyframes mmflip{0%,60%,100%{transform:translateY(0) rotateY(0)} 25%{transform:translateY(-10px) rotateY(180deg)}}
+@media (prefers-reduced-motion: reduce){ .mm-cards span{animation:none} }
+.mm-time{font-variant-numeric:tabular-nums; font-weight:600; font-size:18px; margin:0 0 12px; color:var(--paper-ink)}
+.sheet .row-end.mm-end{justify-content:center}
 #scrEntry .hero{padding-block:6px 0}
 #scrEntry .fan{--cw:clamp(44px, 11vw, 64px); --ch:calc(var(--cw) * 1.42); height:calc(var(--ch) + 20px)}
 #scrEntry .hero h1{font-size:clamp(40px, 10vw, 64px)}
@@ -413,7 +426,7 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     <div class="hero">
       <div class="fan" id="fan"></div>
       <h1 id="heroH">Pishpirik</h1>
-      <p>Kyçu për të luajtur me shokët, ose luaj me CPU pa llogari.</p>
+      <p>Kyçu për të luajtur me shokët, ose luaj pa llogari: me CPU ose me dikë nga kudo.</p>
     </div>
     <div class="panel auth">
       <div id="authLogged" hidden>
@@ -450,13 +463,16 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
     <button class="cpu-btn" id="chCpu" type="button">
       <span><b>Luaj me CPU</b><small>Pa llogari, fillon menjëherë</small></span><span aria-hidden="true">→</span>
     </button>
+    <button class="cpu-btn rnd" id="chRnd" type="button">
+      <span><b>Luaj me dikë</b><small>Pa llogari · lojtar i rastësishëm nga telefoni, PC ose TV</small></span><span aria-hidden="true">⇄</span>
+    </button>
   </section>
 
   <!-- LOBBY -->
   <section class="screen" id="scrLobby" hidden>
     <div class="panel me-bar">
       <div><div class="who" id="lbWho"></div><div class="rec" id="lbRec"></div></div>
-      <div class="tools"><button class="btn" type="button" id="bCpu2">Luaj me CPU</button><button class="btn" type="button" id="bOut">Dil</button></div>
+      <div class="tools"><button class="btn" type="button" id="bCpu2">Luaj me CPU</button><button class="btn" type="button" id="bRnd2">Luaj me dikë</button><button class="btn" type="button" id="bOut">Dil</button></div>
     </div>
     <div class="lobby-grid">
       <div class="panel">
@@ -545,6 +561,16 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
   </div>
 </div>
 
+<div class="overlay" id="mmOv" hidden>
+  <div class="sheet mm-sheet" role="dialog" aria-labelledby="mmH" aria-live="polite">
+    <div class="mm-cards" aria-hidden="true"><span></span><span></span><span></span></div>
+    <h2 id="mmH">Duke kërkuar lojtar…</h2>
+    <p class="sub" id="mmSub">Loja nis sapo dikush tjetër të shtypë "Luaj me dikë", në telefon, PC ose TV.</p>
+    <p class="mm-time" id="mmTime">0:00</p>
+    <div class="row-end mm-end"><button class="btn" type="button" id="mmCancel">Anulo</button></div>
+  </div>
+</div>
+
 <div class="overlay" id="rulesOv" hidden>
   <div class="sheet" role="dialog" aria-labelledby="rulesH">
     <h2 id="rulesH">Si luhet Pishpiriku</h2>
@@ -606,10 +632,10 @@ import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
 // Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
 let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword, getFirestore, initializeFirestore, fdoc, fcol, getDoc, setDoc, deleteDoc, addDoc, fsnap, query, where;
 // Lëvizjet e lojës (rtGames) shkojnë te Realtime Database — ma e shpejtë se Firestore për sinkronizim të vogël, të shpeshtë mes 2 lojtarësh.
-let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush;
+let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush, rtxn, ronDisconnect, signInAnonymously;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261103.6;
+const APP_VERSION = 20261104.1;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -643,7 +669,8 @@ const clone = o => JSON.parse(JSON.stringify(o));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let S = null;                       // the game state on screen
-const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false};
+// gen rritet sa herë nis një lojë e re; animacionet që mbarojnë pas kësaj s'guxojnë ta prekin lojën e re
+const APP = {screen:'entry', mode:null, me:0, oppName:'Kompjuteri', busy:false, gen:0};
 const NET = {chatSeen:null, state:'connecting', db:null, user:null, room:null, uid:null, players:{}, player:null, games:[], online:new Set(),
              gameId:null, gameDoc:null, unsubGame:null, animating:false, pending:null, prevStatus:{}, net:navigator.onLine};
 window.addEventListener('offline', () => { NET.net = false; if (APP.screen==='game') render(); });
@@ -1032,19 +1059,24 @@ async function fly(fromEl, card){
   await sleep(350);
   el.remove();
 }
+// kthen false nëse ndërkohë u nis një lojë tjetër (atëherë thirrësi s'duhet të prekë asgjë)
 async function animateMove(m, G){
+  const gen = APP.gen;
   const mine = m.by===APP.me;
   const handEl = mine ? $('hand0') : $('hand1');
   await fly(handEl.children[m.idx] || handEl.children[0], m.card);
+  if (gen!==APP.gen) return false;
   sfx.play();
   if (m.captured){
     renderPile(m.before.concat([{c:m.card}]));
     await sleep(SET.anim ? 520 : 380);
+    if (gen!==APP.gen) return false;
     if (m.bonus){ burst(mine ? 'Ti' : APP.oppName, m.bonus); sfx.pishti();
       if (APP.mode==='cpu' && Math.random()<.6) setTimeout(()=>cpuSay(mine ? ['e',3] : ['e',1]), 1300); }
     else sfx.capture();
     if (SET.anim) $('pile').classList.add(mine ? 'sweep0' : 'sweep1');
     await sleep(SET.anim ? 440 : 150);
+    if (gen!==APP.gen) return false;
   }
   S = G; render();
   if (m.dealt) setTimeout(()=>sfx.deal(), 120);
@@ -1108,6 +1140,20 @@ async function nextRound(){
   if (APP.mode==='cpu' && S.summary.over){ $('sumOv').hidden = true; startCpu(); return; }
   const G = S.summary.over ? newMatch(roundsOf(S), S.seed, S.seq) : (()=>{ const g=clone(S); startRound(g); return g; })();
   G.nonce = 'r'+G.seq;   // the same on both phones: whoever presses first, the round is identical
+  if (S.summary.over) G.match = (S.match||1)+1;   // revanshi numërohet veç te fitoret/humbjet
+  if (APP.mode==='online'){
+    // nëse shoku e ka nis raundin tashmë (e ndoshta ka hedh edhe kartë), mos ia shkel lëvizjen
+    const nb = $('bNext'); nb.disabled = true;
+    const gen = APP.gen, gid = NET.gameId;
+    try{
+      const cur = await NET.db.doc('games/'+gid).get();
+      const cg = cur.exists && cur.data().G;
+      if (gen!==APP.gen) return;                        // ndërkohë dole nga kjo lojë
+      if (cg && cg.seq >= G.seq){ nb.disabled = false; if (S && S.phase==='summary') processGame(cg); return; }
+    }catch(e){}
+    nb.disabled = false;
+    if (gen!==APP.gen || !S || S.phase!=='summary') return;
+  }
   $('sumOv').hidden = true;
   sfx.shuffle(); setTimeout(()=>sfx.deal(), 900);
   if (APP.mode==='cpu'){ S=G; render(); maybeAi(); return; }
@@ -1120,6 +1166,7 @@ async function nextRound(){
 function startCpu(){ pickRounds('Sa raunde kundër CPU?', 'Fillo', r=>startCpuWith(r)); }
 function startCpuWith(rounds){
   closeGameSub();
+  APP.gen++; NET.animating=false;
   APP.mode='cpu'; APP.me=0; APP.oppName='Kompjuteri'; APP.busy=false; CHATLOG.length=0; lastSumKey='';
   S = newMatch(rounds);
   show('game'); render(); afterState(); sfx.shuffle(); setTimeout(()=>sfx.deal(), 900); maybeAi();
@@ -1128,10 +1175,12 @@ function maybeAi(){ if (APP.mode==='cpu' && S && S.phase==='play' && S.turn===1)
 async function aiTurn(){
   if (APP.mode!=='cpu' || !S || S.turn!==1 || S.phase!=='play' || APP.busy) return;
   APP.busy = true;
+  const gen = APP.gen;
   await sleep(250);
+  if (gen!==APP.gen) return;
   if (APP.mode!=='cpu' || APP.screen!=='game'){ APP.busy=false; return; }
   const G = clone(S); const m = applyPlay(G, 1, aiPick(G));
-  await animateMove(m, G);
+  if (await animateMove(m, G)===false) return;
   APP.busy = false; render(); afterState();
 }
 async function humanPlay(i){
@@ -1139,7 +1188,7 @@ async function humanPlay(i){
   APP.busy = true;
   const G = clone(S); const m = applyPlay(G, APP.me, i);
   if (APP.mode==='cpu'){
-    await animateMove(m, G);
+    if (await animateMove(m, G)===false) return;
     APP.busy = false; render(); afterState(); maybeAi();
     return;
   }
@@ -1147,7 +1196,7 @@ async function humanPlay(i){
   G.nonce = rid();
   const status = (G.phase==='summary' && G.summary.over) ? 'over' : 'play';
   const write = NET.db.doc('games/'+NET.gameId).update({status, G}).then(()=>null, e=>e);
-  await animateMove(m, G);
+  if (await animateMove(m, G)===false) return;
   const err = await write;
   NET.animating = false; APP.busy = false;
   if (err){ toast(writeErr(err)); if (NET.gameDoc && NET.gameDoc.G) S = NET.gameDoc.G; }
@@ -1186,6 +1235,7 @@ async function hashPw(pw, salt){
   return b64(bits);
 }
 function writeErr(e){
+  if (e) console.warn('Pishpirik:', e);   // gabimi i vërtetë mbetet në konsolë, që mos me u fsheh pas mesazhit të përgjithshëm
   const c = e && e.code || '';
   if (c.includes('permission-denied')) return 'Nuk ke leje për këtë veprim. Kyçu prapë.';
   if (c.includes('unavailable') || c.includes('network')) return 'S’ka lidhje me internetin. Provo prapë.';
@@ -1314,6 +1364,8 @@ function authTab(up){
 
 /* ================= friends & lobby ================= */
 const nameOf = uid => NET.players[uid] ? '@'+NET.players[uid].username : 'Lojtar';
+// emri i një lojtari brenda një loje: lojtarët pa llogari s'kanë profil, emri i tyre udhëton me lojën
+const gName = (g, uid) => NET.players[uid] ? nameOf(uid) : (g && g.names && g.names[uid] && g.names[uid].n) || 'Lojtar';
 async function addFriend(ev){
   ev.preventDefault();
   const u=$('addUser').value.trim().replace(/^@/,''), err=$('addErr');
@@ -1351,13 +1403,25 @@ async function acceptInvite(g){
   if (accepting.has(g.id)) return;          // a double tap must not deal two different games
   accepting.add(g.id);
   try{
+    // shoku mund ta ketë anulu ftesën ndërkohë (ose tjetër kush e ka pranu në telefon tjetër)
+    const cur = await NET.db.doc('games/'+g.id).get();
+    if (!cur.exists){ toast('Kjo ftesë u anulua.'); return; }
+    const cd = cur.data();
+    if (cd.status!=='invite'){ if (cd.status==='play') openGame(g.id); else toast('Kjo ftesë nuk vlen më.'); return; }
     const G = newMatch(g.rounds||5); G.nonce = rid();
-    await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created, G});
+    await NET.db.doc('games/'+g.id).set({p:g.p, status:'play', rounds:g.rounds||5, created:g.created||Date.now(), G});
     openGame(g.id);
   }catch(e){ toast(writeErr(e)); }
-  setTimeout(()=>accepting.delete(g.id), 4000);
+  finally{ setTimeout(()=>accepting.delete(g.id), 4000); }
 }
-async function dropGame(g){ try{ await NET.db.doc('games/'+g.id).delete(); }catch(e){ toast(writeErr(e)); } }
+async function dropGame(g){
+  try{ await NET.db.doc('games/'+g.id).delete(); }
+  catch(e){
+    // nëse loja s'ekziston ma (shoku e fshiu i pari), s'ka pse me tregu gabim — thjesht hiqe nga lista
+    try{ const cur = await NET.db.doc('games/'+g.id).get(); if (!cur.exists){ NET.games = NET.games.filter(x=>x.id!==g.id); renderLobby(); return; } }catch(_){}
+    toast(writeErr(e));
+  }
+}
 
 function btn(label, fn, primary){ const b=document.createElement('button'); b.type='button'; b.className='btn'+(primary?' primary':''); b.textContent=label; b.onclick=fn; return b; }
 function rowEl(name, status, actions, dot){
@@ -1415,7 +1479,7 @@ function renderLobby(){
       acts=[btn('Shiko', ()=>openGameOf(g)), btn('Fshi', ()=>dropGame(g))];
     }
     else { st = g.leftBy===me ? 'E le lojën' : 'Shoku e la lojën'; acts=[btn('Fshi', ()=>dropGame(g))]; }
-    gl.append(rowEl('🃏 ' + nameOf(opp), st, acts, NET.online.has(opp)));
+    gl.append(rowEl((g.type==='random' ? '⇄ ' : '🃏 ') + gName(g, opp), st, acts, NET.online.has(opp)));
   });
 }
 
@@ -1424,6 +1488,7 @@ function closeGameSub(){ if (NET.unsubGame){ NET.unsubGame(); NET.unsubGame=null
 function openGameOf(g){ if (g.type!=='billiard' && g.type!=='poker') openGame(g.id); }
 function openGame(gid){
   closeGameSub();
+  APP.gen++; NET.animating=false;
   APP.mode='online'; APP.busy=false; S=null; NET.gameId=gid; NET.chatSeen=null; CHATLOG.length=0; lastSumKey='';
   $('hand0').replaceChildren(); $('hand1').replaceChildren(); $('pile').replaceChildren(); setMsg('Duke hapur lojën…', true);
   show('game');
@@ -1435,7 +1500,7 @@ function onGameSnap(snap){
   const d = clone(snap.data());
   NET.gameDoc = d;
   APP.me = Math.max(0, d.p.indexOf(NET.uid));
-  APP.oppName = nameOf(d.p[1-APP.me]);
+  APP.oppName = gName(d, d.p[1-APP.me]);
   handleChats(d);
   if (d.status==='invite' || !d.G){ setMsg(`Në pritje që ${APP.oppName} të pranojë ftesën…`, true); return; }
   recordResult(d);
@@ -1445,7 +1510,7 @@ async function processGame(G){
   if (NET.animating || APP.busy){ NET.pending = G; return; }
   if (S && G.seq===S.seq+1 && G.lastMove && G.lastMove.seq===G.seq && G.lastMove.by!==APP.me){
     NET.animating = true;
-    await animateMove(G.lastMove, G);
+    if (await animateMove(G.lastMove, G)===false) return;
     NET.animating = false;
     render(); afterState(); flushPending();
   } else if (!S || G.seq!==S.seq || G.nonce!==S.nonce){
@@ -1459,14 +1524,144 @@ async function recordResult(d){
   if (d.status!=='over' || !d.G || !NET.player) return;
   const i = d.p.indexOf(NET.uid); if (i<0) return;
   const res = NET.player.results || {};
-  if (res[NET.gameId]) return;
+  const key = (d.G.match||1)>1 ? NET.gameId+'_'+d.G.match : NET.gameId;   // çdo revansh ka rezultatin e vet
+  if (res[key]) return;
   const Wd = winsOf(d.G); const r = Wd[i]>Wd[1-i] ? 'w' : Wd[i]<Wd[1-i] ? 'l' : 'd';
-  NET.player.results = {...res, [NET.gameId]:r};
-  try{ await NET.db.doc('players/'+NET.uid).update({results:{[NET.gameId]:r}}); }catch(e){}
+  NET.player.results = {...res, [key]:r};
+  try{ await NET.db.doc('players/'+NET.uid).update({results:{[key]:r}}); }catch(e){}
 }
 async function leaveOnline(){
   if (!NET.gameDoc) return;
   try{ await NET.db.doc('games/'+NET.gameId).update({status:'left', leftBy:NET.uid}); }catch(e){ toast(writeErr(e)); }
+}
+
+/* ================= "Luaj me dikë": lojtar i rastësishëm, pa llogari, cross-play =================
+   Telefoni, PC-ja dhe TV-ja përdorin të njëjtën databazë, ndaj luajnë bashkë pa dallim.
+   Te match/waiting rri gjithmonë më së shumti NJË lojtar që pret. Kush vjen tjetër e "merr" me
+   transaksion (që dy veta mos ta marrin të njëjtin), krijon lojën dhe ia lajmëron te match/pairs/{uid}.
+   Kush pret e rifreskon shenjën çdo 7 s; një shenjë ma e vjetër se 20 s s'merret parasysh (telefoni u mbyll). */
+const DEVICE = /web0s|webos|netcast|smart-?tv/i.test(navigator.userAgent) ? 'TV'
+  : (/android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints>1 && /macintosh/i.test(navigator.userAgent))) ? 'Telefon' : 'PC';
+const MM_ROUNDS = 3, MM_FRESH = 20000, MM_BEAT = 7000, MM_TAKEN_WAIT = 12000;
+const MM = {on:false, uid:null, waiting:false, timer:null, tick:null, unsubPair:null, disc:null, started:0};
+function myPublicName(uid){ return loggedIn() ? '@'+NET.player.username : 'Lojtar '+String(uid||'').slice(-4).toUpperCase(); }
+async function ensureAuth(){
+  if (!AUTH || NET.state!=='ok') throw Object.assign(new Error('offline'), {code:'unavailable'});
+  if (!AUTH.currentUser) await signInAnonymously(AUTH);      // pa llogari: Firebase i jep një identitet anonim
+  NET.uid = NET.uid || AUTH.currentUser.uid;
+  return AUTH.currentUser.uid;
+}
+function mmTick(){
+  const s = Math.floor((Date.now()-MM.started)/1000);
+  $('mmTime').textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+  if (s===45) $('mmSub').textContent = 'Askush s’po kërkon tani. Mbaje hapur, loja nis sapo të hyjë dikush. Mund ta thërrasësh edhe një shok të shtypë "Luaj me dikë".';
+}
+async function startRandom(){
+  if (MM.on) return;
+  if (NET.state==='connecting'){ toast('Duke u lidhur me serverin, provo pas pak.'); return; }
+  if (NET.state!=='ok'){ toast('S’ka lidhje me serverin. Kontrollo internetin.'); return; }
+  Object.assign(MM, {on:true, waiting:false, started:Date.now()});
+  $('mmH').textContent = 'Duke kërkuar lojtar…';
+  $('mmSub').textContent = 'Loja nis sapo dikush tjetër të shtypë "Luaj me dikë", në telefon, PC ose TV.';
+  $('mmOv').hidden = false; mmTick(); MM.tick = setInterval(mmTick, 1000);
+  setTimeout(()=>{ if (!$('mmOv').hidden) $('mmCancel').focus(); }, 30);
+  try{
+    const uid = MM.uid = await ensureAuth();
+    if (!MM.on) return;
+    await rremove(rref(RDB,'match/pairs/'+uid)).catch(()=>{});   // lajmërim i vjetër nga një kërkim i kaluar
+    if (!MM.on) return;
+    MM.unsubPair = ronValue(rref(RDB,'match/pairs/'+uid), s=>{ const gid=s.val(); if (gid && MM.on) mmFound(gid); }, ()=>{});
+    // mbaje kopjen lokale të radhës të freskët, që transaksioni mos të vendosë mbi të dhëna të vjetra
+    await new Promise(res=>{ let done=false; MM.unsubWait = ronValue(rref(RDB,'match/waiting'), ()=>{ if(!done){ done=true; res(); } }, ()=>{ if(!done){ done=true; res(); } }); setTimeout(()=>{ if(!done){ done=true; res(); } }, 5000); });
+    if (!MM.on) return;
+    await mmTry();
+  }catch(e){
+    mmStop();
+    toast(e && e.code==='auth/operation-not-allowed' ? 'Loja pa llogari s’është aktivizuar ende në server.' : writeErr(e));
+  }
+}
+async function mmTry(){
+  if (!MM.on) return;
+  clearTimeout(MM.timer);
+  const me = MM.uid;
+  let opp = null, taken = false;
+  const res = await rtxn(rref(RDB,'match/waiting'), cur=>{
+    opp = null; taken = false;
+    const now = Date.now();
+    if (cur && cur.uid===me) return {...cur, ts:now};                     // ende pres: rifresko shenjën
+    if (MM.waiting){ taken = true; return; }                               // isha duke pritur e s'jam ma: dikush më mori
+    if (cur && now-cur.ts < MM_FRESH){ opp = cur; return null; }           // dikush po pret: e marr unë
+    return {uid:me, ts:now, name:myPublicName(me), dev:DEVICE};            // s'ka kush: pres unë
+  }, {applyLocally:false});
+  if (!MM.on) return;
+  if (taken){
+    // dikush më mori dhe po e krijon lojën; lajmërimi vjen te match/pairs. Nëse s'vjen, rihyj në radhë.
+    MM.waiting = false; if (MM.disc){ MM.disc.cancel().catch(()=>{}); MM.disc = null; }
+    MM.timer = setTimeout(()=>{ if (MM.on) mmTry(); }, MM_TAKEN_WAIT);
+    return;
+  }
+  if (!res.committed) { MM.timer = setTimeout(()=>{ if (MM.on) mmTry(); }, 2000); return; }
+  const v = res.snapshot.val();
+  if (v && v.uid===me){
+    if (!MM.waiting){
+      MM.waiting = true;
+      // nëse mbyllet faqja/humb interneti ndërsa pres, serveri e heq vetë shenjën time
+      try{ MM.disc = ronDisconnect(rref(RDB,'match/waiting')); MM.disc.remove(); }catch(e){}
+    }
+    MM.timer = setTimeout(()=>{ if (MM.on) mmTry(); }, MM_BEAT);
+    return;
+  }
+  if (opp) await mmCreate(opp);
+}
+async function mmCreate(opp){
+  const me = MM.uid;
+  $('mmH').textContent = 'U gjet lojtar!';
+  try{
+    const G = newMatch(MM_ROUNDS); G.nonce = rid();
+    const names = {[me]:{n:myPublicName(me), d:DEVICE}, [opp.uid]:{n:String(opp.name||'Lojtar').slice(0,24), d:opp.dev||''}};
+    const {id} = await NET.db.collection('games').add({p:[me, opp.uid], status:'play', rounds:MM_ROUNDS, created:Date.now(), G, type:'random', names});
+    await rset(rref(RDB,'match/pairs/'+opp.uid), id);
+    mmFound(id);
+  }catch(e){
+    // s'u krijua loja: kthehu në kërkim
+    $('mmH').textContent = 'Duke kërkuar lojtar…';
+    MM.waiting = false; MM.timer = setTimeout(()=>{ if (MM.on) mmTry(); }, 1500);
+  }
+}
+function mmFound(gid){
+  const uid = MM.uid;
+  mmStop();
+  rremove(rref(RDB,'match/pairs/'+uid)).catch(()=>{});
+  sfx.turn();
+  openGame(gid);
+}
+function mmStop(){
+  MM.on = false; MM.waiting = false;
+  clearTimeout(MM.timer); clearInterval(MM.tick);
+  if (MM.unsubPair){ MM.unsubPair(); MM.unsubPair = null; }
+  if (MM.unsubWait){ MM.unsubWait(); MM.unsubWait = null; }
+  if (MM.disc){ MM.disc.cancel().catch(()=>{}); MM.disc = null; }
+  $('mmOv').hidden = true;
+}
+async function mmCancel(){
+  if (!MM.on) return;
+  const me = MM.uid, wasWaiting = MM.waiting;
+  mmStop();
+  if (!me) return;
+  let stillMine = false;
+  try{
+    const r = await rtxn(rref(RDB,'match/waiting'), cur=>{ if (cur && cur.uid===me){ stillMine = true; return null; } return; }, {applyLocally:false});
+    stillMine = r.committed && stillMine;
+  }catch(e){}
+  // nëse dikush më kishte marrë pikërisht tani, lajmëroje që s'jam ma këtu (mos ta lë me pritë kot)
+  if (wasWaiting && !stillMine){
+    setTimeout(async ()=>{
+      try{
+        const s = await rget(rref(RDB,'match/pairs/'+me)); const gid = s.val();
+        if (gid){ await NET.db.doc('games/'+gid).update({status:'left', leftBy:me}); rremove(rref(RDB,'match/pairs/'+me)).catch(()=>{}); }
+      }catch(e){}
+    }, 4000);
+  }
 }
 
 
@@ -1660,16 +1855,42 @@ function computeOnline(){
 }
 function startNet(uid){
   let first = true;
-  netSubs.push(DB.collection('players').onSnapshot(snap=>{
-    const m={}; snap.docs.forEach(d=>m[d.id]=d.data());
-    NET.players=m; NET.player = m[uid] || NET.player;
+  // Më parë dëgjonim KREJT lojtarët: çdo "jam online" i çdokujt u shkonte krejt të tjerëve —
+  // leximet rriteshin me katrorin e numrit të lojtarëve dhe e hanin kuotën falas të Firebase.
+  // Tani dëgjojmë vetëm: profilin tim, kush më ka shtu, shokët e mi dhe kundërshtarët e lojërave.
+  const P = {};                   // uid -> profili
+  const watched = {};             // uid -> unsubscribe (dëgjues i veçantë për shokët / kundërshtarët)
+  let addedMe = new Set();        // kush më ka në listën e tij (vjen nga query, s'ka nevojë për dëgjues tjetër)
+  const refresh = () => {
+    NET.players = {...P}; NET.player = P[uid] || NET.player;
     computeOnline();
-    if (first){ first=false; heartbeat(); if (NET.goLobby && NET.player){ NET.goLobby=false; show('lobby'); } }
+    if (first && P[uid]){ first=false; heartbeat(); if (NET.goLobby && NET.player){ NET.goLobby=false; show('lobby'); } }
     if (APP.screen==='entry') renderEntry();
     if (APP.screen==='lobby') renderLobby();
     // only the name may have changed: don't redraw the table (it would cut a card animation in half)
-    if (APP.screen==='game' && APP.mode==='online' && NET.gameDoc){ APP.oppName = nameOf(NET.gameDoc.p[1-APP.me]); $('name1').textContent = APP.oppName; }
+    if (APP.screen==='game' && APP.mode==='online' && NET.gameDoc){ APP.oppName = gName(NET.gameDoc, NET.gameDoc.p[1-APP.me]); $('name1').textContent = APP.oppName; }
+  };
+  const syncWatch = () => {
+    const want = new Set([...((P[uid] && P[uid].friends) || []), ...NET.games.flatMap(g=>g.p||[])]);
+    want.delete(uid); addedMe.forEach(id=>want.delete(id));
+    Object.keys(watched).forEach(id=>{ if (!want.has(id)){ watched[id](); delete watched[id]; if (!addedMe.has(id)) delete P[id]; } });
+    want.forEach(id=>{
+      if (watched[id]) return;
+      watched[id] = DB.doc('players/'+id).onSnapshot(s=>{ if (s.exists) P[id]=s.data(); else delete P[id]; refresh(); }, ()=>{});
+    });
+  };
+  netSubs.push(DB.doc('players/'+uid).onSnapshot(s=>{
+    if (s.exists) P[uid] = s.data();
+    syncWatch(); refresh();
   }, ()=>{ NET.state='offline'; renderEntry(); }));
+  netSubs.push(DB.collection('players').where('friends','array-contains',uid).onSnapshot(snap=>{
+    const now = new Set(snap.docs.map(d=>d.id));
+    addedMe.forEach(id=>{ if (!now.has(id) && !watched[id]) delete P[id]; });
+    addedMe = now;
+    snap.docs.forEach(d=>{ P[d.id] = d.data(); });
+    syncWatch(); refresh();
+  }, ()=>{}));
+  netSubs.push(()=>{ Object.values(watched).forEach(f=>f()); Object.keys(watched).forEach(k=>delete watched[k]); });
   netSubs.push(NET.db.collection('games').where('p','array-contains',uid).onSnapshot(snap=>{
     const list = snap.docs.map(d=>({id:d.id, ...d.data()}));
     const hadAny = Object.keys(NET.prevStatus).length>0;
@@ -1684,6 +1905,7 @@ function startNet(uid){
     });
     NET.prevStatus = Object.fromEntries(list.map(g=>[g.id, g.status])); NET.prevStatus.__='x';
     NET.games = list;
+    syncWatch();
     if (APP.screen==='lobby') renderLobby();
   }, ()=>{}));
   beat = setInterval(()=>{ heartbeat(); computeOnline(); if (APP.screen==='lobby') renderLobby(); }, 60*1000);
@@ -1699,6 +1921,7 @@ async function initNet(){
     fdoc = Fs.doc; fcol = Fs.collection; fsnap = Fs.onSnapshot;
     ({getDatabase} = Rt);
     rref = Rt.ref; rget = Rt.get; rset = Rt.set; rupdate = Rt.update; rremove = Rt.remove; ronValue = Rt.onValue; rpush = Rt.push;
+    rtxn = Rt.runTransaction; ronDisconnect = Rt.onDisconnect; signInAnonymously = Au.signInAnonymously;
     const app = initializeApp(firebaseConfig);
     AUTH = getAuth(app);
     // Rrjetet mobile në Kosovë/Shqipëri shpesh e bllokojnë WebSocket-in; pa këtë, Firestore
@@ -1726,7 +1949,20 @@ async function initNet(){
 }
 
 /* ================= wiring ================= */
-$('bHome').onclick = () => { if (APP.screen==='game' && APP.mode==='online') closeGameSub(); show('entry'); };
+// dalja nga një lojë online; lojërat e rastësishme s'kanë "Vazhdo" më vonë, ndaj dalja = e le lojën,
+// e kush del i fundit e fshin krejt (që mos mbesin lojëra të braktisura në databazë)
+function exitOnlineGame(){
+  const d = NET.gameDoc, gid = NET.gameId;
+  if (d && gid && d.type==='random'){
+    if (d.status==='left') NET.db.doc('games/'+gid).delete().catch(()=>{});
+    else if (d.status==='play' || d.status==='over') leaveOnline();
+  }
+  closeGameSub();
+}
+$('bHome').onclick = () => { if (APP.screen==='game' && APP.mode==='online') exitOnlineGame(); show('entry'); };
+$('chRnd').onclick = startRandom;
+$('bRnd2').onclick = startRandom;
+$('mmCancel').onclick = mmCancel;
 $('bSet').onclick = openSettings;
 $('bRules').onclick = () => { $('rulesOv').hidden=false; };
 $('sSound').onchange = e => { SET.sound = e.target.checked; saveSet(); syncSetUI(); if (SET.sound) sfx.click(); };
@@ -1748,7 +1984,7 @@ $('fAdd').onsubmit = addFriend;
 $('bOut').onclick = logout;
 document.querySelectorAll('[data-go="entry"]').forEach(b=>b.onclick=()=>show('entry'));
 $('bBack').onclick = () => {
-  if (APP.mode==='online'){ closeGameSub(); show(loggedIn() ? 'lobby' : 'entry'); }
+  if (APP.mode==='online'){ exitOnlineGame(); show(loggedIn() ? 'lobby' : 'entry'); }
   else show('entry');
 };
 $('bGameAct').onclick = () => {
@@ -1760,8 +1996,8 @@ $('bChat').onclick = openChat;
 $('chForm').onsubmit = e => { e.preventDefault(); const t = $('chIn').value; if (sendChat('m', t)) $('chIn').value = ''; };
 $('bSumMenu').onclick = () => { $('sumOv').hidden=true; $('bBack').onclick(); };
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.overlay').hidden=true);
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv') o.hidden=true; }));
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else ['setOv','chatOv','rndOv'].forEach(id=>$(id).hidden=true); } });
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o && o.id!=='sumOv' && o.id!=='mmOv') o.hidden=true; }));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(!$('mmOv').hidden) mmCancel(); else if(!$('rulesOv').hidden) $('rulesOv').hidden=true; else ['setOv','chatOv','rndOv'].forEach(id=>$(id).hidden=true); } });
 
 buildTiles();
 buildChat();
@@ -1775,20 +2011,39 @@ applyTheme(saved);
 
 /* ================= kontrollo nëse ka version të ri ================= */
 let updSeen = false;
+// Një "reload" i thjeshtë shpesh e merr faqen prapë nga cache-i i shfletuesit (versionin e vjetër).
+// Para rifreskimit ia kërkojmë serverit drejtpërdrejt skedarët, që cache-i të mbushet me versionin e ri.
+async function hardReload(){
+  const page = location.href.split('#')[0];
+  try{ await Promise.all([page, './', './index.html', './firebase-config.js'].map(u=>fetch(u, {cache:'reload'}))); }catch(e){}
+  location.reload();
+}
+function safeToReload(){
+  if (APP.screen==='game') return false;                                  // mos ia prish lojën që po luan
+  const a = document.activeElement;
+  if (a && a.matches && a.matches('input,textarea') && a.value) return false;   // po shkruan diçka
+  return [...document.querySelectorAll('.overlay')].every(o=>o.hidden);
+}
 async function checkForUpdate(){
   if (updSeen) return;
   try{
     const r = await fetch('./index.html?v=' + Date.now(), {cache:'no-store'});
     const t = await r.text();
     const m = t.match(/APP_VERSION\s*=\s*([\d.]+)/);
-    if (m && parseFloat(m[1]) > APP_VERSION){ updSeen = true; $('updBar').hidden = false; }
+    if (m && parseFloat(m[1]) > APP_VERSION){
+      updSeen = true;
+      // rifreskim automatik kur s'je në mes të lojës — por vetëm një herë për çdo version, që mos me u bë lak
+      let tried = null; try{ tried = sessionStorage.getItem('pishpirik-upd'); }catch(e){}
+      if (tried!==m[1] && safeToReload()){ try{ sessionStorage.setItem('pishpirik-upd', m[1]); }catch(e){} hardReload(); return; }
+      $('updBar').hidden = false;
+    }
   }catch(e){}
 }
-$('updBtn').onclick = () => location.reload();
+$('updBtn').onclick = hardReload;
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
 window.addEventListener('focus', checkForUpdate);
 setInterval(checkForUpdate, 3*60*1000);
-setTimeout(checkForUpdate, 15*1000);
+setTimeout(checkForUpdate, 3*1000);
 
 show('entry');
 initNet();
