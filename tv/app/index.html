@@ -369,7 +369,7 @@ button.cap-chip[disabled]{cursor:default; opacity:.6}
 .sheet .btn{color:var(--paper-ink); background:transparent; border-color:#bfae88}
 .sheet .btn.primary{background:var(--paper-ink); color:var(--paper); border-color:var(--paper-ink)}
 .tiles{display:grid; grid-template-columns:repeat(auto-fill, minmax(calc(132px * var(--k)), 1fr)); gap:calc(10px * var(--k))}
-.tile{--cw:calc(46px * var(--k)); position:relative; border:1.5px solid var(--paper-line); background:#fffaf0; border-radius:calc(12px * var(--k)); padding:calc(12px * var(--k)) calc(8px * var(--k)) calc(10px * var(--k));
+.tile{--cw:calc(46px * var(--k)); --ch:calc(var(--cw) * 1.42); position:relative; border:1.5px solid var(--paper-line); background:#fffaf0; border-radius:calc(12px * var(--k)); padding:calc(12px * var(--k)) calc(8px * var(--k)) calc(10px * var(--k));
   cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:calc(9px * var(--k)); font:inherit; color:inherit}
 .tile:hover{border-color:#bfae88}
 .tile.on{border-color:var(--paper-ink); box-shadow:0 0 0 1.5px var(--paper-ink)}
@@ -389,6 +389,10 @@ table.tally{width:100%; border-collapse:collapse; font-variant-numeric:tabular-n
 .tally tr.sum td{font-weight:700; border-bottom:none; font-size:calc(16px * var(--k))}
 .tally tr.tot td{font-family:var(--display); font-size:calc(20px * var(--k)); font-weight:700; border-bottom:none; padding-top:2px}
 .rules{margin:0; padding-left:calc(20px * var(--k)); display:flex; flex-direction:column; gap:calc(8px * var(--k)); line-height:1.5; max-width:62ch}
+
+/* ---------- tavolina mbushet në ekran pa scroll (telefon i vogël, telefon horizontal, laptop) ---------- */
+.gacts{display:flex; gap:calc(8px * var(--k)); align-items:center}
+.btn.gset{padding:calc(7px * var(--k)) calc(10px * var(--k)); display:inline-grid; place-items:center}
 
 @media (max-width:640px){
   .choices,.lobby-grid{grid-template-columns:minmax(0,1fr)}
@@ -470,12 +474,13 @@ body[data-screen="game"] header{display:none}
 .sheet{max-height:92vh}
 .overlay.bottom{place-items:center}
 .tv-acts{display:flex; gap:calc(12px * var(--k))}
+#bSetG{display:none}   /* TV-ja ka butonin e vet "Cilësimet" (tv.js) */
 
 </style>
 <script src="webOSTV.js"></script>
 </head>
 <body>
-<div class="upd-bar" id="updBar" hidden>Ka një version të ri të Kafenejës. <button type="button" id="updBtn">Rifresko tani</button></div>
+<div class="upd-bar" id="updBar" hidden>Ka një version të ri të Pishpirikut. <button type="button" id="updBtn">Rifresko tani</button></div>
 <div class="app">
   <header>
     <button class="brand" id="bHome" type="button" aria-label="Pishpirik, kthehu në hyrje">Pishpirik</button>
@@ -565,7 +570,7 @@ body[data-screen="game"] header{display:none}
     <div class="gbar">
       <button class="btn" type="button" id="bBack">← Menyja</button>
       <span class="mode" id="modeLbl"></span>
-      <button class="btn" type="button" id="bGameAct"></button>
+      <span class="gacts"><button class="btn gset" type="button" id="bSetG" aria-label="Cilësimet" title="Cilësimet"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l1.6 2.3 2.7-.6.6 2.7 2.4 1.4-1.1 2.5 1.1 2.5-2.4 1.4-.6 2.7-2.7-.6L12 21.2l-1.6-2.3-2.7.6-.6-2.7-2.4-1.4 1.1-2.5-1.1-2.5 2.4-1.4.6-2.7 2.7.6z"/><circle cx="12" cy="12" r="3.2"/></svg></button><button class="btn" type="button" id="bGameAct"></button></span>
     </div>
     <div class="board">
       <div class="sc me"><span class="who"><span class="tdot" id="tdot0"></span><span id="name0">Ti</span></span><span class="pts" id="tot0">0</span><span class="pips" id="pips0"></span></div>
@@ -717,7 +722,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush, rtxn, ronDisconnect, signInAnonymously;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261104.1;
+const APP_VERSION = 20261104.2;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -1287,7 +1292,7 @@ async function humanPlay(i){
 
 /* ================= screens ================= */
 function show(name){
-  APP.screen = name; document.body.dataset.screen = name;
+  APP.screen = name; document.body.dataset.screen = name;   // CSS-ja e tavolinës ndryshon sipas ekranit
   for (const [k,id] of [['entry','scrEntry'],['lobby','scrLobby'],['game','scrGame']]) $(id).hidden = k!==name;
   $('chatOv').hidden = true;
   if (name!=='game') $('sumOv').hidden = true;
@@ -2046,6 +2051,7 @@ $('chRnd').onclick = startRandom;
 $('bRnd2').onclick = startRandom;
 $('mmCancel').onclick = mmCancel;
 $('bSet').onclick = openSettings;
+$('bSetG').onclick = openSettings;   // në tavolinë shiriti i sipërm fshihet
 $('bRules').onclick = () => { $('rulesOv').hidden=false; };
 $('sSound').onchange = e => { SET.sound = e.target.checked; saveSet(); syncSetUI(); if (SET.sound) sfx.click(); };
 $('sVol').oninput = e => { SET.vol = +e.target.value; saveSet(); };
