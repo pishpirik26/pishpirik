@@ -91,6 +91,15 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
 - History: 1.0.0 (2026-11-03, cancelled) → 1.0.1 (2026-11-03, built from web 20261103.4, lacked the rid fix) →
   1.0.2 (2026-11-04, web 20261104.1: random cross-play, all fixes).
 - Every LG upload needs a higher version (appinfo.json, file version in the upload row, Service Info).
+- **Current status (2026-11-04 01:10):** 1.0.1 is "QA Processing" at LG (can't be edited/cancelled by us any more;
+  Edit redirects to 1:1 Q&A). We sent a 1:1 Q&A (Applications → App QA Schedule Check/Hold Request) asking LG to
+  hold QA and let us replace it with 1.0.2. LG answers by e-mail (mendurberisha@hotmail.com) and in 1:1 Q&A.
+  **Next step when they reply (or if they reject 1.0.1):** File Upload → delete both 1.0.1 rows → upload
+  `tv/out/*_1.0.2_*.ipk` (stage them in /mnt/user-data/uploads first; decline "apply appinfo"; All chipsets;
+  2022 and later; SDK 7.0.0; resolution 1920,1080 / 1280,720; file version 1.0.2) → Service Info app version 1.0.2 →
+  Test Info: upload `tv/docs/Pishpirik_UX_Scenario.pdf`, remove the old PDF, tick "Other Information" and re-type the
+  tester note → check Self-check list (33 Pass / 20 N/A) → SUBMIT → accept the 4 agreement checkboxes → confirm.
+  Optionally refresh Images with `tv/store/shot-*.png` (entry screen now shows "Luaj me dikë").
 
 ## Testing
 `tools/` — Playwright with `mockfb.js` (fake Auth/Firestore/RTDB shared by several pages). See `tools/README.md`.
