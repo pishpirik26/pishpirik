@@ -17,6 +17,8 @@ for x in ["document.addEventListener('visibilitychange', () => { if (!document.h
           "setTimeout(checkForUpdate, 3*1000);"]:
     assert x in s, 'missing: ' + x
     s = s.replace(x, '')
+# pamja e tavolinës për telefon/laptop (TV-ja e ka në tv.css)
+s = re.sub(r'/\* web-only-start.*?/\* web-only-end \*/\n', '', s, flags=re.S)
 s = s.replace('<link rel="icon" type="image/png" href="icon-192.png">', '<link rel="icon" type="image/png" href="icon.png">')
 assert 'checkForUpdate()' not in s.split('async function checkForUpdate')[1].split('$(\'updBtn\')')[1], 'an update trigger is still active'
 open('base.html', 'w', encoding='utf-8').write(s)

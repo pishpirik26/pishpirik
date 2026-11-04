@@ -65,3 +65,4 @@ body[data-screen="game"] header{display:none}
 .sheet{max-height:92vh}
 .overlay.bottom{place-items:center}
 .tv-acts{display:flex; gap:calc(12px * var(--k))}
+#bSetG{display:none}   /* TV-ja ka butonin e vet "Cilësimet" (tv.js) */

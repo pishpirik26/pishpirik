@@ -26,8 +26,10 @@ tv_css = open('tv.css', encoding='utf-8').read()
 tv_js = open('tv.js', encoding='utf-8').read()
 out = out.replace('</head>', '<style id="tv">\n' + tv_css + '\n</style>\n<script src="webOSTV.js"></script>\n</head>', 1)
 out = out.replace('</body>', '<script>\n' + tv_js + '\n</script>\n</body>', 1)
-old = "  APP.screen = name;\n"
-assert old in out
-out = out.replace(old, "  APP.screen = name; document.body.dataset.screen = name;\n", 1)
+# loja e web-it e vendos vetë body.dataset.screen (që nga 20261104.2); versionet e vjetra jo
+if 'document.body.dataset.screen = name' not in out:
+    old = "  APP.screen = name;\n"
+    assert old in out
+    out = out.replace(old, "  APP.screen = name; document.body.dataset.screen = name;\n", 1)
 open('app/index.html', 'w', encoding='utf-8').write(out)
 print('scaled values:', out.count('var(--k)'))
