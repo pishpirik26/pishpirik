@@ -1,0 +1,67 @@
+/* ===== Pishpirik në TV (webOS) =====
+   --k e shkallëzon gjithë faqen: 4K TV-të e vizatojnë në 1920x1080, Full HD-të në 1280x720. */
+:root{ --k:1.3; }
+@media (max-height:900px){ :root{ --k:.87; } }
+@media (max-height:620px){ :root{ --k:.75; } }
+
+html,body{overflow:hidden; cursor:default}
+.app{max-width:none; width:100%; height:100vh; min-height:0; overflow:hidden;
+  padding:calc(18px * var(--k)) calc(64px * var(--k)) calc(14px * var(--k))}
+.upd-bar{display:none!important}
+
+/* --- fokusi i telekomandës: gjithmonë i dukshëm, i trashë, me ngjyrë ari --- */
+:focus{outline:none}
+.tv-focus, button.tv-focus, input.tv-focus{
+  outline:calc(4px * var(--k)) solid var(--brass)!important;
+  outline-offset:calc(4px * var(--k))!important;
+  box-shadow:0 0 0 calc(9px * var(--k)) rgba(216,173,85,.28)!important;
+}
+.panel .tv-focus, .sheet .tv-focus{outline-color:#8a5d10!important; box-shadow:0 0 0 calc(9px * var(--k)) rgba(138,93,16,.25)!important}
+.cpu-btn.tv-focus{outline-color:var(--cream)!important; transform:scale(1.03)}
+.hand .card.tv-focus{--dip:calc(-30px * var(--k)); outline:none!important;
+  box-shadow:0 0 0 calc(5px * var(--k)) var(--brass), 0 calc(14px * var(--k)) calc(30px * var(--k)) rgba(0,0,0,.55)!important; z-index:5}
+.btn, .cpu-btn, .card, .tile, .gear, .chat-fab{transition:transform .12s ease, box-shadow .12s ease}
+
+/* --- hyrja: dy kolona (djathtas: CPU, Luaj me dikë, ose, llogaria) --- */
+#scrEntry{display:grid; grid-template-columns:minmax(0,1fr) calc(460px * var(--k)); grid-template-rows:1fr auto auto auto auto 1fr;
+  column-gap:calc(70px * var(--k)); row-gap:calc(14px * var(--k)); max-width:calc(1240px * var(--k)); width:100%; margin:0 auto;
+  height:calc(100vh - 80px * var(--k)); align-content:center}
+#scrEntry .hero{grid-column:1; grid-row:1 / 7; align-self:center}
+#scrEntry .fan{--cw:calc(78px * var(--k)); --ch:calc(var(--cw) * 1.42); height:calc(var(--ch) + 30px * var(--k))}
+#scrEntry .hero h1{font-size:calc(96px * var(--k))}
+#scrEntry .hero p{font-size:calc(20px * var(--k))}
+#scrEntry .cpu-btn{grid-column:2; grid-row:2; width:100%}
+#scrEntry .cpu-btn.rnd{grid-row:3}
+#scrEntry .or{grid-column:2; grid-row:4; width:100%}
+#scrEntry .auth{grid-column:2; grid-row:5; width:100%}
+#scrEntry .auth .panel, #scrEntry .panel.auth{padding:calc(18px * var(--k))}
+#scrEntry .field{margin-bottom:calc(8px * var(--k))}
+
+/* --- lobby --- */
+#scrLobby{max-width:calc(1240px * var(--k)); width:100%; margin:0 auto; height:calc(100vh - 80px * var(--k)); overflow:auto}
+
+/* --- tavolina: rezultati majtas, letrat në mes --- */
+body[data-screen="game"] header{display:none}
+#scrGame{display:grid; height:100%; box-sizing:border-box;
+  grid-template-columns:calc(250px * var(--k)) minmax(0,1fr) calc(250px * var(--k));
+  grid-template-rows:auto minmax(0,1fr) auto auto minmax(0,1fr);
+  grid-template-areas:"bar bar bar" "board opp ." "board mid ." "board msg ." "board mine .";
+  column-gap:calc(24px * var(--k)); row-gap:calc(6px * var(--k))}
+#scrGame .gbar{grid-area:bar}
+#scrGame .gbar .mode{flex:1; text-align:center}
+#scrGame .board{grid-area:board; flex-direction:column; justify-content:center; gap:calc(26px * var(--k)); align-self:center; padding:calc(22px * var(--k))}
+#scrGame .board .sc.right{text-align:left; align-items:flex-start}
+#scrGame .board .sc.right .who{flex-direction:row-reverse; justify-content:flex-end}
+#scrGame .board .sc.right .pips{justify-content:flex-start}
+#scrGame .board .goal{order:-1; text-align:left}
+#scrGame .seat.opp{grid-area:opp; align-self:start}
+#scrGame .mid-table{grid-area:mid; min-height:0}
+#scrGame .msg{grid-area:msg}
+#scrGame .seat.mine{grid-area:mine; align-self:end}
+#scrGame .hand{min-height:calc(var(--ch) + 12px * var(--k))}
+.chat-fab{right:calc(40px * var(--k)); bottom:calc(30px * var(--k))}
+
+/* --- dritaret --- */
+.sheet{max-height:92vh}
+.overlay.bottom{place-items:center}
+.tv-acts{display:flex; gap:calc(12px * var(--k))}

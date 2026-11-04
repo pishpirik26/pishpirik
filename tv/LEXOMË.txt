@@ -1,0 +1,26 @@
+Pishpirik për LG webOS TV
+=========================
+ID në LG: al.pishpirik.game   (s'ndryshohet ma)
+
+Skedarët
+  ../  (rrënja e repos)  loja e web-it, burimi i vetëm i lojës
+  make_base.py       kthen ../index.html në base.html për TV (Firebase brenda faqes, pa PWA, pa kontroll versioni)
+  tv.css             pamja për TV: dy kolona në hyrje, tavolinë horizontale, shkallëzim --k për 1920x1080 dhe 1280x720
+  tv.js              telekomanda: shigjetat, OK, Back, Magic Remote; fokusi kalon vetë te kartat kur vjen radha jote
+  scale.py           bashkon base.html + tv.css + tv.js në app/index.html
+  mkipk.py           ndërton .ipk-në (i njëjti format si ares-package)
+  app/               appinfo.json, ikonat, splash, webOSTV.js
+  store/             ikona 400x400 (sfond i njëtrajtshëm, LG s'pranon gradient) dhe 5 screenshot 1920x1080
+  docs/              UX scenario (ux.html -> Pishpirik_UX_Scenario.pdf)
+
+Rindërtimi pas çdo ndryshimi në lojë
+  1. rrit "version" te app/appinfo.json (LG s'pranon dy herë të njëjtin version)
+  2. ./build.sh   ->  out/al.pishpirik.game_<ver>_1920x1080.ipk dhe _1280x720.ipk
+
+Në Seller Lounge për secilën paketë: "2022 and later", SDK 7.0.0, rezolucioni 1920,1080 ose 1280,720,
+versioni i skedarit i njëjtë me appinfo.json; pastaj Service Info -> App Version, UX scenario i ri, SUBMIT.
+
+Historiku
+  1.0.0  dërguar 2026-11-03, anuluar para QA
+  1.0.1  dërguar 2026-11-03 (nga web 20261103.4) — i mungon rregullimi i ftesave (rid), mos e lër këtë
+  1.0.2  gati 2026-11-04 (nga web 20261104.1): "Luaj me dikë" cross-play, të gjitha rregullimet, fokusi te kartat online
