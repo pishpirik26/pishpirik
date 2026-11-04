@@ -1,0 +1,15 @@
+{
+  "id": "al.pishpirik.game",
+  "version": "1.0.2",
+  "vendor": "Pishpirik",
+  "type": "web",
+  "main": "index.html",
+  "title": "Pishpirik",
+  "appDescription": "Loja e letrave Pishpirik, me CPU ose me shokët",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "splashBackground": "splash.png",
+  "iconColor": "#102b1d",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true
+}
