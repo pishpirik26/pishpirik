@@ -87,8 +87,8 @@ async function attach(page, name){
       export const onAuthStateChanged = (a, cb) => { auth.cbs.push(cb); setTimeout(() => cb(auth.currentUser), 0); return () => {}; };
       export const signInAnonymously = async () => { auth.currentUser = {uid:'anon' + Math.random().toString(36).slice(2, 10), isAnonymous:true}; fire(); return {user:auth.currentUser}; };
       export const signOut = async () => { auth.currentUser = null; fire(); };
-      export const createUserWithEmailAndPassword = async () => { throw Object.assign(new Error('x'), {code:'auth/operation-not-allowed'}); };
-      export const signInWithEmailAndPassword = createUserWithEmailAndPassword;
+      export const createUserWithEmailAndPassword = async (a, email) => { auth.currentUser = {uid:'u' + Math.random().toString(36).slice(2, 10), email}; fire(); return {user:auth.currentUser}; };
+      export const signInWithEmailAndPassword = async () => { throw Object.assign(new Error('x'), {code:'auth/invalid-credential'}); };
       export const EmailAuthProvider = {credential(){}}; export const reauthenticateWithCredential = async()=>{}; export const updatePassword = async()=>{};`,
     'firebase-firestore.js': `
       let sid = 0; const L = {}; window.__mfFsFire = (id, v) => { if (L[id]) L[id](v); };
