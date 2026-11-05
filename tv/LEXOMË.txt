@@ -23,4 +23,5 @@ versioni i skedarit i njëjtë me appinfo.json; pastaj Service Info -> App Versi
 Historiku
   1.0.0  dërguar 2026-11-03, anuluar para QA
   1.0.1  dërguar 2026-11-03 (nga web 20261103.4) — i mungon rregullimi i ftesave (rid), mos e lër këtë
-  1.0.2  gati 2026-11-04 (nga web 20261104.2): "Luaj me dikë" cross-play, të gjitha rregullimet, fokusi te kartat online
+  1.0.1  refuzuar me kërkesën tonë 2026-11-05
+  1.0.2  dërguar 2026-11-05 (nga web 20261104.2): "Luaj me dikë" cross-play, të gjitha rregullimet, fokusi te kartat online
