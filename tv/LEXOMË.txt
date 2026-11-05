@@ -8,6 +8,8 @@ Skedarët
   tv.css             pamja për TV: dy kolona në hyrje, tavolinë horizontale, shkallëzim --k për 1920x1080 dhe 1280x720
   tv.js              telekomanda: shigjetat, OK, Back, Magic Remote; fokusi kalon vetë te kartat kur vjen radha jote
   scale.py           bashkon base.html + tv.css + tv.js në app/index.html
+  legacy.py          e bën faqen të punojë në TV-të e vjetra (2018–2020): JS më i vjetër, pamje pa grid, Firebase 8
+  polyfills.js, fb8.js, legacy53.css   pjesët që shton legacy.py
   mkipk.py           ndërton .ipk-në (i njëjti format si ares-package)
   app/               appinfo.json, ikonat, splash, webOSTV.js
   store/             ikona 400x400 (sfond i njëtrajtshëm, LG s'pranon gradient) dhe 5 screenshot 1920x1080
@@ -25,3 +27,4 @@ Historiku
   1.0.1  dërguar 2026-11-03 (nga web 20261103.4) — i mungon rregullimi i ftesave (rid), mos e lër këtë
   1.0.1  refuzuar me kërkesën tonë 2026-11-05
   1.0.2  dërguar 2026-11-05 (nga web 20261104.2): "Luaj me dikë" cross-play, të gjitha rregullimet, fokusi te kartat online
+  1.0.3  gati 2026-11-05, pa u dërguar: punon edhe në TV-të 2018–2020 (webOS 4.x dhe 5). Te LG: "2018 and later".

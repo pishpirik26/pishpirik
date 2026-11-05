@@ -4,6 +4,7 @@
   var KEY = {LEFT:37, UP:38, RIGHT:39, DOWN:40, ENTER:13, BACK:461, ESC:27, BACKSPACE:8};
   var SEL = 'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])';
   var lastRect = null, lastHandIdx = -1;
+  var OLD_SCROLL = (function(){ var m = navigator.userAgent.match(/Chrome\/(\d+)/); return !!(m && +m[1] < 61); })();
 
   function $(id){ return document.getElementById(id); }
   function visible(el){
@@ -32,7 +33,8 @@
     if (prev && prev !== el) prev.classList.remove('tv-focus');
     el.classList.add('tv-focus');
     if (document.activeElement !== el) { try { el.focus({preventScroll:true}); } catch(e){ el.focus(); } }
-    if (el.scrollIntoView && el.closest('.sheet, #scrLobby')) el.scrollIntoView({block:'nearest'});
+    // TV-të e vjetra (Chrome < 61) e lexojnë {block:'nearest'} si "në krye": aty përdor scrollIntoViewIfNeeded
+    if (el.closest('.sheet, #scrLobby')){ if (el.scrollIntoViewIfNeeded && OLD_SCROLL) el.scrollIntoViewIfNeeded(false); else if (el.scrollIntoView) el.scrollIntoView({block:'nearest'}); }
     lastRect = el.getBoundingClientRect();
     var h = el.closest('#hand0');
     lastHandIdx = h ? Array.prototype.indexOf.call(h.children, el) : -1;
@@ -190,4 +192,105 @@
     var el = e.target;
     if (el && el.classList && !el.classList.contains('tv-focus') && candidates().indexOf(el) >= 0) setFocus(el, 'focusin');
   });
+
+  // TV-të e vjetra (webOS 5, 2020) s'e njohin 'gap' te flex: hapësirat i japim me margin
+  (function flexGapShim(){
+    var t = document.createElement('div');
+    t.style.cssText = 'display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden';
+    t.appendChild(document.createElement('div')); t.appendChild(document.createElement('div'));
+    document.body.appendChild(t);
+    var supported = t.scrollHeight === 1;
+    document.body.removeChild(t);
+    window.__flexGap = supported ? 'native' : 'shim';
+    if (supported && !window.__as53) return;
+    var sels = [];
+    function walk(list){
+      for (var i = 0; i < list.length; i++){
+        var r = list[i];
+        if (r.type === 1){ var st = r.style; if (st.getPropertyValue('row-gap') || st.getPropertyValue('column-gap') || st.getPropertyValue('gap')) sels.push(r.selectorText); }
+        else if (r.type === 4 && window.matchMedia(r.media.mediaText).matches) walk(r.cssRules);
+        else if (r.type === 12 && r.cssRules) walk(r.cssRules);
+      }
+    }
+    for (var i = 0; i < document.styleSheets.length; i++){ try { walk(document.styleSheets[i].cssRules); } catch(e){} }
+    // Chrome 53 s'e njeh fare 'gap', as në CSSOM: përdor listën që legacy.py e nxjerr nga CSS-ja
+    var built = null, gridSels = window.__gridSels || [], pxCache = {};
+    if ((!sels.length || window.__as53) && window.__gapRules){
+      built = window.__gapRules.filter(function(r){ return !r.m || window.matchMedia(r.m).matches; });
+      sels = built.map(function(r){ return r.s; });
+    }
+    function toPx(expr){
+      if (!expr) return 0;
+      if (pxCache[expr] !== undefined) return pxCache[expr];
+      var p = document.createElement('div');            // jashtë <body>, që MutationObserver të mos e shohë
+      p.style.cssText = 'position:absolute;visibility:hidden;height:0;width:' + expr;
+      document.documentElement.appendChild(p);
+      var w = p.getBoundingClientRect().width; document.documentElement.removeChild(p);
+      return (pxCache[expr] = w);
+    }
+    function matches(el, sel){ var f = el.matches || el.webkitMatchesSelector; try { return f.call(el, sel); } catch(e){ return false; } }
+    function gridOrigin(el){ for (var i = 0; i < gridSels.length; i++) if (matches(el, gridSels[i])) return true; return false; }
+    function px(v){ v = parseFloat(v); return isNaN(v) ? 0 : v; }
+    function shown(el){ if (!el.getClientRects().length) return false; var p = getComputedStyle(el).position; return p !== 'absolute' && p !== 'fixed'; }
+    function setM(el, side, v){
+      if (!el.__fg) el.__fg = {};
+      // gap shtohet mbi margin-in që ka (p.sh. -6px), si te shfletuesit e rinj; pozitivët mund të jenë 'auto': mos i prek
+      var cur = px(getComputedStyle(el)[side]);
+      if (cur > 0) return;
+      el.__fg[side] = v; el.style[side] = (cur + v) + 'px';
+    }
+    function reset(el){ if (!el.__fg) return; for (var s in el.__fg){ el.style[s] = ''; } el.__fg = null; }
+    function apply(){
+      var seen = [], gaps = [];
+      sels.forEach(function(sel, n){
+        var els; try { els = document.querySelectorAll(sel); } catch(e){ return; }
+        for (var i = 0; i < els.length; i++){
+          var at = seen.indexOf(els[i]);
+          if (at < 0){ at = seen.length; seen.push(els[i]); gaps.push({}); }
+          if (built){ if (built[n].rg) gaps[at].rg = built[n].rg; if (built[n].cg) gaps[at].cg = built[n].cg; }
+        }
+      });
+      seen.forEach(function(box, bi){
+        var cs = getComputedStyle(box);
+        if (cs.display !== 'flex' && cs.display !== 'inline-flex') return;
+        if (built && gridOrigin(box)) return;            // rrjetat kanë hapësirat e veta te legacy53.css
+        var kids = Array.prototype.filter.call(box.children, function(k){ reset(k); return shown(k); });
+        // radhitja vizuale (CSS 'order'), jo ajo e HTML-së
+        kids = kids.map(function(k, i){ return {k: k, o: parseInt(getComputedStyle(k).order, 10) || 0, i: i}; })
+          .sort(function(a, b){ return a.o - b.o || a.i - b.i; }).map(function(x){ return x.k; });
+        var rg = built ? toPx(gaps[bi].rg) : px(cs.rowGap), cg = built ? toPx(gaps[bi].cg) : px(cs.columnGap), dir = cs.flexDirection, wrap = cs.flexWrap !== 'nowrap';
+        if (!kids.length || (!rg && !cg)) return;
+        var col = dir.indexOf('column') === 0, rev = dir.indexOf('reverse') > 0;
+        if (!wrap){
+          var side = col ? (rev ? 'marginBottom' : 'marginTop') : (rev ? 'marginRight' : 'marginLeft'), g = col ? rg : cg;
+          for (var i = 1; i < kids.length; i++) if (g) setM(kids[i], side, g);
+          return;
+        }
+        // me rreshta: hapësirë djathtas mes kartave, lart për rreshtat e dytë e më poshtë
+        for (var j = 0; j < kids.length - 1; j++) if (cg) setM(kids[j], col ? 'marginBottom' : 'marginRight', cg);
+        var top0 = kids[0].offsetTop;
+        for (var k = 1; k < kids.length; k++) if (rg && kids[k].offsetTop > top0 + 1) setM(kids[k], col ? 'marginLeft' : 'marginTop', rg);
+      });
+    }
+    var pending = false, last = 0;
+    function schedule(){
+      if (pending) return; pending = true;
+      setTimeout(function(){ pending = false; last = Date.now(); try { apply(); } catch(e){ window.__tvErr = 'flexGap: ' + e; } }, Math.max(0, 120 - (Date.now() - last)));
+    }
+    // lëvizja e fokusit (vetëm klasa tv-focus) s'e ndryshon pamjen: mos e rillogarit (TV-të e vjetra janë të ngadalta)
+    function onlyFocus(recs){
+      for (var i = 0; i < recs.length; i++){
+        var r = recs[i];
+        if (r.type !== 'attributes' || r.attributeName !== 'class') return false;
+        var a = (r.oldValue || '').replace(/\btv-focus\b/g, '').replace(/\s+/g, ' ').trim();
+        var b = String(r.target.className || '').replace(/\btv-focus\b/g, '').replace(/\s+/g, ' ').trim();
+        if (a !== b) return false;
+      }
+      return true;
+    }
+    new MutationObserver(function(recs){ if (!onlyFocus(recs)) schedule(); })
+      .observe(document.body, {childList: true, subtree: true, attributes: true, attributeOldValue: true, attributeFilter: ['hidden', 'class']});
+    window.addEventListener('resize', schedule);
+    apply();
+  })();
 })();

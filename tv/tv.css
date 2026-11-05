@@ -54,10 +54,11 @@ body[data-screen="game"] header{display:none}
 #scrGame .board .sc.right .who{flex-direction:row-reverse; justify-content:flex-end}
 #scrGame .board .sc.right .pips{justify-content:flex-start}
 #scrGame .board .goal{order:-1; text-align:left}
-#scrGame .seat.opp{grid-area:opp; align-self:start}
+#scrGame .seat.opp{grid-area:opp; align-self:start; padding-top:calc(var(--ch) * .14)}   /* kartat e kundërshtarit në fan s’e mbulojnë shiritin lart */
 #scrGame .mid-table{grid-area:mid; min-height:0}
 #scrGame .msg{grid-area:msg}
 #scrGame .seat.mine{grid-area:mine; align-self:end}
+#scrGame .seat.mine .stats{margin-top:calc(var(--ch) * .1)}   /* "Mori N karta" poshtë kartave, jo mbi to */
 #scrGame .hand{min-height:calc(var(--ch) + 12px * var(--k))}
 .chat-fab{right:calc(40px * var(--k)); bottom:calc(30px * var(--k))}
 
@@ -66,3 +67,5 @@ body[data-screen="game"] header{display:none}
 .overlay.bottom{place-items:center}
 .tv-acts{display:flex; gap:calc(12px * var(--k))}
 #bSetG{display:none}   /* TV-ja ka butonin e vet "Cilësimet" (tv.js) */
+/* TV-të e vjetra: përshkrimi i dizajnit thyhet në rreshta, s’del jashtë kutisë */
+.tile .nm, .tile .ds{max-width:100%}

@@ -1,0 +1,53 @@
+/* ===== TV-të pa CSS grid (LG 2018–2019, webOS 4.x = Chrome 53) =====
+   polyfills.js e vendos klasën html.nogrid kur motori s'e njeh display:grid.
+   Këtu çdo rrjetë (grid) e lojës bëhet flex me të njëjtën pamje. Hapësirat (gap) i jepen me margin. */
+
+/* qendrimi i ikonave dhe dritareve (display:grid; place-items:center) */
+html.nogrid .gear, html.nogrid .turn-arrow, html.nogrid .chat-fab, html.nogrid .mid, html.nogrid .burst,
+html.nogrid .overlay, html.nogrid .tile.on .tick, html.nogrid .btn.gset{display:flex; align-items:center; justify-content:center}
+html.nogrid .overlay > *{flex:0 1 auto}
+
+/* rrjetat me kolona të barabarta -> rreshta flex (n kolona, hapësira g) */
+html.nogrid .rgrid, html.nogrid .emo, html.nogrid .snd, html.nogrid .tiles, html.nogrid .choices,
+html.nogrid .lobby-grid, html.nogrid #fPw .row2{display:flex; flex-wrap:wrap}
+html.nogrid .rgrid > *{width:calc((100% - 4 * 8px * var(--k)) / 5); margin:0 calc(8px * var(--k)) calc(8px * var(--k)) 0}
+html.nogrid .rgrid > *:nth-child(5n){margin-right:0}
+html.nogrid .emo > *{width:calc((100% - 5 * 6px * var(--k)) / 6); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
+html.nogrid .emo > *:nth-child(6n){margin-right:0}
+html.nogrid .snd > *{width:calc((100% - 4 * 6px * var(--k)) / 5); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
+html.nogrid .snd > *:nth-child(5n){margin-right:0}
+html.nogrid .tiles > *{width:calc((100% - 4 * 10px * var(--k)) / 5); margin:0 calc(10px * var(--k)) calc(10px * var(--k)) 0}
+html.nogrid .tiles > *:nth-child(5n){margin-right:0}
+html.nogrid .choices > *{width:calc((100% - 12px * var(--k)) / 2); margin:0 calc(12px * var(--k)) calc(12px * var(--k)) 0}
+html.nogrid .choices > *:nth-child(2n){margin-right:0}
+html.nogrid .lobby-grid{align-items:flex-start}
+html.nogrid .lobby-grid > *{width:calc((100% - 14px * var(--k)) / 2); margin:0 calc(14px * var(--k)) calc(14px * var(--k)) 0}
+html.nogrid .lobby-grid > *:nth-child(2n){margin-right:0}
+html.nogrid #fPw .row2 > *{width:calc((100% - 8px * var(--k)) / 2); margin-right:calc(8px * var(--k))}
+html.nogrid #fPw .row2 > *:nth-child(2n){margin-right:0}
+html.nogrid .rgrid > *, html.nogrid .emo > *, html.nogrid .snd > *, html.nogrid .tiles > *, html.nogrid .choices > *,
+html.nogrid .lobby-grid > *, html.nogrid #fPw .row2 > *{box-sizing:border-box; flex:none}
+
+/* tavolina në mes: pako | grumbulli | raundi */
+html.nogrid .mid-table{display:flex; align-items:center}
+html.nogrid .mid-table > .deck-wrap, html.nogrid .mid-table > .round-wrap{flex:1 1 0; min-width:0}
+html.nogrid .mid-table > .deck-wrap{align-items:flex-start}
+html.nogrid .mid-table > .pile{flex:none; margin:0 calc(10px * var(--k))}
+
+/* hyrja: titulli majtas, butonat djathtas */
+html.nogrid #scrEntry{display:flex; flex-direction:column; justify-content:center; align-items:flex-end; position:relative}
+html.nogrid #scrEntry .hero{position:absolute; left:0; top:50%; transform:translateY(-50%); width:calc(100% - 530px * var(--k))}
+html.nogrid #scrEntry > .cpu-btn, html.nogrid #scrEntry > .or, html.nogrid #scrEntry > .auth{width:calc(460px * var(--k)); flex:none; box-sizing:border-box;
+  margin-left:auto; margin-right:0; align-self:flex-end}
+html.nogrid #scrEntry > .cpu-btn{order:1} html.nogrid #scrEntry > .cpu-btn.rnd{order:2}
+html.nogrid #scrEntry > .or{order:3} html.nogrid #scrEntry > .auth{order:4}
+html.nogrid #scrEntry > .cpu-btn.rnd, html.nogrid #scrEntry > .or, html.nogrid #scrEntry > .auth{margin-top:calc(14px * var(--k))}
+
+/* tavolina: rezultati majtas, letrat në mes */
+html.nogrid #scrGame{display:flex; flex-direction:column; position:relative; padding-left:calc(274px * var(--k)); padding-right:calc(274px * var(--k))}
+html.nogrid #scrGame > .gbar{margin-left:calc(-274px * var(--k)); margin-right:calc(-274px * var(--k)); flex:none}
+html.nogrid #scrGame > .board{position:absolute; left:0; top:50%; transform:translateY(-50%); width:calc(250px * var(--k)); box-sizing:border-box}
+html.nogrid #scrGame > .seat.opp{flex:1 1 0; min-height:0; justify-content:flex-start; align-self:stretch}
+html.nogrid #scrGame > .seat.mine{flex:1 1 0; min-height:0; justify-content:flex-end; align-self:stretch}
+html.nogrid #scrGame > .mid-table, html.nogrid #scrGame > .msg{flex:none; align-self:stretch}
+html.nogrid #scrGame > * + *{margin-top:calc(6px * var(--k))}

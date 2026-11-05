@@ -4,6 +4,7 @@ set -e
 cd "$(dirname "$0")"
 python3 make_base.py ..
 python3 scale.py
+python3 legacy.py      # TV-të e 2020 (webOS 5, Chrome 68)
 VER=$(python3 -c "import json;print(json.load(open('app/appinfo.json'))['version'])")
 mkdir -p out
 python3 mkipk.py app "out/al.pishpirik.game_${VER}_1920x1080.ipk"
