@@ -91,15 +91,18 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
 - History: 1.0.0 (2026-11-03, cancelled) → 1.0.1 (2026-11-03, built from web 20261103.4, lacked the rid fix) →
   1.0.2 (2026-11-04, web 20261104.2: random cross-play, all fixes, not yet uploaded to LG).
 - Every LG upload needs a higher version (appinfo.json, file version in the upload row, Service Info).
-- **Current status (2026-11-04 01:10):** 1.0.1 is "QA Processing" at LG (can't be edited/cancelled by us any more;
-  Edit redirects to 1:1 Q&A). We sent a 1:1 Q&A (Applications → App QA Schedule Check/Hold Request) asking LG to
-  hold QA and let us replace it with 1.0.2. LG answers by e-mail (mendurberisha@hotmail.com) and in 1:1 Q&A.
-  **Next step when they reply (or if they reject 1.0.1):** File Upload → delete both 1.0.1 rows → upload
-  `tv/out/*_1.0.2_*.ipk` (stage them in /mnt/user-data/uploads first; decline "apply appinfo"; All chipsets;
-  2022 and later; SDK 7.0.0; resolution 1920,1080 / 1280,720; file version 1.0.2) → Service Info app version 1.0.2 →
-  Test Info: upload `tv/docs/Pishpirik_UX_Scenario.pdf`, remove the old PDF, tick "Other Information" and re-type the
-  tester note → check Self-check list (33 Pass / 20 N/A) → SUBMIT → accept the 4 agreement checkboxes → confirm.
-  Optionally refresh Images with `tv/store/shot-*.png` (entry screen now shows "Luaj me dikë").
+- **Current status (2026-11-05 10:05):** LG rejected 1.0.1 at our request (2026-11-05). 1.0.2 (built from web 20261104.2)
+  submitted the same day; status "App Packaging Request" → then QA. LG answers by e-mail (mendurberisha@hotmail.com).
+- How the resubmission worked (for next time):
+  - Edit opens on File Upload with the file table hidden: click **DONE** under the App ID to show it. Use **Modify** on each
+    row → File Re-Upload (input type=file) → platform "2022 and later" (row had defaulted to 2021) → File Ver → SAVE.
+  - Service Info: App Version → SAVE at the bottom. Test Info: UX PDF (remove old, upload new), tick "Service Feature
+    Update" + "Other Information" with notes (notes are NOT kept after a reload: fill and SAVE in the same visit).
+  - Self-check list lives in an iframe (`selfCheckList_iframe`); results survived the version change (33 Pass / 20 N/A).
+  - **SUBMIT stays grey until Defect Info is resolved**: open the issue → Resolve → "Issue modify" + comment → OK.
+  - LG pages use native alert() ("Successfully Saved."), which freezes Claude in Chrome: before clicking Save run
+    `window.alert=m=>window.__msgs.push(m); window.confirm=()=>true` in the page.
+  - Submit page: 4 agreements (Seller Agreement, QA IPs, rejection cycles, "I agree" for minor defects) → CONFIRM.
 
 ## Testing
 `tools/` — Playwright with `mockfb.js` (fake Auth/Firestore/RTDB shared by several pages). See `tools/README.md`.

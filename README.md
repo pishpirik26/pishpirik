@@ -7,7 +7,7 @@ Loja e letrave **Pishpirik**, 1 kundër 1, në web dhe në LG TV.
 - **Me shokët**: krijo llogari me username, shto shokë dhe ftoji në lojë.
 
 Live: <https://pishpirik26.github.io/pishpirik/>
-LG TV: `al.pishpirik.game` (LG Content Store, në shqyrtim)
+LG TV: `al.pishpirik.game` (LG Content Store, versioni 1.0.2 në shqyrtim)
 
 ## Çka ka në repo
 
