@@ -96,7 +96,7 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
 - `tv.js`: spatial navigation with a gold focus frame, OK = click, Back (461/Esc) closes dialogs / cancels the
   player search / leaves the game / exits the app (`webOS.platformBack`), Magic Remote pointer, in-game
   "Cilësimet" button, focus jumps to your cards when it becomes your turn.
-- Seller Lounge settings used: platform "2022 and later" for 1.0.2; **1.0.3 is built for "2020 and later"**
+- Seller Lounge settings used: platform "2022 and later" for 1.0.2; **1.0.3 is built for "2018 and later"**
   (owner has an LG 65UN7300, 2020, webOS 5), SDK 7.0.0, all chipsets, category
   Game → Strategy, 12+ (free-text chat), language Albanian only, 22 countries (XK, AL, MK, ME, DE, CH, AT, IT, GB, BE,
   SE, FR, NL, NO, DK, FI, GR, SI, HR, LU, US, CA), keywords space-separated
@@ -106,8 +106,10 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
 - History: 1.0.0 (2026-11-03, cancelled) → 1.0.1 (2026-11-03, built from web 20261103.4, lacked the rid fix) →
   1.0.2 (2026-11-04, web 20261104.2: random cross-play, all fixes; submitted 2026-11-05) → **1.0.3 built 2026-11-05, NOT
   uploaded** (owner: wait until LG accepts 1.0.2): same game, runs on 2018+ TVs (webOS 4.x/5). On LG choose platform
-  "2018 and later" for both rows. Still to check: Firebase 8 path against the real Firebase (open
-  `pishpirik26.github.io/pishpirik/tv/app/index.html?as53` after uploading tv/app, play "Luaj me dikë" vs the web page).
+  "2018 and later" for both rows. Firebase 8 path checked against the REAL Firebase on 2026-11-05 via
+  `pishpirik26.github.io/pishpirik/tv/app/index.html?as53` (signed-in session picked up, lobby: Firestore friends +
+  RTDB games, "Luaj me dikë" search started and cancelled). A full real random match on that path was not played
+  (both browser tabs share one Firebase login, so they can't match each other).
 - Every LG upload needs a higher version (appinfo.json, file version in the upload row, Service Info).
 - **Current status (2026-11-05 10:05):** LG rejected 1.0.1 at our request (2026-11-05). 1.0.2 (built from web 20261104.2)
   submitted the same day; status "App Packaging Request" → then QA. LG answers by e-mail (mendurberisha@hotmail.com).
