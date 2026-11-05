@@ -53,6 +53,59 @@ class Store {
   }
 }
 const store = new Store();
+const BASE = 'https://www.gstatic.com/firebasejs/10.12.2/';
+// the fake SDK modules (also served over HTTP to old-engine tests by oldtv_xplay.js)
+const MODS = {
+  'firebase-app.js': `export const initializeApp = (o) => ({options:o, name:'[DEFAULT]'}); export const getApps = () => [];`,
+  'firebase-auth.js': `
+    const auth = {currentUser:null, cbs:[]};
+    const fire = () => auth.cbs.forEach(cb => setTimeout(() => cb(auth.currentUser), 0));
+    export const getAuth = () => auth;
+    export const onAuthStateChanged = (a, cb) => { auth.cbs.push(cb); setTimeout(() => cb(auth.currentUser), 0); return () => {}; };
+    export const signInAnonymously = async () => { auth.currentUser = {uid:'anon' + Math.random().toString(36).slice(2, 10), isAnonymous:true}; fire(); return {user:auth.currentUser}; };
+    export const signOut = async () => { auth.currentUser = null; fire(); };
+    export const createUserWithEmailAndPassword = async (a, email) => { auth.currentUser = {uid:'u' + Math.random().toString(36).slice(2, 10), email}; fire(); return {user:auth.currentUser}; };
+    export const signInWithEmailAndPassword = async () => { throw Object.assign(new Error('x'), {code:'auth/invalid-credential'}); };
+    export const EmailAuthProvider = {credential(){}}; export const reauthenticateWithCredential = async()=>{}; export const updatePassword = async()=>{};`,
+  'firebase-firestore.js': `
+    let sid = 0; const L = {}; window.__mfFsFire = (id, v) => { if (L[id]) L[id](v); };
+    export const initializeFirestore = () => ({}); export const getFirestore = () => ({});
+    export const doc = (db, ...p) => ({path:p.join('/'), doc:true});
+    export const collection = (db, ...p) => ({path:p.join('/'), doc:false, where:[]});
+    export const where = (f, op, v) => [f, op, v];
+    export const query = (q, w) => ({...q, where:[...q.where, w]});
+    const snapDoc = (id, data) => ({id, exists: () => data != null, data: () => data});
+    const toSnap = (v) => v.doc ? snapDoc(v.id, v.data) : ({docs: v.docs.map(d => snapDoc(d.id, d.data)), size: v.docs.length, empty: !v.docs.length});
+    export const getDoc = async (r) => snapDoc(r.path.split('/').pop(), await window.__mf('fsGet', {path:r.path}));
+    export const setDoc = async (r, v, o) => { await window.__mf('fsSet', {path:r.path, v, merge: !!(o && o.merge)}); };
+    export const deleteDoc = async (r) => { await window.__mf('fsDel', {path:r.path}); };
+    export const addDoc = async (c, v) => { const id = 'd' + Math.random().toString(36).slice(2); await window.__mf('fsSet', {path:c.path + '/' + id, v}); return {id}; };
+    export const onSnapshot = (q, cb, err) => { const id = ++sid; L[id] = v => cb(toSnap(v)); window.__mf('fsSub', {id, q}).then(v => cb(toSnap(v))); return () => { delete L[id]; window.__mf('fsUnsub', {id}); }; };`,
+  'firebase-database.js': `
+    let sid = 0; const L = {}; window.__mfFire = (id, v) => { if (L[id]) L[id](v); };
+    export const getDatabase = () => ({});
+    export const ref = (db, path) => ({path: path || '', key: (path || '').split('/').pop()});
+    const snap = (r, v) => ({key: r.key, exists: () => v != null, val: () => v});
+    export const get = async (r) => snap(r, await window.__mf('get', {path:r.path}));
+    export const set = async (r, v) => { await window.__mf('set', {path:r.path, v}); };
+    export const update = async (r, v) => { await window.__mf('update', {path:r.path, v}); };
+    export const remove = async (r) => { await window.__mf('set', {path:r.path, v:null}); };
+    export const push = (r) => ref(null, r.path + '/-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7));
+    export const onValue = (r, cb, err) => { const id = ++sid; L[id] = v => cb(snap(r, v)); window.__mf('sub', {id, path:r.path}).then(v => { if (L[id]) cb(snap(r, v)); }); return () => { delete L[id]; window.__mf('unsub', {id}); }; };
+    export const onDisconnect = () => ({remove(){ return Promise.resolve(); }, cancel(){ return Promise.resolve(); }});
+    export const runTransaction = async (r, fn) => {
+      let cur = await window.__mf('get', {path:r.path});
+      for (let i = 0; i < 25; i++){
+        const nv = fn(cur == null ? null : JSON.parse(JSON.stringify(cur)));
+        if (nv === undefined) return {committed:false, snapshot: snap(r, cur)};
+        const res = await window.__mf('cas', {path:r.path, expect:cur, v:nv});
+        if (res.ok) return {committed:true, snapshot: snap(r, nv)};
+        cur = res.cur;
+      }
+      return {committed:false, snapshot: snap(r, cur)};
+    };`,
+};
+
 async function attach(page, name){
   store.pages.set(name, page);
   await page.exposeFunction('__mf', async (op, a) => {
@@ -77,57 +130,7 @@ async function attach(page, name){
     if (op === 'fsSub'){ const v = store.fsEval(a.q); store.fsSubs.push({page:name, id:a.id, q:a.q, last:JSON.stringify(v)}); return v; }
     if (op === 'fsUnsub'){ store.fsSubs = store.fsSubs.filter(s => !(s.page === name && s.id === a.id)); return true; }
   });
-  const base = 'https://www.gstatic.com/firebasejs/10.12.2/';
-  const mods = {
-    'firebase-app.js': `export const initializeApp = (o) => ({options:o, name:'[DEFAULT]'}); export const getApps = () => [];`,
-    'firebase-auth.js': `
-      const auth = {currentUser:null, cbs:[]};
-      const fire = () => auth.cbs.forEach(cb => setTimeout(() => cb(auth.currentUser), 0));
-      export const getAuth = () => auth;
-      export const onAuthStateChanged = (a, cb) => { auth.cbs.push(cb); setTimeout(() => cb(auth.currentUser), 0); return () => {}; };
-      export const signInAnonymously = async () => { auth.currentUser = {uid:'anon' + Math.random().toString(36).slice(2, 10), isAnonymous:true}; fire(); return {user:auth.currentUser}; };
-      export const signOut = async () => { auth.currentUser = null; fire(); };
-      export const createUserWithEmailAndPassword = async (a, email) => { auth.currentUser = {uid:'u' + Math.random().toString(36).slice(2, 10), email}; fire(); return {user:auth.currentUser}; };
-      export const signInWithEmailAndPassword = async () => { throw Object.assign(new Error('x'), {code:'auth/invalid-credential'}); };
-      export const EmailAuthProvider = {credential(){}}; export const reauthenticateWithCredential = async()=>{}; export const updatePassword = async()=>{};`,
-    'firebase-firestore.js': `
-      let sid = 0; const L = {}; window.__mfFsFire = (id, v) => { if (L[id]) L[id](v); };
-      export const initializeFirestore = () => ({}); export const getFirestore = () => ({});
-      export const doc = (db, ...p) => ({path:p.join('/'), doc:true});
-      export const collection = (db, ...p) => ({path:p.join('/'), doc:false, where:[]});
-      export const where = (f, op, v) => [f, op, v];
-      export const query = (q, w) => ({...q, where:[...q.where, w]});
-      const snapDoc = (id, data) => ({id, exists: () => data != null, data: () => data});
-      const toSnap = (v) => v.doc ? snapDoc(v.id, v.data) : ({docs: v.docs.map(d => snapDoc(d.id, d.data)), size: v.docs.length, empty: !v.docs.length});
-      export const getDoc = async (r) => snapDoc(r.path.split('/').pop(), await window.__mf('fsGet', {path:r.path}));
-      export const setDoc = async (r, v, o) => { await window.__mf('fsSet', {path:r.path, v, merge: !!(o && o.merge)}); };
-      export const deleteDoc = async (r) => { await window.__mf('fsDel', {path:r.path}); };
-      export const addDoc = async (c, v) => { const id = 'd' + Math.random().toString(36).slice(2); await window.__mf('fsSet', {path:c.path + '/' + id, v}); return {id}; };
-      export const onSnapshot = (q, cb, err) => { const id = ++sid; L[id] = v => cb(toSnap(v)); window.__mf('fsSub', {id, q}).then(v => cb(toSnap(v))); return () => { delete L[id]; window.__mf('fsUnsub', {id}); }; };`,
-    'firebase-database.js': `
-      let sid = 0; const L = {}; window.__mfFire = (id, v) => { if (L[id]) L[id](v); };
-      export const getDatabase = () => ({});
-      export const ref = (db, path) => ({path: path || '', key: (path || '').split('/').pop()});
-      const snap = (r, v) => ({key: r.key, exists: () => v != null, val: () => v});
-      export const get = async (r) => snap(r, await window.__mf('get', {path:r.path}));
-      export const set = async (r, v) => { await window.__mf('set', {path:r.path, v}); };
-      export const update = async (r, v) => { await window.__mf('update', {path:r.path, v}); };
-      export const remove = async (r) => { await window.__mf('set', {path:r.path, v:null}); };
-      export const push = (r) => ref(null, r.path + '/-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7));
-      export const onValue = (r, cb, err) => { const id = ++sid; L[id] = v => cb(snap(r, v)); window.__mf('sub', {id, path:r.path}).then(v => { if (L[id]) cb(snap(r, v)); }); return () => { delete L[id]; window.__mf('unsub', {id}); }; };
-      export const onDisconnect = () => ({remove(){ return Promise.resolve(); }, cancel(){ return Promise.resolve(); }});
-      export const runTransaction = async (r, fn) => {
-        let cur = await window.__mf('get', {path:r.path});
-        for (let i = 0; i < 25; i++){
-          const nv = fn(cur == null ? null : JSON.parse(JSON.stringify(cur)));
-          if (nv === undefined) return {committed:false, snapshot: snap(r, cur)};
-          const res = await window.__mf('cas', {path:r.path, expect:cur, v:nv});
-          if (res.ok) return {committed:true, snapshot: snap(r, nv)};
-          cur = res.cur;
-        }
-        return {committed:false, snapshot: snap(r, cur)};
-      };`,
-  };
+  const base = BASE, mods = MODS;
   await page.route(base + '*', route => {
     const f = route.request().url().split('/').pop();
     if (mods[f]) return route.fulfill({status:200, contentType:'application/javascript', headers:{'access-control-allow-origin':'*'}, body:mods[f]});
@@ -135,4 +138,4 @@ async function attach(page, name){
   });
   await page.route('https://fonts.googleapis.com/**', r => r.abort());
 }
-module.exports = {store, attach};
+module.exports = {store, attach, MODS, BASE};
