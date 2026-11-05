@@ -10,20 +10,20 @@ html.nogrid .overlay > *{flex:0 1 auto}
 /* rrjetat me kolona të barabarta -> rreshta flex (n kolona, hapësira g) */
 html.nogrid .rgrid, html.nogrid .emo, html.nogrid .snd, html.nogrid .tiles, html.nogrid .choices,
 html.nogrid .lobby-grid, html.nogrid #fPw .row2{display:flex; flex-wrap:wrap}
-html.nogrid .rgrid > *{width:calc((100% - 4 * 8px * var(--k)) / 5); margin:0 calc(8px * var(--k)) calc(8px * var(--k)) 0}
+html.nogrid .rgrid > *{width:calc((100% - 4 * 8px * var(--k)) / 5 - 1px); margin:0 calc(8px * var(--k)) calc(8px * var(--k)) 0}
 html.nogrid .rgrid > *:nth-child(5n){margin-right:0}
-html.nogrid .emo > *{width:calc((100% - 5 * 6px * var(--k)) / 6); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
+html.nogrid .emo > *{width:calc((100% - 5 * 6px * var(--k)) / 6 - 1px); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
 html.nogrid .emo > *:nth-child(6n){margin-right:0}
-html.nogrid .snd > *{width:calc((100% - 4 * 6px * var(--k)) / 5); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
+html.nogrid .snd > *{width:calc((100% - 4 * 6px * var(--k)) / 5 - 1px); margin:0 calc(6px * var(--k)) calc(6px * var(--k)) 0}
 html.nogrid .snd > *:nth-child(5n){margin-right:0}
-html.nogrid .tiles > *{width:calc((100% - 4 * 10px * var(--k)) / 5); margin:0 calc(10px * var(--k)) calc(10px * var(--k)) 0}
+html.nogrid .tiles > *{width:calc((100% - 4 * 10px * var(--k)) / 5 - 1px); margin:0 calc(10px * var(--k)) calc(10px * var(--k)) 0}
 html.nogrid .tiles > *:nth-child(5n){margin-right:0}
-html.nogrid .choices > *{width:calc((100% - 12px * var(--k)) / 2); margin:0 calc(12px * var(--k)) calc(12px * var(--k)) 0}
+html.nogrid .choices > *{width:calc((100% - 12px * var(--k)) / 2 - 1px); margin:0 calc(12px * var(--k)) calc(12px * var(--k)) 0}
 html.nogrid .choices > *:nth-child(2n){margin-right:0}
 html.nogrid .lobby-grid{align-items:flex-start}
-html.nogrid .lobby-grid > *{width:calc((100% - 14px * var(--k)) / 2); margin:0 calc(14px * var(--k)) calc(14px * var(--k)) 0}
+html.nogrid .lobby-grid > *{width:calc((100% - 14px * var(--k)) / 2 - 1px); margin:0 calc(14px * var(--k)) calc(14px * var(--k)) 0}
 html.nogrid .lobby-grid > *:nth-child(2n){margin-right:0}
-html.nogrid #fPw .row2 > *{width:calc((100% - 8px * var(--k)) / 2); margin-right:calc(8px * var(--k))}
+html.nogrid #fPw .row2 > *{width:calc((100% - 8px * var(--k)) / 2 - 1px); margin-right:calc(8px * var(--k))}
 html.nogrid #fPw .row2 > *:nth-child(2n){margin-right:0}
 html.nogrid .rgrid > *, html.nogrid .emo > *, html.nogrid .snd > *, html.nogrid .tiles > *, html.nogrid .choices > *,
 html.nogrid .lobby-grid > *, html.nogrid #fPw .row2 > *{box-sizing:border-box; flex:none}
