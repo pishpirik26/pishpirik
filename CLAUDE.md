@@ -152,6 +152,12 @@ accounts (test accounts used: rtdbtest1 / rtdbtest2, password in the owner's han
   unless the TV language is Albanian. When adding UI text, add its English to i18n.en.json and run
   `node tools/i18n_harvest.js` (walks every screen in English and prints leftover Albanian). UX scenario PDF and the
   5 store screenshots are now English. On LG also add English as a service language + English title/description.
+- 2026-11-11 (20261111.2): English proofread. Fixes: CPU summary said "kompjuteri won the round" (lowercase name had
+  no translation) → "The computer won the round"; "1 rounds" → singular (FN.INVR/INVSENT); final summary says "Final
+  score in rounds"; "Friend request sent to Player." (also "Lojtar" in Albanian) → the typed @username; clearer rules text.
+  UX PDF wording polished. **TV 1.0.4 built** (`tv/out/*1.0.4*`) with these fixes — NOT uploaded: 1.0.3 is in LG QA;
+  upload 1.0.4 as the next update (or if 1.0.3 gets rejected). oldtv_xplay test: the phone now waits on each summary and
+  stops at match end (before, it pressed "Next round"/"Play again" instantly and the old TV never saw a summary).
 - 2026-11-04 (20261104.2): the table now fits the screen without scrolling on every size (small phones, phones held
   sideways, laptops 1024x600/1280x720): header hidden in game, settings button in the game bar (#bSetG), cards sized by
   screen height, landscape = TV-like grid (scores left). That CSS sits between `web-only-start/end` comments and

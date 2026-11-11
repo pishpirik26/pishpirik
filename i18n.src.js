@@ -5,7 +5,9 @@
   'use strict';
   var EN = /*EN*/{}/*END*/;
   var FN = {
-    RES_FINAL: function(m, pre, a, b, c, d){ return (pre ? tr(pre) + ' ' : '') + '(' + a + '–' + b + '). Rounds won: ' + c + '–' + d + '.'; },
+    RES_FINAL: function(m, pre, a, b, c, d){ return (pre ? tr(pre) + ' ' : '') + '(' + a + '–' + b + '). Final score in rounds: ' + c + '–' + d + '.'; },
+    INVR: function(m, n){ return 'Pishpirik · ' + n + (n === '1' ? ' round' : ' rounds'); },
+    INVSENT: function(m, n){ return 'Invite sent (' + n + (n === '1' ? ' round' : ' rounds') + ') · waiting'; },
     RES: function(m, pre, a, b, c, d){ return (pre ? tr(pre) + ' ' : '') + '(' + a + '–' + b + '). Rounds won: ' + c + '–' + d + '.'; },
     LOBBYGAME: function(m, a, b, r, R, turn){ return a + ' – ' + b + ' · round ' + r + '/' + R + (turn ? ' · Your turn' : ''); },
     LOBBYDONE: function(m, w, a, b){ return {Fitove: 'Won', Humbe: 'Lost', Barazim: 'Draw'}[w] + ' ' + a + '–' + b; },
