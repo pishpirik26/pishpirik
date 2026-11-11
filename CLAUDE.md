@@ -137,6 +137,14 @@ accounts (test accounts used: rtdbtest1 / rtdbtest2, password in the owner's han
 - 2026-11-04 (20261104.1): "Luaj me dikë" anonymous cross-play; hard reload + auto-update; per-friend listeners
   (Firestore quota); race fixes (new game during CPU move, "Raundi tjetër" overwrite); rematch results;
   friendlier invite errors; privacy page updated; TV 1.0.2.
+- 2026-11-11 (20261111.1): **English** (LG rejected 1.0.2 on 2026-11-11 at pretest: "It is a global app but does not
+  support English"). `i18n.src.js` + `i18n.en.json` → `python3 tools/i18n_build.py` embeds `<script id="i18n">` in index.html:
+  a MutationObserver translates every text node/placeholder/title/aria-label from Albanian (exact table + regex rules,
+  names like "Lojtar AB12" → "Player AB12"); originals kept on the node, so switching back works. Settings → Gjuha /
+  Language (Shqip/English, saved in localStorage `pishpirik-lang`; `?lang=en` forces). Default: web Albanian; TV English
+  unless the TV language is Albanian. When adding UI text, add its English to i18n.en.json and run
+  `node tools/i18n_harvest.js` (walks every screen in English and prints leftover Albanian). UX scenario PDF and the
+  5 store screenshots are now English. On LG also add English as a service language + English title/description.
 - 2026-11-04 (20261104.2): the table now fits the screen without scrolling on every size (small phones, phones held
   sideways, laptops 1024x600/1280x720): header hidden in game, settings button in the game bar (#bSetG), cards sized by
   screen height, landscape = TV-like grid (scores left). That CSS sits between `web-only-start/end` comments and

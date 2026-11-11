@@ -578,6 +578,15 @@ body[data-screen="game"] .app{height:100vh; height:100dvh}
     <p class="sub">Ruhen në këtë shfletues.</p>
 
     <div class="sgroup">
+      <h3>Gjuha</h3>
+      <div class="srow"><span><b>Gjuha / Language</b></span>
+        <div class="seg" id="sLang" role="radiogroup" aria-label="Gjuha / Language" data-noi18n>
+          <button type="button" data-v="sq" role="radio">Shqip</button><button type="button" data-v="en" role="radio">English</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sgroup">
       <h3>Zëri</h3>
       <label class="srow" for="sSound"><span><b>Tingujt</b><small>Kartat, radha jote</small></span><input type="checkbox" class="sw" id="sSound"></label>
       <div class="srow"><label for="sVol"><b>Volumi</b></label><input type="range" id="sVol" min="0" max="100" step="5"></div>
@@ -676,6 +685,373 @@ body[data-screen="game"] .app{height:100vh; height:100dvh}
   </div>
 </div>
 
+<script id="i18n">
+/* ===== Gjuha (Shqip / English) =====
+   Loja shkruhet shqip; kur gjuha është English, çdo tekst në ekran përkthehet këtu (edhe ai që shfaqet më vonë).
+   ES5, që të punojë edhe në TV-të e vjetra. */
+(function(){
+  'use strict';
+  var EN = {
+"Pishpirik": "Pishpirik",
+"Pishpirik:": "Pishpirik:",
+"Pishpirik!": "Pishpirik!",
+"Pishpirik, kthehu në hyrje": "Pishpirik, back to home",
+"Gjuha": "Language",
+"Cilësimet": "Settings",
+"Ruhen në këtë shfletues.": "Saved on this device.",
+"Zëri": "Sound",
+"Tingujt": "Sounds",
+"Kartat, radha jote": "Card sounds and turn alerts",
+"Volumi": "Volume",
+"Stili i tingujve": "Sound style",
+"Si tingëllojnë kartat": "Card sound effects",
+"Loja": "Game",
+"Ndihma": "Hints",
+"Ndriço kartat që marrin": "Highlight cards that can capture",
+"Animacionet": "Animations",
+"Kartat fluturojnë dhe hapen me lëvizje": "Animate dealing and card flips",
+"Niveli i CPU": "Difficulty",
+"Sa mirë luan kompjuteri": "How well the computer plays",
+"Lehtë": "Easy",
+"Normal": "Normal",
+"Vështirë": "Hard",
+"Kartat": "Cards",
+"Llogaria": "Account",
+"Rregullat e lojës": "Game rules",
+"Gati": "Done",
+"Mbyll": "Close",
+"Anulo": "Cancel",
+"Fillo": "Start",
+"Dil": "Sign out",
+"Chat": "Chat",
+"Chat i shpejtë": "Quick chat",
+"Emoji": "Emoji",
+"Fjali": "Phrases",
+"Dërgo": "Send",
+"Mesazhi": "Message",
+"Shkruaj një mesazh…": "Type a message…",
+"Duke kërkuar lojtar…": "Finding an opponent…",
+"Loja nis sapo dikush tjetër të shtypë \"Luaj me dikë\", në telefon, PC ose TV.": "The game starts as soon as someone else selects “Play Online” on a phone, PC or TV.",
+"Askush s’po kërkon tani. Mbaje hapur, loja nis sapo të hyjë dikush. Mund ta thërrasësh edhe një shok të shtypë \"Luaj me dikë\".": "No one else is searching right now. Keep this screen open; the game starts as soon as someone joins. You can also ask a friend to select “Play Online”.",
+"U gjet lojtar!": "Opponent found!",
+"Duke u lidhur me serverin, provo pas pak.": "Connecting to the server. Try again in a moment.",
+"S’ka lidhje me serverin. Kontrollo internetin.": "No connection to the server. Check your internet.",
+"Loja pa llogari s’është aktivizuar ende në server.": "Playing without an account is not available right now.",
+"Telefon": "Phone",
+"PC": "PC",
+"TV": "TV",
+"Lojtar": "Player",
+"Kompjuteri": "Computer",
+"Ti": "You",
+"Luaj me CPU": "Play vs Computer",
+"Pa llogari, fillon menjëherë": "No account needed · starts instantly",
+"Luaj me dikë": "Play Online",
+"Pa llogari · lojtar i rastësishëm nga telefoni, PC ose TV": "No account needed · random opponent on a phone, PC or TV",
+"ose": "or",
+"Kyçu": "Sign in",
+"Llogari e re": "New account",
+"Kyçu për të luajtur me shokët, ose luaj pa llogari: me CPU ose me dikë nga kudo.": "Sign in to play with friends, or play without an account against the computer or an online opponent.",
+"Emri i përdoruesit": "Username",
+"emri i përdoruesit": "username",
+"Fjalëkalimi": "Password",
+"Përsërit fjalëkalimin": "Repeat password",
+"Mbaj mend emrin e përdoruesit": "Remember my username",
+"Krijo llogari": "Create account",
+"Krijo llogarinë": "Create account",
+"3–16 shkronja, numra, pikë ose _. Shokët të gjejnë me këtë emër.": "3–16 letters, numbers, dots or underscores. Friends will find you by this name.",
+"Të paktën 6 karaktere.": "At least 6 characters.",
+"Mirë se u ktheve": "Welcome back",
+"Je i kyçur. Shokët, ftesat dhe lojërat të presin.": "You're signed in. Your friends, invites and games are waiting.",
+"Vazhdo te shokët": "Go to friends",
+"Nuk je i kyçur. Kyçu për të luajtur me shokët.": "You're not signed in. Sign in to play with friends.",
+"Kyçu ose krijo llogari": "Sign in or create an account",
+"Dil nga llogaria": "Sign out",
+"Dole nga llogaria.": "Signed out.",
+"Duke krijuar…": "Creating…",
+"Duke u kyçur…": "Signing in…",
+"Emri duhet të ketë 3–16 shkronja, numra, pikë ose _.": "Usernames must be 3–16 letters, numbers, dots or underscores.",
+"Fjalëkalimi duhet të ketë të paktën 6 karaktere.": "Password must be at least 6 characters.",
+"Fjalëkalimet nuk përputhen.": "The passwords don't match.",
+"Ky emër është i zënë. Zgjidh një tjetër.": "This username is taken. Please choose another.",
+"Fjalëkalimi është shumë i dobët.": "The password is too weak.",
+"Pronari duhet të aktivizojë Email/Password në Firebase.": "Creating accounts is not available right now.",
+"Shkruaj emrin dhe fjalëkalimin.": "Enter your username and password.",
+"Ky emër përdoruesi nuk është i vlefshëm.": "This username is not valid.",
+"Emri ose fjalëkalimi është gabim.": "Incorrect username or password.",
+"Shumë tentime. Prit pak dhe provo prapë.": "Too many attempts. Please wait a moment and try again.",
+"Ndrysho fjalëkalimin": "Change password",
+"Fjalëkalimi aktual": "Current password",
+"I ri": "New password",
+"Përsërite": "Confirm",
+"Ruaj fjalëkalimin": "Save password",
+"Fjalëkalimi i ri duhet të ketë të paktën 6 karaktere.": "The new password must be at least 6 characters.",
+"Fjalëkalimet e reja nuk përputhen.": "The new passwords don't match.",
+"Fjalëkalimi u ndryshua.": "Password changed.",
+"Fjalëkalimi aktual është gabim.": "The current password is wrong.",
+"Lojërat e mia": "My games",
+"Shto shok": "Add friend",
+"Emri i përdoruesit të shokut": "Friend's username",
+"Shto": "Add",
+"Shokët": "Friends",
+"Të kanë shtuar": "Friend requests",
+"Asnjë lojë ende. Fto një shok nga lista.": "No games yet. Invite a friend from the list.",
+"Ende s’ke shokë. Shkruaj username-in e shokut sipër.": "No friends yet. Type your friend's username above.",
+"Ky je ti.": "That's you.",
+"Fto në lojë": "Invite",
+"Hiq": "Remove",
+"Online tani": "Online now",
+"Online": "Online",
+"Jo online": "Offline",
+"Jo lidhje": "No connection",
+"Shok": "Friend",
+"Në pritje që të të shtojë": "Waiting for them to accept",
+"Të ka shtuar si shok": "Added you as a friend",
+"Prano": "Accept",
+"Refuzo": "Decline",
+"Fshi": "Delete",
+"Shiko": "View",
+"Vazhdo": "Continue",
+"Në lojë": "In game",
+"Radha jote": "Your turn",
+"E le lojën": "You left the game",
+"Shoku e la lojën": "Opponent left the game",
+"Kjo lojë nuk ekziston më": "This game no longer exists",
+"Kjo lojë nuk ekziston më.": "This game no longer exists.",
+"Kjo ftesë u anulua.": "This invite was cancelled.",
+"Kjo ftesë nuk vlen më.": "This invite is no longer valid.",
+"Dërgo ftesën": "Send invite",
+"Ftesa për lojë": "Game invite",
+"Duke hapur lojën…": "Opening the game…",
+"Lidhja me lojën u ndërpre.": "The connection to the game was lost.",
+"Duke kontrolluar lidhjen…": "Checking the connection…",
+"Loja online s’është e lidhur tani.": "Online play is not connected right now.",
+"S’ka lidhje me serverin. Kontrollo internetin. Me CPU mund të luash gjithsesi.": "No connection to the server. Check your internet. You can still play against the computer.",
+"Loja online s’është lidhur ende me Firebase (shiko README). Me CPU mund të luash gjithsesi.": "Online play is not available yet. You can still play against the computer.",
+"Nuk ke leje për këtë veprim. Kyçu prapë.": "You don't have permission to do this. Please sign in again.",
+"S’ka lidhje me internetin. Provo prapë.": "No internet connection. Please try again.",
+"Serveri është i ngarkuar. Provo pas pak.": "The server is busy. Try again in a moment.",
+"Nuk u ruajt. Provo prapë.": "Couldn't save. Please try again.",
+"Lidhja me internetin u rikthye.": "Back online.",
+"Ka një version të ri të Pishpirikut.": "A new version of Pishpirik is available.",
+"Rifresko tani": "Refresh now",
+"Menyja": "Menu",
+"← Menyja": "← Menu",
+"Lojë e re": "New game",
+"Lëre lojën": "Leave game",
+"Kundër kompjuterit": "Vs. computer",
+"Po mendon": "Thinking",
+"Kartat e tua": "Your cards",
+"Kartat e kompjuterit": "Computer's cards",
+"Kartat e marra": "Captured cards",
+"Pako mbaroi": "Deck is empty",
+"Mori": "Captured:",
+"karta": "",
+"raundi": "round",
+"Raundi mbaroi": "Round over",
+"Raundi tjetër": "Next round",
+"Luaj përsëri": "Play again",
+"E fitove raundin": "You won the round",
+"Raundi doli barazim": "The round is a draw",
+"Fitove lojën!": "You won the game!",
+"Fitoi kompjuteri": "The computer won",
+"Barazim!": "Draw!",
+"Karta të marra": "Cards taken",
+"Më shumë karta": "Most cards",
+"Asat": "Aces",
+"Fantët": "Jacks",
+"Ky raund": "This round",
+"Raunde të fituara": "Rounds won",
+"Sa raunde?": "How many rounds?",
+"Sa raunde kundër CPU?": "How many rounds against the computer?",
+"Raundin e fiton kush ka më shumë pikë. Lojën e fiton kush fiton më shumë raunde.": "The higher score wins each round. Whoever wins more rounds wins the game.",
+"Një raund, kush merr më shumë pikë fiton.": "One round: the higher score wins.",
+"Si luhet Pishpiriku": "How to play Pishpirik",
+"Pako me 52 karta, dy lojtarë.": "A 52-card deck, two players.",
+"Secili merr 4 karta. Në mes vendosen 4 karta, por duket vetëm e sipërmja.": "Each player is dealt 4 cards. Four cards are placed in the middle, but only the top card is face up.",
+"Me radhë hidhni nga një kartë mbi grumbull. Nëse karta jote ka të njëjtin numër me kartën e sipërme, e merr gjithë grumbullin.": "Players take turns placing one card on the pile. If your card has the same rank as the top card, you capture the whole pile.",
+"Fanti (J) e merr grumbullin gjithmonë, çfarëdo karte të jetë sipër.": "A Jack (J) always captures the pile, no matter which card is on top.",
+"kur në mes ka vetëm një kartë dhe ti e merr me të njëjtin numër, fiton 10 pikë. Fant mbi fant jep 20.": "when the pile has only one card and you capture it with a card of the same rank, you score 10 points. A Jack on a Jack scores 20.",
+"Kur mbarojnë kartat në dorë ndahen nga 4 të reja. Kartat që mbeten në fund i merr ai që mori i fundit.": "When both hands are empty, each player is dealt 4 new cards. Cards left on the table at the end go to the last player who captured.",
+"Pikët e raundit: më shumë karta 3, çdo As 1, çdo Fant 1, 2 spathi (2♣) 2, 10 karo (10♦) 3, plus pishpirikët.": "Scoring per round: most cards 3, each Ace 1, each Jack 1, 2 of clubs (2♣) 2, 10 of diamonds (10♦) 3, plus Pishpirik bonuses.",
+"Para lojës zgjidhni sa raunde (1–10). Raundin e fiton kush ka më shumë pikë, lojën kush fiton më shumë raunde.": "Before the game, choose the number of rounds (1–10). The higher score wins each round; whoever wins more rounds wins the game.",
+"Klasike": "Classic",
+"Kuq e bardhë, si në kafene": "Red and white, like in a café",
+"Mbretërore": "Royal",
+"Blu e thellë me ar": "Deep blue with gold",
+"Kuq e Zi": "Red & Black",
+"Shah kuq e zi": "Red and black check",
+"Neon": "Neon",
+"Natë në arkadë": "Night at the arcade",
+"Art Deco": "Art Deco",
+"E zezë dhe ar": "Black and gold",
+"Druri": "Wood",
+"Arrë e lëmuar": "Polished walnut",
+"Minimal": "Minimal",
+"Bardh e zi, pa zbukurime": "Black and white, no frills",
+"Retro 70": "Retro 70",
+"Vija portokalli": "Orange stripes",
+"Oqeani": "Ocean",
+"Valë të gjelbra": "Green waves",
+"Qilim": "Kilim",
+"Motiv qilimi shqiptar": "Albanian kilim pattern",
+"Të buta": "Soft",
+"Kristal": "Crystal",
+"Arkade": "Arcade",
+"Minimale": "Minimal",
+"Hajde shpejt! ⏳": "Hurry up! ⏳",
+"Lojë e mirë 👏": "Good game 👏",
+"S’ke shans 😂": "No chance 😂",
+"Pishpiriku po vjen 😎": "A Pishpirik is coming 😎",
+"Fat i madh 🍀": "Lucky! 🍀",
+"Prit pak…": "One moment…",
+"Kurgjo s’ma ndien 😏": "Not worried 😏",
+"GG 🤝": "GG 🤝",
+"All-in! 🔥": "All-in! 🔥",
+"Po blofon 🤨": "You're bluffing 🤨",
+"E le këtë lojë.": "You left this game.",
+"Fitove": "Won",
+"Humbe": "Lost",
+"Barazim": "Draw"
+};
+  var FN = {
+    RES_FINAL: function(m, pre, a, b, c, d){ return (pre ? tr(pre) + ' ' : '') + '(' + a + '–' + b + '). Rounds won: ' + c + '–' + d + '.'; },
+    RES: function(m, pre, a, b, c, d){ return (pre ? tr(pre) + ' ' : '') + '(' + a + '–' + b + '). Rounds won: ' + c + '–' + d + '.'; },
+    LOBBYGAME: function(m, a, b, r, R, turn){ return a + ' – ' + b + ' · round ' + r + '/' + R + (turn ? ' · Your turn' : ''); },
+    LOBBYDONE: function(m, w, a, b){ return {Fitove: 'Won', Humbe: 'Lost', Barazim: 'Draw'}[w] + ' ' + a + '–' + b; },
+    NUMNAME: function(m, n, name){ return n + '. ' + tr(name); },
+    STATS: function(m, dot, w, l, x, f){ return (dot ? '· ' : '') + w + (w === '1' ? ' win · ' : ' wins · ') + l + (l === '1' ? ' loss' : ' losses') + (f !== undefined ? ' · ' + f + (f === '1' ? ' friend' : ' friends') : ''); }
+  };
+  var RX = [
+    [/^(\d+)\. (.+)$/, FN.NUMNAME],
+    [/^(.*?) ?(\d+)–(\d+)\. Rezultati final në raunde: (\d+)–(\d+)\.$/, FN.RES_FINAL],
+    [/^(.*?) ?(\d+)–(\d+)\. Rezultati: (\d+)–(\d+)\.$/, FN.RES],
+    [/^Lojtar (\S+)$/, "Player $1"],
+    [/^(\d+) në pako$/, "$1 in deck"],
+    [/^raundi (\d+)\/(\d+)$/, "round $1/$2"],
+    [/^Raundi (\d+) nga (\d+)$/, "Round $1 of $2"],
+    [/^Raundin e fitoi (.+)$/, "$1 won the round"],
+    [/^Fitoi (.+)$/, "$1 won"],
+    [/^Fiton kush merr i pari (\d+) raunde nga (\d+)\.$/, "First to win $1 of $2 rounds wins the game."],
+    [/^Sa raunde me (.+)\?$/, "How many rounds with $1?"],
+    [/^Mirë se erdhe, (@.+)!$/, "Welcome, $1!"],
+    [/^Nuk u gjet asnjë (@.+)\.$/, "User $1 not found."],
+    [/^(@.+) është tashmë në listë\.$/, "$1 is already on your list."],
+    [/^Tani je shok me (.+)\.$/, "You are now friends with $1."],
+    [/^Kërkesa iu dërgua (.+)\.$/, "Friend request sent to $1."],
+    [/^(.+) të ka ftuar tashmë në Pishpirik\. Prano ftesën lart\.$/, "$1 has already invited you. Accept the invite above."],
+    [/^Ke tashmë një ftesë për Pishpirik me (.+?)\.?$/, "You already have a game invite with $1."],
+    [/^Ftesa u dërgua te (.+?)\.?$/, "Invite sent to $1."],
+    [/^Pishpirik · (\d+) raunde$/, "Pishpirik · $1 rounds"],
+    [/^Ftesa u dërgua \((\d+) raunde\), në pritje$/, "Invite sent ($1 rounds) · waiting"],
+    [/^(\d+) – (\d+) · raundi (\d+)\/(\d+)( · Radha jote)?$/, FN.LOBBYGAME],
+    [/^(Fitove|Humbe|Barazim) (\d+) – (\d+) në raunde$/, FN.LOBBYDONE],
+    [/^(.+) e la lojën\.$/, "$1 left the game."],
+    [/^Në pritje që (.+) të pranojë ftesën…$/, "Waiting for $1 to accept the invite…"],
+    [/^(.+) pranoi ftesën\. E gjen te shokët\.$/, "$1 accepted your invite. You'll find the game in your list."],
+    [/^(.+) pranoi ftesën\.$/, "$1 accepted your invite."],
+    [/^(.+) të fton në Pishpirik\.$/, "$1 invited you to a game."],
+    [/^Kartat e (.+)$/, "$1's cards"],
+    [/^(·\s*)?(\d+) fitore · (\d+) humbje( · (\d+) shokë)?$/, FN.STATS],
+    [/^2 spathi \(2♣(.?)\)$/, "2 of clubs (2♣$1)"],
+    [/^10 karo \(10♦(.?)\)$/, "10 of diamonds (10♦$1)"],
+    [/^(.+) \+(\d+)$/, "$1 +$2"]
+  ];
+  var KEY = 'pishpirik-lang';
+  function pick(){
+    var q = /[?&]lang=(sq|en)\b/.exec(location.search); if (q) return q[1];
+    try { var s = localStorage.getItem(KEY); if (s === 'sq' || s === 'en') return s; } catch (e) {}
+    var nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+    if (/^sq/i.test(nav)) return 'sq';
+    // TV: gjuha e TV-së (jo shqip -> English); web: shqip si gjithmonë
+    return /web0s|webos|netcast|smart-?tv/i.test(navigator.userAgent) ? 'en' : 'sq';
+  }
+  var lang = pick();
+  var miss = window.__i18nMiss = {};
+  function tr(s){
+    if (lang === 'sq' || !s) return s;
+    var t = s.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ' ');
+    if (!t) return s;
+    var lead = s.match(/^\s*/)[0], trail = s.match(/\s*$/)[0];
+    var out = EN.hasOwnProperty(t) ? EN[t] : null;
+    if (out === null){
+      for (var i = 0; i < RX.length; i++){
+        var m = t.match(RX[i][0]);
+        if (m){
+          // emrat brenda fjalisë (p.sh. "Lojtar", "Kompjuteri") përkthehen edhe ata
+          out = typeof RX[i][1] === 'function' ? RX[i][1].apply(null, m)
+            : RX[i][1].replace(/\$(\d)/g, function(_, k){ return name(m[+k] || ''); });
+          break;
+        }
+      }
+    }
+    if (out === null){
+      if (/[a-zëç]{3}/i.test(t) && /[ëç]|\b(të|një|me|nuk|për|nga|dhe|ose|je|ke|po|s’|ka|e|i)\b/i.test(t)) miss[t] = (miss[t] || 0) + 1;
+      return s;
+    }
+    return lead + out + trail;
+  }
+  // emrat e lojtarëve brenda fjalive: "Lojtar AB12" -> "Player AB12", "Kompjuteri" -> "Computer"
+  function name(g){ if (EN.hasOwnProperty(g)) return EN[g]; var m = /^Lojtar (\S+)$/.exec(g); return m ? 'Player ' + m[1] : g; }
+  window.T = tr;                                       // për tekstet që s'janë në faqe (p.sh. titulli)
+  var ATTR = ['placeholder', 'title', 'aria-label'];
+  function skip(el){ return el && el.closest && el.closest('[data-noi18n], script, style, textarea, .chat-log .me-txt'); }
+  function doText(n){
+    if (skip(n.parentNode)) return;
+    if (n.__sq === undefined || (n.data !== n.__en)) n.__sq = n.data;   // teksti origjinal (shqip)
+    var v = lang === 'sq' ? n.__sq : tr(n.__sq);
+    n.__en = v;
+    if (n.data !== v) n.data = v;
+  }
+  function doAttrs(el){
+    if (skip(el)) return;
+    for (var i = 0; i < ATTR.length; i++){
+      var a = ATTR[i]; if (!el.hasAttribute(a)) continue;
+      var cur = el.getAttribute(a), store = el.__sqA || (el.__sqA = {}), done = el.__enA || (el.__enA = {});
+      if (store[a] === undefined || cur !== done[a]) store[a] = cur;
+      var v = lang === 'sq' ? store[a] : tr(store[a]); done[a] = v;
+      if (cur !== v) el.setAttribute(a, v);
+    }
+  }
+  function walk(root){
+    if (root.nodeType === 3){ doText(root); return; }
+    if (root.nodeType !== 1 || skip(root)) return;
+    doAttrs(root);
+    var w = document.createTreeWalker(root, 5, null, false), n;   // elementet + teksti
+    while ((n = w.nextNode())){ if (n.nodeType === 3) doText(n); else doAttrs(n); }
+  }
+  var busy = false;
+  var mo = new MutationObserver(function(recs){
+    if (busy) return; busy = true;
+    try {
+      for (var i = 0; i < recs.length; i++){
+        var r = recs[i];
+        if (r.type === 'characterData') doText(r.target);
+        else if (r.type === 'attributes') doAttrs(r.target);
+        else for (var j = 0; j < r.addedNodes.length; j++) walk(r.addedNodes[j]);
+      }
+    } finally { mo.takeRecords(); busy = false; }
+  });
+  function start(){
+    walk(document.body);
+    if (document.title) document.title = tr(document.title);
+    mo.observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTR});
+  }
+  window.I18N = {
+    get lang(){ return lang; },
+    set: function(l){
+      if (l !== 'sq' && l !== 'en') return; lang = l;
+      try { localStorage.setItem(KEY, l); } catch (e) {}
+      document.documentElement.lang = l;
+      busy = true; try { walk(document.body); } finally { mo.takeRecords(); busy = false; }
+      var b = document.querySelectorAll('#sLang button');
+      for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-checked', b[i].getAttribute('data-v') === l ? 'true' : 'false');
+    }
+  };
+  document.documentElement.lang = lang;
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+
+</script>
 <script type="module">
 import { firebaseConfig, USER_DOMAIN } from "./firebase-config.js";
 // Firebase loads lazily in initNet(), so the CPU game works even if it cannot be reached
@@ -684,7 +1060,7 @@ let initializeApp, getAuth, onAuthStateChanged, createUserWithEmailAndPassword, 
 let getDatabase, rref, rget, rset, rupdate, rremove, ronValue, rpush, rtxn, ronDisconnect, signInAnonymously;
 // Shumë "vonesa" janë thjesht telefona që po luajnë me nj fiks të vjetër të ruajtur (sidomos kur faqja është "shtuar në ekranin kryesor").
 // Ky numër rritet me çdo publikim; kur telefoni zbulon një version më të ri në server, i fton të rifreskojë në vend që të mbetet pas, pa e ditur askush.
-const APP_VERSION = 20261104.2;
+const APP_VERSION = 20261111.1;
 const VS = '︎';
 const SUITS = [['♠','S',0],['♥','H',1],['♦','D',1],['♣','C',0]];
 const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -740,6 +1116,7 @@ function syncSetUI(){
   $('sSound').checked = SET.sound; $('sVol').value = SET.vol; $('sVol').disabled = !SET.sound;
   $('sHints').checked = SET.hints; $('sAnim').checked = SET.anim;
   document.querySelectorAll('#sLevel button').forEach(b=>{ const on=b.dataset.v===SET.level; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+  document.querySelectorAll('#sLang button').forEach(b=>{ const on=b.dataset.v===window.I18N.lang; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
   document.querySelectorAll('#sSoundStyle button').forEach(b=>{ const on=b.dataset.v===SET.soundStyle; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
 }
 function openSettings(){ syncSetUI(); renderAccount(); $('setOv').hidden=false; }
@@ -2021,6 +2398,7 @@ $('sVol').onchange = () => sfx.play();
 $('sHints').onchange = e => { SET.hints = e.target.checked; saveSet(); if (APP.screen==='game' && S) render(); };
 $('sAnim').onchange = e => { SET.anim = e.target.checked; saveSet(); };
 document.querySelectorAll('#sLevel button').forEach(b=>b.onclick=()=>{ SET.level=b.dataset.v; saveSet(); syncSetUI(); sfx.click(); });
+document.querySelectorAll('#sLang button').forEach(b=>b.onclick=()=>{ window.I18N.set(b.dataset.v); syncSetUI(); sfx.click(); });
 $('inRemember').onchange = e => { if (!e.target.checked) rememberUser(null); };
 $('chCpu').onclick = startCpu;
 $('bCpu2').onclick = startCpu;
