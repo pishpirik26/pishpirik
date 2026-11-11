@@ -13,6 +13,8 @@ module.exports = async ({ evalJS, key, shot, sleep, result }) => {
       const t = await evalJS(`document.getElementById('sumOv').innerText.replace(/\\s+/g,' ').slice(0,110)`);
       if (!rounds.includes(t)) rounds.push(t);
       const next = await evalJS(`(function(){var b=document.getElementById('bNext'); return !!(b && b.getClientRects().length && !b.disabled)})()`);
+      const over = /^\s*(Fitove|Fitoi|Barazim|You won|The computer won|Draw|.* won!?$|.* won the game!?$)/.test(await evalJS(`document.getElementById('sumH').textContent`));
+      if (over){ result.over = true; break; }
       if (next && rounds.length < 4){ await evalJS(`document.getElementById('bNext').focus()`); await key('Enter'); await sleep(1500); continue; }
       if (!next) break;
       await sleep(400); continue;
