@@ -78,9 +78,12 @@ const server = http.createServer((req, res) => {
     const st = await ph.evaluate(() => { const A = window.__app; const s = document.getElementById('sumOv'); if (s && !s.hidden) return 'sum'; return A.canAct() ? 'me' : 'wait'; }).catch(() => 'x');
     if (st === 'sum'){
       phone.summary = await ph.evaluate(() => document.querySelector('#sumOv h2, #sumOv .sheet h2') ? document.querySelector('#sumOv h2').textContent : document.getElementById('sumOv').innerText.slice(0, 80));
+      // si njeri: lëre përmbledhjen pak në ekran (TV-ja e vjetër duhet ta shohë), mos e nis ndeshjen e re ("Luaj përsëri")
+      if (!/^Raundi \d+ nga \d+$/.test((phone.summary || '').trim())) break;
+      await sleep(3000);
       const next = await ph.$('#bNext');
       if (next && await next.isVisible()){ await next.click(); await sleep(800); continue; }
-      break;
+      continue;   // shoku e nisi raundin tjetër: përmbledhja u mbyll vetë
     }
     if (st === 'me'){ idle = 0; await ph.evaluate(() => document.querySelector('#hand0 .card-btn:not([disabled])').click()); phone.plays++; }
     else if (++idle > 240){ phone.stalled = true; break; }
