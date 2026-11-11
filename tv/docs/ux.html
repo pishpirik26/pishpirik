@@ -4,20 +4,20 @@ h1{color:#1d4a37;margin:0 0 4px}h2{color:#1d4a37;border-bottom:2px solid #d8ad55
 .pg{page-break-after:always}.row{display:flex;gap:16px;align-items:flex-start}.row img{width:58%;border:1px solid #ccc}
 table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:5px 7px;text-align:left;vertical-align:top}th{background:#eef3ef}
 .box{border:2px dashed #c0262d;padding:8px 10px;margin-top:8px}</style></head><body>
-<div class="pg"><h1>Pishpirik – UX Scenario</h1><p>App ID: <b>al.pishpirik.game</b> · Version 1.0.3 · Type: Web app · Resolutions: 1920×1080 and 1280×720 · Platforms: webOS 4.0 (2018) and later · Languages: English and Albanian</p>
+<div class="pg"><h1>Pishpirik – UX Scenario</h1><p>App ID: <b>al.pishpirik.game</b> · Version 1.0.4 · Type: Web app · Resolutions: 1920×1080 and 1280×720 · Platforms: webOS 4.0 (2018) and later · Languages: English and Albanian</p>
 <h2>Overview</h2>
 <p>Pishpirik is a traditional Albanian two-player card game. The user plays against the computer, plays online against a random person without an account (“Play Online”, cross-play with phones, computers and other TVs), or signs in and plays online with friends added by username. The whole app is operated with the remote control.</p>
 <table><tr><th>Remote key</th><th>Action</th></tr>
 <tr><td>Arrow keys</td><td>Move the gold focus frame between buttons, fields and the cards in your hand</td></tr>
 <tr><td>OK</td><td>Activate the focused button / play the focused card</td></tr>
-<tr><td>BACK</td><td>Close the open dialog (in the player search: cancel the search); in a game return to the menu; on the start screen exit the app (webOS platformBack)</td></tr>
+<tr><td>BACK</td><td>Close the open dialog (in the player search: cancel the search); in a game, return to the menu; on the start screen, exit the app (webOS platformBack)</td></tr>
 <tr><td>Magic Remote pointer</td><td>Focus follows the pointer; click = OK</td></tr></table>
 <p>No in-app purchases. No advertising. No adult content (rated 12+ because of the optional text chat in online games).</p></div>
 <div class="pg"><h2>1. Start screen</h2><div class="row"><img src="../store/shot-1-hyrja.png"><div>
 <p>Shown at launch. Focus starts on <b>“Play vs Computer”</b>.</p><ul>
-<li><b>Play vs Computer</b>: opens round selection, then starts a game vs the computer. No login.</li>
+<li><b>Play vs Computer</b>: opens round selection, then starts a game against the computer. No login.</li>
 <li><b>Play Online</b>: searches for another person who pressed the same button on any device. No login. See section 5.</li>
-<li><b>Sign in / Create account</b>: log in or create an account (username + password) for playing with friends.</li>
+<li><b>Sign in / Create account</b>: sign in or create an account (username + password) for playing with friends.</li>
 <li><b>Gear icon</b> (top right): Settings.</li>
 <li><b>BACK</b>: exits the app.</li></ul></div></div></div>
 <div class="pg"><h2>2. Game table</h2><div class="row"><img src="../store/shot-2-loja.png"><div>
@@ -27,20 +27,20 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:5p
 <li>UP reaches <b>Menu</b>, <b>Settings</b> and <b>New game</b> / <b>Leave game</b>.</li>
 <li>Chat button (bottom right) is only for online games.</li>
 <li>BACK returns to the start screen (in an online game against a random person this also leaves the game).</li></ul>
-<p>When the round ends a summary dialog shows the points; OK starts the next round.</p></div></div></div>
+<p>When the round ends, a summary dialog shows the points; OK starts the next round.</p></div></div></div>
 <div class="pg"><h2>3. Settings</h2><div class="row"><img src="../store/shot-3-kartat.png"><div><ul>
 <li>Sound on/off, volume, 5 sound styles.</li>
 <li>Card highlight hints, animations, computer difficulty (easy / normal / hard).</li>
-<li>10 card designs.</li><li>Account: change password, log out.</li>
+<li>10 card designs.</li><li>Account: change password, sign out.</li>
 <li><b>Language</b>: English / Shqip (Albanian). The app starts in English, or in Albanian when the TV language is Albanian; the choice is remembered.</li>
 <li>“Done” or BACK closes the dialog.</li></ul></div></div></div>
 <div class="pg"><h2>4. Rules</h2><div class="row"><img src="../store/shot-4-rregullat.png"><div>
 <p>Opened from Settings → “Game rules”. Explains the rules (English or Albanian). “Close” or BACK closes it.</p></div></div></div>
-<div class="pg"><h2>5. Play with someone (no account)</h2><div class="row"><img src="../store/shot-5-kerkimi.png"><div>
+<div class="pg"><h2>5. Play Online (no account)</h2><div class="row"><img src="../store/shot-5-kerkimi.png"><div>
 <ol>
 <li>Start screen → DOWN to <b>“Play Online”</b> → OK. The search dialog shows a timer; focus is on <b>“Cancel”</b>.</li>
 <li>On a second TV, a phone or a PC browser (https://pishpirik26.github.io/pishpirik/) press <b>“Play Online”</b> (“Luaj me dikë” in Albanian) as well. Within a few seconds the game starts on both devices (3 rounds).</li>
-<li>If nobody else is searching the dialog keeps waiting (there is no computer fallback). OK on “Cancel” or BACK cancels the search.</li>
+<li>If nobody else is searching, the dialog keeps waiting (there is no computer fallback). OK on “Cancel” or BACK cancels the search.</li>
 <li>Players are shown with a generated name, e.g. “Player 4F2K” (“Lojtar 4F2K” in Albanian).</li></ol></div></div></div>
 <div><h2>6. Login and online play with friends (optional)</h2>
 <p>Accounts are only needed for playing with friends. Sign-up is free and instant inside the app: it needs only a username and a password, no e-mail or personal data, so the tester can create the test accounts directly.</p>
@@ -48,7 +48,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid #bbb;padding:5p
 <li>Start screen → tab <b>“Create account”</b> → enter any username (3–16 letters/numbers, e.g. lgqa1) and a password (6+ characters) twice → OK on <b>“Create account”</b>. The friends screen opens.</li>
 <li>On a second TV or a PC browser (https://pishpirik26.github.io/pishpirik/) create a second account the same way (e.g. lgqa2).</li>
 <li>Account 1: in <b>“Add friend”</b> type the second username → <b>“Add”</b>. Account 2 accepts the friend request in <b>“Friend requests”</b>.</li>
-<li>Account 1 selects the friend and sends a game invitation, choosing the number of rounds. Account 2 accepts it in <b>“Game invite”</b>. The game starts on both devices.</li>
+<li>Account 1 selects the friend and sends a game invite, choosing the number of rounds. Account 2 accepts it in <b>“Game invite”</b>. The game starts on both devices.</li>
 <li>During the game the Chat button (bottom right) opens quick emoji, phrases and short text.</li>
 <li>Settings → Account: change password or sign out (“Sign out”).</li></ol>
 </div>
