@@ -111,8 +111,15 @@ Match = rounds (1–10), winner = most rounds; ends early when decided. Rematch 
   RTDB games, "Luaj me dikë" search started and cancelled). A full real random match on that path was not played
   (both browser tabs share one Firebase login, so they can't match each other).
 - Every LG upload needs a higher version (appinfo.json, file version in the upload row, Service Info).
-- **Current status (2026-11-05 10:05):** LG rejected 1.0.1 at our request (2026-11-05). 1.0.2 (built from web 20261104.2)
-  submitted the same day; status "App Packaging Request" → then QA. LG answers by e-mail (mendurberisha@hotmail.com).
+- **Current status (2026-11-11):** 1.0.2 rejected at pretest on 2026-11-11 ("global app but does not support English").
+  **1.0.3 submitted 2026-11-11** (web 20261111.1 + English, platform "2018 and later", SDK auto 4.0.0, both rows File Ver 1.0.3):
+  English added as App Service Language (Service Country Info) and in Display Info other languages; English description
+  mentions "Available in English and Albanian"; 5 English screenshots (en-1..5) replaced the old 4; new UX PDF; notes
+  (Service Feature Update + Images/Service Info Change + Other Information); self-check 33/20 saved; defect resolved
+  ("Issue modify"). Status "App Packaging Request" → then QA. LG answers by e-mail (mendurberisha@hotmail.com).
+- Seller Lounge extras learned 2026-11-11: App Service Languages live in **Service Country Info** (bottom); screenshots max 6
+  (single file input `#secondaryimg`, upload/delete one by one, keep ≥3); Defect Info is inside `#defectInfo_iframe`
+  (Resolve dialog: radio IM + textarea, then `chkSave()` link "Ok"); page resets `window.__msgs`, use another name.
 - How the resubmission worked (for next time):
   - Edit opens on File Upload with the file table hidden: click **DONE** under the App ID to show it. Use **Modify** on each
     row → File Re-Upload (input type=file) → platform "2022 and later" (row had defaulted to 2021) → File Ver → SAVE.
