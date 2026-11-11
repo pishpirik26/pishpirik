@@ -33,7 +33,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   // play the whole 3-round match: TV with OK only, phone by clicking
   let tvPlays = 0, phPlays = 0, rounds = 0;
   for (let step = 0; step < 5000; step++){
-    const t = await tv.evaluate(() => ({sum: !document.getElementById('sumOv').hidden, inHand: !!(document.activeElement && document.activeElement.closest('#hand0') && !document.activeElement.disabled), over: /Fitove|Fitoi|Barazim/.test(document.getElementById('sumH').textContent), next: !document.getElementById('bNext').disabled}));
+    const t = await tv.evaluate(() => ({sum: !document.getElementById('sumOv').hidden, inHand: !!(document.activeElement && document.activeElement.closest('#hand0') && !document.activeElement.disabled), over: /Fitove|Fitoi|Barazim|won|Draw/.test(document.getElementById('sumH').textContent), next: !document.getElementById('bNext').disabled}));
     const p = await ph.evaluate(() => { const A = window.__app; return {can: A.canAct(), phase: A.S && A.S.phase, over: A.S && A.S.summary && A.S.summary.over}; });
     if (t.sum && t.over && p.phase === 'summary'){ break; }
     let acted = false;

@@ -66,7 +66,7 @@ const server = http.createServer((req, res) => {
   // ---- old TV engine
   const harness = path.join(__dirname, 'oldtv');
   const res = path.join(OUT, RES + (AS53 ? '-as53' : '')); fs.mkdirSync(res, { recursive: true }); try { fs.unlinkSync(path.join(res, 'result.json')); } catch (e) {}
-  const tv = spawn('xvfb-run', ['-a', '-s', `-screen 0 ${W}x${H}x24`, ELECTRON, harness, 'http://127.0.0.1:8766/index.html' + (AS53 ? '?as53' : ''), W, H, SCEN ? path.resolve(SCEN) : path.join(harness, 'xplay_tv.js'), res, String(PORT)], { stdio: ['ignore', 'ignore', 'ignore'], env: Object.assign({}, process.env, { BRIDGE_PORT: String(PORT) }) });
+  const tv = spawn('xvfb-run', ['-a', '-s', `-screen 0 ${W}x${H}x24`, ELECTRON, harness, 'http://127.0.0.1:8766/index.html?x=1' + (AS53 ? '&as53' : '') + (process.argv.includes('--en') ? '&lang=en' : ''), W, H, SCEN ? path.resolve(SCEN) : path.join(harness, 'xplay_tv.js'), res, String(PORT)], { stdio: ['ignore', 'ignore', 'ignore'], env: Object.assign({}, process.env, { BRIDGE_PORT: String(PORT) }) });
   const tvDone = new Promise(r => tv.on('exit', r));
 
   if (NOPHONE){ await tvDone; const r = JSON.parse(fs.readFileSync(path.join(res, 'result.json'), 'utf8')); console.log(JSON.stringify(r, null, 1)); await b.close(); server.close(); process.exit(0); }
